@@ -31,6 +31,9 @@ class Settings(BaseSettings):
 
     rembg_model: str = "silueta"
 
+    blob_store_id: str = ""
+    blob_webhook_public_key: str = ""
+
     rate_limit_max_requests: int = 120
     rate_limit_window_seconds: int = 60
 

@@ -37,12 +37,14 @@ The repo is wired for Vercel serverless (Python):
 
 1. Import the repo into Vercel (root = repository root).
 2. Create a **Vercel Blob** store and copy its read-write token.
-3. Set environment variables:
-   - `STORAGE_DRIVER=vercel`
-   - `BLOB_READ_WRITE_TOKEN=<token>`
-   - `BLOB_ACCESS_MODE=public` (or `private`, matching the store)
-   - `CORS_ORIGINS=https://<your-domain>.vercel.app`
-   - `APP_ENV=production`, `DEBUG=false`
+ 3. Set environment variables:
+    - `STORAGE_DRIVER=vercel`
+    - `BLOB_READ_WRITE_TOKEN=<token>`
+    - `BLOB_STORE_ID=<store-id>` (optional, required when using multiple blob stores)
+    - `BLOB_WEBHOOK_PUBLIC_KEY=<public-key>` (optional, for webhook verification)
+    - `BLOB_ACCESS_MODE=public` (or `private`, matching the store)
+    - `CORS_ORIGINS=https://<your-domain>.vercel.app`
+    - `APP_ENV=production`, `DEBUG=false`
 4. Deploy.
 
 ### What changes on Vercel

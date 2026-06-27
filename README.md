@@ -219,6 +219,8 @@ CORS_ORIGINS=http://127.0.0.1:8000,http://localhost:8000
 
 # Vercel only
 BLOB_READ_WRITE_TOKEN=
+BLOB_STORE_ID=
+BLOB_WEBHOOK_PUBLIC_KEY=
 ```
 
 ---
