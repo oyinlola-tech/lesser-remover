@@ -39,8 +39,8 @@ flowchart TD
 
     UI -->|POST /api/background/remove| Routes
     UI -->|POST /api/compression/batch/start| Routes
-    UI -->|GET /api/jobs/{job_id}| Routes
-    UI -->|GET /api/compression/download/{file}| Routes
+    UI -->|GET /api/jobs/:job_id| Routes
+    UI -->|GET /api/compression/download/:file| Routes
 
     Routes --> Controllers
     Controllers --> Services
