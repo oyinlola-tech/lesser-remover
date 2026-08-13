@@ -264,6 +264,48 @@
 
           </div>
           <section class="uploader" id="background-uploader">
+            <div class="background-settings">
+              <div>
+                <span class="eyebrow">
+                  Output
+                </span>
+
+                <h2>
+                  Choose your format.
+                </h2>
+              </div>
+
+              <div class="output-options">
+                <button
+                  type="button"
+                  class="output-option active"
+                  data-format="webp"
+                >
+                  <strong>
+                    WebP
+                  </strong>
+
+                  <span>
+                    Smaller with transparency
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  class="output-option"
+                  data-format="png"
+                >
+                  <strong>
+                    PNG
+                  </strong>
+
+                  <span>
+                    Lossless transparency
+                  </span>
+                </button>
+              </div>
+            </div>
+
             <div class="drop-zone" id="bg-drop-zone">
               <div class="upload-icon">↑</div>
               <h2>Drop an image here</h2>
@@ -305,9 +347,45 @@
                   Process another
                 </button>
               </div>
-              <div class="preview">
-                <img id="bg-preview-image" alt="Background removed preview" />
-              </div>
+                <div
+                  class="image-comparison"
+                  id="image-comparison"
+                >
+                  <div class="comparison-image original">
+                    <img id="original-preview" alt="Original image" />
+                  </div>
+
+                  <div
+                    class="comparison-image processed"
+                    id="processed-preview-container"
+                  >
+                    <img id="processed-preview" alt="Background removed image" />
+                  </div>
+
+                  <div
+                    class="comparison-divider"
+                    id="comparison-divider"
+                  >
+                    <span class="comparison-handle">↔</span>
+                  </div>
+
+                  <div class="comparison-label comparison-label-original">
+                    Original
+                  </div>
+
+                  <div class="comparison-label comparison-label-processed">
+                    Removed background
+                  </div>
+
+                  <input
+                    id="comparison-slider"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="50"
+                    aria-label="Compare original and processed image"
+                  />
+                </div>
               <div class="variant-grid" id="bg-variant-grid"></div>
             </div>
             <div class="error-message hidden" id="bg-error-message"></div>
@@ -394,80 +472,139 @@
                         <button
                           type="button"
                           class="quality-option"
-                          data-quality="95"
+                          data-preset="best_quality"
                         >
                           <strong>
-                            Maximum quality
+                            Best quality
                           </strong>
                           <span>
-                            Best visual quality
+                            Keep more detail
                           </span>
                         </button>
                         <button
                           type="button"
                           class="quality-option active"
-                          data-quality="85"
+                          data-preset="balanced"
                         >
                           <strong>
                             Balanced
                           </strong>
                           <span>
-                            Good quality, smaller file
+                            A strong balance of quality and size
                           </span>
                         </button>
                         <button
                           type="button"
                           class="quality-option"
-                          data-quality="70"
+                          data-preset="smallest"
                         >
                           <strong>
-                            Smallest file
+                            Smallest practical size
                           </strong>
                           <span>
-                            Prioritize file size
+                            Prioritize a smaller file
                           </span>
                         </button>
                       </div>
                     </div>
                     <div class="setting-group">
-                      <label for="output-format">
-                        Image output
+                      <label for="max-dimension">
+                        Maximum dimension
                       </label>
-                      <select
-                        id="output-format"
-                        class="select-input"
-                      >
-                        <option value="webp">
-                          WebP
-                        </option>
-                        <option value="jpeg">
-                          JPEG
-                        </option>
-                        <option value="png">
-                          PNG
-                        </option>
+                      <select id="max-dimension" class="select-input">
+                        <option value="">Keep original dimensions</option>
+                        <option value="5000">5000 px</option>
+                        <option value="4000">4000 px</option>
+                        <option value="3000">3000 px</option>
+                        <option value="2000">2000 px</option>
+                        <option value="1500">1500 px</option>
                       </select>
-                    </div>
-                    <div class="setting-group">
-                      <label for="pdf-quality">
-                        PDF quality
-                      </label>
-                      <select
-                        id="pdf-quality"
-                        class="select-input"
-                      >
-                        <option value="ebook">
-                          Balanced
-                        </option>
-                        <option value="screen">
-                          Smallest
-                        </option>
-                        <option value="printer">
-                          High quality
-                        </option>
-                      </select>
+                      <small>
+                        Large images can be resized while keeping their proportions.
+                      </small>
                     </div>
                   </div>
+
+                  <details class="advanced-settings">
+                    <summary>
+                      <span>
+                        Advanced settings
+                      </span>
+
+                      <span class="advanced-settings-chevron">
+                        +
+                      </span>
+                    </summary>
+
+                    <div class="advanced-settings-content">
+                      <div class="setting-group">
+                        <label for="target-size">
+                          Target size
+                        </label>
+
+                        <div class="target-size-input">
+                          <input
+                            id="target-size"
+                            type="number"
+                            min="10"
+                            placeholder="Optional"
+                          >
+
+                          <span>
+                            KB
+                          </span>
+                        </div>
+
+                        <small>
+                          The compressor will try to find
+                          the highest quality below this size.
+                        </small>
+                      </div>
+
+                      <div class="setting-group">
+                        <label>
+                          Metadata
+                        </label>
+
+                        <label class="toggle">
+                          <input
+                            id="strip-metadata"
+                            type="checkbox"
+                            checked
+                          >
+
+                          <span class="toggle-track">
+                            <span class="toggle-thumb"></span>
+                          </span>
+
+                          <span class="toggle-label">
+                            Remove unnecessary metadata
+                          </span>
+                        </label>
+                      </div>
+
+                      <div class="setting-group">
+                        <label for="advanced-format">
+                          Output format
+                        </label>
+
+                        <select
+                          id="advanced-format"
+                          class="select-input"
+                        >
+                          <option value="webp">
+                            WebP
+                          </option>
+                          <option value="jpeg">
+                            JPEG
+                          </option>
+                          <option value="png">
+                            PNG
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </details>
                   <button
                     type="button"
                     class="compress-button primary-button"
@@ -565,6 +702,19 @@
                         0%
                       </strong>
                     </div>
+                    <div class="reduction-indicator">
+
+                        <div class="reduction-track">
+                            <div id="reduction-value" class="reduction-value"></div>
+                        </div>
+
+                        <div class="reduction-label">
+                            <span>File size after compression</span>
+                            <strong id="reduction-label">0%</strong>
+                        </div>
+
+                    </div>
+                    <p id="compression-summary-message" class="summary-message"></p>
                   </div>
                   <div
                     id="completed-files"
