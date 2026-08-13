@@ -18,6 +18,7 @@
   ],
   "env": {
     "APP_ENV": "production",
-    "DEBUG": "false"
+    "DEBUG": "false",
+    "NUMBA_DISABLE_JIT": "1"
   }
 }
