@@ -81,7 +81,8 @@ function showResult(data) {
     try {
         registerUse();
     } catch (e) {
-        }
+        logger.error("Error occurred while registering use:", e);
+    }
 }
 
 async function processFile(file) {
