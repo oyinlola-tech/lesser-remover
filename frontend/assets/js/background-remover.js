@@ -16,6 +16,9 @@ const resultMeta = document.querySelector("#bg-result-meta");
 const variantGrid = document.querySelector("#bg-variant-grid");
 const newImageButton = document.querySelector("#bg-new-image-button");
 const outputOptions = document.querySelectorAll(".output-option");
+const processingMessage = document.querySelector("#bg-processing-message");
+const processingProgress = document.querySelector("#bg-processing-progress");
+const processingCount = document.querySelector("#bg-processing-count");
 
 let originalObjectUrl = null;
 let selectedOutputFormat = "webp";
@@ -46,6 +49,15 @@ function resetUI() {
     resultMeta.textContent = "";
     variantGrid.innerHTML = "";
     fileInput.value = "";
+    if (processingProgress) processingProgress.style.width = "0%";
+    if (processingCount) processingCount.textContent = "";
+    if (processingMessage) processingMessage.textContent = "Preparing your image...";
+}
+
+function updateBackgroundProgress(stage, percent) {
+    if (processingMessage) processingMessage.textContent = stage;
+    if (processingProgress) processingProgress.style.width = `${percent}%`;
+    if (processingCount) processingCount.textContent = `${percent}%`;
 }
 
 function showError(message) {
@@ -108,6 +120,8 @@ async function processFile(file) {
     hideElement(errorMessage);
     showElement(processing);
 
+    updateBackgroundProgress("Preparing your image...", 10);
+
     try {
         if (originalObjectUrl) {
             URL.revokeObjectURL(originalObjectUrl);
@@ -116,8 +130,14 @@ async function processFile(file) {
         originalPreview.src = originalObjectUrl;
         originalPreview.alt = file.name || "Original image";
 
+        updateBackgroundProgress("Removing background...", 40);
+
         const data = await startBackgroundRemoval(file, selectedOutputFormat);
+        
+        updateBackgroundProgress("Encoding result...", 80);
         showResult(data.result);
+        
+        updateBackgroundProgress("Complete", 100);
     } catch (error) {
         showError(error.message || "Something went wrong while processing the image.");
     }
