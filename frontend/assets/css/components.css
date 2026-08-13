@@ -33,7 +33,7 @@
 
   font-size: var(--font-size-lg);
 
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
 
   letter-spacing: -0.04em;
 }
@@ -54,7 +54,7 @@
 
   font-size: var(--font-size-sm);
 
-  font-weight: 900;
+  font-weight: var(--font-weight-black);
 }
 .hero {
   padding: 96px 0 64px;
@@ -68,21 +68,27 @@
   margin-bottom: 20px;
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
 }
+
 .hero h1 {
   max-width: 760px;
   margin: 0;
   font-size: clamp(3rem, 7vw, var(--font-size-4xl));
   line-height: var(--line-height-tight);
-  letter-spacing: -0.06em;
+  letter-spacing: var(--letter-spacing-tight);
+  font-weight: var(--font-weight-black);
 }
+
 .hero-description {
   max-width: 620px;
   margin: 28px 0 0;
   color: var(--color-text-secondary);
   font-size: var(--font-size-lg);
-  line-height: 1.6;
+  line-height: var(--line-height-relaxed);
+  font-weight: var(--font-weight-regular);
 }
 
 .landing {
@@ -95,26 +101,20 @@
 
 .landing h1 {
   max-width: 820px;
-
   margin: 0;
-
   font-size: clamp(3.4rem, 8vw, var(--font-size-4xl));
-
-  line-height: var(--line-height-tight);
-
-  letter-spacing: -0.065em;
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-tight);
+  font-weight: var(--font-weight-black);
 }
 
 .landing-description {
   max-width: 660px;
-
   margin: 28px 0 0;
-
   color: var(--color-text-secondary);
-
   font-size: var(--font-size-lg);
-
-  line-height: 1.65;
+  line-height: var(--line-height-relaxed);
+  font-weight: var(--font-weight-regular);
 }
 
 .tool-grid {
@@ -186,7 +186,7 @@
 
   font-size: var(--font-size-sm);
 
-  font-weight: 900;
+  font-weight: var(--font-weight-black);
 }
 
 .tool-card-arrow {
@@ -195,42 +195,32 @@
 
 .tool-card-label {
   display: block;
-
   margin-bottom: 12px;
-
   color: var(--color-text-secondary);
-
   font-size: var(--font-size-sm);
-
-  font-weight: 800;
-
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
-
-  letter-spacing: 0.04em;
+  letter-spacing: var(--letter-spacing-wide);
 }
 
 .tool-card h2 {
   margin: 0;
-
   font-size: clamp(2rem, 4vw, 3rem);
-
-  line-height: var(--line-height-tight);
-
-  letter-spacing: -0.05em;
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-tight);
+  font-weight: var(--font-weight-black);
 }
 
 .tool-card p {
   max-width: 480px;
-
   margin: 18px 0 0;
-
   color: var(--color-text-secondary);
-
-  line-height: 1.6;
+  line-height: var(--line-height-relaxed);
+  font-weight: var(--font-weight-regular);
 }
 
 .tool-card-action {
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
 }
 .tool-switcher {
   display: inline-flex;
@@ -254,7 +244,7 @@
 
   font-size: var(--font-size-sm);
 
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
 
   transition: color var(--transition-fast);
 }
@@ -279,7 +269,7 @@
   border: 1px solid var(--color-border-strong);
   background: var(--color-surface);
   color: var(--color-text);
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-xs);
   text-decoration: none;
   cursor: pointer;
@@ -360,7 +350,7 @@
 
   font-size: 24px;
 
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
 }
 
 .drop-zone h2 {
@@ -393,7 +383,7 @@
 
   color: var(--color-text);
 
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
 
   transition:
     background var(--transition-fast),
@@ -420,7 +410,7 @@
   border-radius: 999px;
   background: var(--color-surface);
   color: var(--color-text);
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
 }
 .file-hint {
   margin-top: 18px !important;
@@ -446,12 +436,13 @@
 .result-title {
   margin: 0;
   font-size: var(--font-size-xl);
-  letter-spacing: -0.03em;
+  letter-spacing: var(--letter-spacing-tight);
+  font-weight: var(--font-weight-bold);
 }
 .result-meta {
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 .preview {
   min-height: 420px;
@@ -583,7 +574,7 @@
   margin-top: 10px;
   color: var(--color-text-secondary);
   font-size: var(--font-size-xs);
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
 }
   display: flex;
   gap: 10px;
@@ -598,7 +589,7 @@
   border: 1px solid var(--color-border-strong);
   background: var(--color-surface);
   color: var(--color-text);
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-sm);
   transition:
     background var(--transition-fast),
@@ -665,7 +656,7 @@
   border-radius: 10px;
   background: var(--color-surface-muted);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
 }
 .file-queue-info {
   min-width: 0;
@@ -687,7 +678,7 @@
 .file-queue-status {
   color: var(--color-text-secondary);
   font-size: var(--font-size-xs);
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
 }
 .file-queue-remove {
   width: 34px;
@@ -800,7 +791,7 @@
   background: var(--color-surface-muted);
   color: var(--color-text-secondary);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
 }
 
 .target-reached {
@@ -812,7 +803,7 @@
 }
 
 .completed-file-size {
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 6px;
 }
 
@@ -825,20 +816,20 @@
   background: var(--color-primary-soft);
   color: var(--color-success);
   font-size: var(--font-size-xs);
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
 .success-badge::before {
   content: "✓";
-  font-weight: 900;
+  font-weight: var(--font-weight-black);
 }
 
 .saved-space {
   color: var(--color-text);
   font-size: var(--font-size-2xl);
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
   letter-spacing: -0.04em;
 }
 
@@ -846,7 +837,7 @@
   color: var(--color-text);
 
   font-size: 11px;
-  font-weight: 900;
+  font-weight: var(--font-weight-black);
 }
 
 .file-queue-main {
@@ -912,7 +903,7 @@
 
   font-size: var(--font-size-xs);
 
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
 }
 .compressor-section {
   padding: 40px 0 120px;
@@ -924,13 +915,16 @@
 .tool-page-header h2 {
   margin: 0;
   font-size: clamp(2.5rem, 5vw, 4rem);
-  line-height: var(--line-height-tight);
-  letter-spacing: -0.06em;
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-tight);
+  font-weight: var(--font-weight-black);
 }
 .tool-page-header p {
   margin: 20px 0 0;
   color: var(--color-text-secondary);
   font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  font-weight: var(--font-weight-regular);
 }
 .compressor-card {
   padding: 10px;
@@ -988,7 +982,7 @@
   flex-shrink: 0;
   background: transparent;
   color: var(--color-text-secondary);
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
 }
 .text-button:hover {
   color: var(--color-text);
@@ -1009,7 +1003,7 @@
 }
 .setting-group > label {
   font-size: var(--font-size-sm);
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
 }
 .quality-options {
   display: flex;
@@ -1060,7 +1054,7 @@
   list-style: none;
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
 }
 .advanced-settings summary::-webkit-details-marker {
   display: none;
@@ -1190,7 +1184,7 @@
   padding-right: 14px;
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
 }
 .setting-group small {
   color: var(--color-text-muted);
@@ -1229,7 +1223,7 @@
 .saving-block span {
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -1333,7 +1327,7 @@
   background: var(--color-surface-muted);
   color: var(--color-text-secondary);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
 }
 
 .target-reached {
@@ -1345,14 +1339,14 @@
 }
 
 .completed-file-size {
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 6px;
 }
 
 .saved-space {
   color: var(--color-text);
   font-size: var(--font-size-2xl);
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
   letter-spacing: -0.04em;
 }
 
@@ -1405,7 +1399,7 @@
 
   font-size: var(--font-size-xs);
 
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
 }
 
 @media (max-width: 900px) {
@@ -1560,7 +1554,7 @@
   background: var(--color-surface);
   color: var(--color-text);
   box-shadow: var(--shadow-md);
-  font-weight: 900;
+  font-weight: var(--font-weight-black);
 }
 #comparison-slider {
   position: absolute;
@@ -1581,7 +1575,7 @@
   background: rgba(255, 255, 255, 0.92);
   color: var(--color-text);
   font-size: var(--font-size-xs);
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
   box-shadow: var(--shadow-sm);
   pointer-events: none;
 }
@@ -1605,7 +1599,7 @@
 .completed-file-savings {
   color: var(--color-success);
   font-size: var(--font-size-xs);
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
 }
 .reduction-indicator {
   margin-top: 20px;

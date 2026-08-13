@@ -34,8 +34,19 @@
     --font-size-3xl: 3rem;
     --font-size-4xl: 5rem;
 
-    --line-height-tight: 1.02;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-black: 900;
+
+    --line-height-snug: 1.25;
     --line-height-normal: 1.5;
+    --line-height-relaxed: 1.65;
+
+    --letter-spacing-tight: -0.02em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.04em;
 
     --radius-sm: 8px;
     --radius-md: 12px;
