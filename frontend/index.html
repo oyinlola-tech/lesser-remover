@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Local image background removal and compression tools." />
+    <title>Image Tools</title>
+    
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/components.css" />
+    <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+  </head>
+  <body>
+    <header class="site-header">
+
+      <div class="container header-inner">
+
+        <a
+          href="/"
+          class="brand"
+          aria-label="Image Tools home"
+        >
+          <span class="brand-mark">I</span>
+
+          <span>
+            Image Tools
+          </span>
+        </a>
+
+
+        <nav
+          class="header-nav"
+          aria-label="Main navigation"
+        >
+
+          <a
+            href="#tools"
+            class="active"
+          >
+            Tools
+          </a>
+
+          <a href="#background-remover">
+            Background remover
+          </a>
+
+          <a href="#compressor">
+            Compressor
+          </a>
+
+        </nav>
+
+      </div>
+
+    </header>
+
+    <section class="landing">
+
+      <div class="container">
+
+        <div class="landing-content">
+
+          <span class="eyebrow">
+            Private by default
+          </span>
+
+          <h1>
+            Make your files lighter,
+            cleaner and easier to use.
+          </h1>
+
+          <p class="landing-description">
+            Remove image backgrounds and compress
+            your files directly on your computer.
+            Nothing needs to leave your machine.
+          </p>
+
+        </div>
+
+
+        <div
+          class="tool-grid"
+          id="tools"
+        >
+
+          <a
+            href="#background-remover"
+            class="tool-card tool-card-primary"
+          >
+
+            <div class="tool-card-top">
+
+              <span class="tool-card-icon">
+                BG
+              </span>
+
+              <span class="tool-card-arrow">
+                ↗
+              </span>
+
+            </div>
+
+
+            <div>
+
+              <span class="tool-card-label">
+                Image tool
+              </span>
+
+              <h2>
+                Remove background
+              </h2>
+
+              <p>
+                Turn ordinary images into
+                transparent PNG or WebP files
+                while keeping the original
+                resolution.
+              </p>
+
+            </div>
+
+
+            <span class="tool-card-action">
+              Start removing
+            </span>
+
+          </a>
+
+
+          <a
+            href="#compressor"
+            class="tool-card"
+          >
+
+            <div class="tool-card-top">
+
+              <span class="tool-card-icon">
+                %
+              </span>
+
+              <span class="tool-card-arrow">
+                ↗
+              </span>
+
+            </div>
+
+
+            <div>
+
+              <span class="tool-card-label">
+                File tool
+              </span>
+
+              <h2>
+                Compress files
+              </h2>
+
+              <p>
+                Reduce image and PDF sizes
+                without blindly sacrificing
+                quality.
+              </p>
+
+            </div>
+
+
+            <span class="tool-card-action">
+              Start compressing
+            </span>
+
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="local-section">
+
+      <div class="container">
+
+        <div class="local-content">
+
+          <span class="eyebrow">
+            Local processing
+          </span>
+
+          <h2>
+            Your files stay on your computer.
+          </h2>
+
+          <p>
+            The application runs on your machine.
+            Uploads are processed by the local
+            Python server and stored locally while
+            they're being processed.
+          </p>
+
+        </div>
+
+
+        <div class="local-points">
+
+          <div>
+            <strong>
+              No account
+            </strong>
+
+            <span>
+              Nothing to sign up for.
+            </span>
+          </div>
+
+
+          <div>
+            <strong>
+              No database
+            </strong>
+
+            <span>
+              Temporary state lives on disk.
+            </span>
+          </div>
+
+
+          <div>
+            <strong>
+              No cloud upload
+            </strong>
+
+            <span>
+              Processing happens locally.
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <main id="background-remover">
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+
+            <span class="eyebrow">
+                Background remover
+            </span>
+
+            <h1>
+                Make any image transparent.
+            </h1>
+
+            <p class="hero-description">
+                Upload an image and we'll remove the
+                background locally while keeping the
+                original resolution.
+            </p>
+
+          </div>
+          <section class="uploader" id="background-uploader">
+            <div class="drop-zone" id="bg-drop-zone">
+              <div class="upload-icon">↑</div>
+              <h2>Drop an image here</h2>
+              <p>Or choose an image from your computer</p>
+              <label for="bg-file-input" class="primary-button">
+                Choose image
+              </label>
+              <input
+                id="bg-file-input"
+                type="file"
+                accept="image/*"
+                class="visually-hidden"
+              />
+              <p class="file-hint">
+                JPG, JPEG, PNG, WebP and other common image formats
+              </p>
+            </div>
+            <div class="processing hidden" id="bg-processing">
+              <div class="processing-content">
+                <div class="spinner"></div>
+                <h2>Removing the background</h2>
+                <p>
+                  Your image is being processed locally. This may take a moment
+                  for large images.
+                </p>
+              </div>
+            </div>
+            <div class="result-card hidden" id="bg-result">
+              <div class="result-header">
+                <div>
+                  <h2 class="result-title">Your image is ready</h2>
+                  <div class="result-meta" id="bg-result-meta"></div>
+                </div>
+                <button
+                  type="button"
+                  class="secondary-button"
+                  id="bg-new-image-button"
+                >
+                  Process another
+                </button>
+              </div>
+              <div class="preview">
+                <img id="bg-preview-image" alt="Background removed preview" />
+              </div>
+              <div class="variant-grid" id="bg-variant-grid"></div>
+            </div>
+            <div class="error-message hidden" id="bg-error-message"></div>
+          </section>
+          <section
+            id="compressor"
+            class="compressor-section"
+          >
+            <div class="container">
+              <div class="tool-page-header">
+                <span class="eyebrow">
+                  File compression
+                </span>
+                <h2>
+                  Make your files smaller.
+                </h2>
+                <p>
+                  Reduce file size while keeping the quality
+                  that matters.
+                </p>
+              </div>
+              <section class="compressor-card">
+                <div
+                  class="compressor-drop-zone"
+                  id="compressor-drop-zone"
+                >
+                  <div class="upload-icon">
+                    ↑
+                  </div>
+                  <h2>
+                    Drop your files here
+                  </h2>
+                  <p>
+                    Or choose files from your computer
+                  </p>
+                  <label
+                    for="compressor-file-input"
+                    class="primary-button"
+                  >
+                    Choose file
+                  </label>
+                  <input
+                    id="compressor-file-input"
+                    type="file"
+                    accept="image/*,.pdf,application/pdf"
+                    multiple
+                    class="visually-hidden"
+                  />
+                  <p class="file-hint">
+                    JPG, JPEG, PNG, WebP and PDF
+                  </p>
+                </div>
+                <div
+                  id="compressor-workspace"
+                  class="compressor-workspace hidden"
+                >
+                  <div class="queue-header">
+                    <div>
+                      <span class="eyebrow">
+                        Files
+                      </span>
+                      <h2>
+                        Ready to compress
+                      </h2>
+                    </div>
+                    <button
+                      type="button"
+                      class="text-button"
+                      id="clear-files"
+                    >
+                      Clear all
+                    </button>
+                  </div>
+                  <div
+                    id="file-queue"
+                    class="file-queue"
+                  ></div>
+                  <div class="compression-settings">
+                    <div class="setting-group">
+                      <label>
+                        Compression
+                      </label>
+                      <div class="quality-options">
+                        <button
+                          type="button"
+                          class="quality-option"
+                          data-quality="95"
+                        >
+                          <strong>
+                            Maximum quality
+                          </strong>
+                          <span>
+                            Best visual quality
+                          </span>
+                        </button>
+                        <button
+                          type="button"
+                          class="quality-option active"
+                          data-quality="85"
+                        >
+                          <strong>
+                            Balanced
+                          </strong>
+                          <span>
+                            Good quality, smaller file
+                          </span>
+                        </button>
+                        <button
+                          type="button"
+                          class="quality-option"
+                          data-quality="70"
+                        >
+                          <strong>
+                            Smallest file
+                          </strong>
+                          <span>
+                            Prioritize file size
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="setting-group">
+                      <label for="output-format">
+                        Image output
+                      </label>
+                      <select
+                        id="output-format"
+                        class="select-input"
+                      >
+                        <option value="webp">
+                          WebP
+                        </option>
+                        <option value="jpeg">
+                          JPEG
+                        </option>
+                        <option value="png">
+                          PNG
+                        </option>
+                      </select>
+                    </div>
+                    <div class="setting-group">
+                      <label for="pdf-quality">
+                        PDF quality
+                      </label>
+                      <select
+                        id="pdf-quality"
+                        class="select-input"
+                      >
+                        <option value="ebook">
+                          Balanced
+                        </option>
+                        <option value="screen">
+                          Smallest
+                        </option>
+                        <option value="printer">
+                          High quality
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="compress-button primary-button"
+                    id="compress-button"
+                  >
+                    Compress files
+                  </button>
+                </div>
+                <div
+                  id="compression-processing"
+                  class="processing hidden"
+                >
+                  <div class="processing-content">
+                    <div class="spinner"></div>
+                    <h2>
+                      Compressing your files
+                    </h2>
+                    <p id="processing-message">
+                      Preparing your files...
+                    </p>
+                    <div class="progress-bar">
+                      <div
+                        id="processing-progress"
+                        class="progress-bar-value"
+                      ></div>
+                    </div>
+                    <div
+                      id="processing-count"
+                      class="processing-count"
+                    >
+                      0 of 0 completed
+                    </div>
+                    <button
+                      type="button"
+                      class="secondary-button cancel-button"
+                      id="cancel-compression"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+                <div
+                  id="compression-result"
+                  class="compression-result hidden"
+                >
+                  <div class="result-header">
+                    <div>
+                      <h2 class="result-title">
+                        Your files are ready
+                      </h2>
+                      <div
+                        id="compression-result-meta"
+                        class="result-meta"
+                      ></div>
+                    </div>
+                    <button
+                      type="button"
+                      class="secondary-button"
+                      id="compress-another"
+                    >
+                      Compress another
+                    </button>
+                  </div>
+                  <div class="compression-summary">
+                    <div class="size-block">
+                      <span>
+                        Original
+                      </span>
+                      <strong
+                        id="original-size"
+                      >
+                        0 MB
+                      </strong>
+                    </div>
+                    <div class="size-arrow">
+                      →
+                    </div>
+                    <div class="size-block">
+                      <span>
+                        Compressed
+                      </span>
+                      <strong
+                        id="compressed-size"
+                      >
+                        0 MB
+                      </strong>
+                    </div>
+                    <div class="saving-block">
+                      <span>
+                        You saved
+                      </span>
+                      <strong
+                        id="savings-percent"
+                      >
+                        0%
+                      </strong>
+                    </div>
+                  </div>
+                  <div class="compression-result-actions">
+                    <a
+                      id="compression-download"
+                      class="primary-button"
+                      href="#"
+                    >
+                      Download file
+                    </a>
+                  </div>
+                </div>
+                <div
+                  id="compression-error"
+                  class="error-message hidden"
+                ></div>
+              </section>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="/static/assets/js/app.js"></script>
+  </body>
+</html>
