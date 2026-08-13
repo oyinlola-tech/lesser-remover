@@ -1,0 +1,135 @@
+@media (max-width: 700px) {
+    .container {
+        width: min(
+            @media (max-width: 900px) {
+
+                .tool-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .compression-settings {
+                    grid-template-columns: 1fr;
+                }
+
+                .compression-summary {
+                    grid-template-columns:
+                        1fr 1fr;
+                }
+
+                .size-arrow {
+                    display: none;
+                }
+
+                .saving-block {
+                    padding-left: 0;
+
+                    border-left: 0;
+                }
+            }
+
+
+            @media (max-width: 700px) {
+
+                .container {
+                    width:
+                        min(
+                            calc(100% - 24px),
+                            var(--container-width)
+                        );
+                }
+
+                .header-inner {
+                    min-height: 64px;
+                }
+
+                .header-nav {
+                    display: none;
+                }
+
+                .landing {
+                    padding:
+                        64px 0 72px;
+                }
+
+                .landing h1 {
+                    font-size:
+                        3rem;
+                }
+
+                .landing-description {
+                    font-size:
+                        var(--font-size-md);
+                }
+
+                .tool-grid {
+                    margin-top: 40px;
+                }
+
+                .tool-card {
+                    min-height: 330px;
+
+                    padding: 24px;
+                }
+
+                .hero {
+                    padding:
+                        64px 0 48px;
+                }
+
+                .hero h1 {
+                    font-size:
+                        2.8rem;
+                }
+
+                .hero-description {
+                    font-size:
+                        var(--font-size-md);
+                }
+
+                .drop-zone {
+                    min-height: 320px;
+
+                    padding: 24px;
+                }
+
+                .compression-summary {
+                    grid-template-columns: 1fr;
+                }
+
+                .saving-block {
+                    padding-top: 18px;
+
+                    border-top:
+                        1px solid var(--color-border);
+                }
+
+                .compression-result-actions {
+                    display: block;
+                }
+
+                .compression-result-actions
+                .primary-button {
+                    width: 100%;
+                }
+
+                .queue-header {
+                    align-items:
+                        flex-start;
+                }
+
+                .file-queue-item {
+                    grid-template-columns:
+                        auto
+                        minmax(0, 1fr)
+                        auto;
+                }
+
+                .file-queue-status {
+                    grid-column: 2;
+                }
+
+                .file-queue-remove {
+                    grid-column: 3;
+                    grid-row: 1;
+                }
+            }

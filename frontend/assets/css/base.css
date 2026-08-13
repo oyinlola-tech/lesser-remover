@@ -1,0 +1,64 @@
+body {
+    min-height: 100vh;
+
+    background:
+        var(--color-background);
+
+    color:
+        var(--color-text);
+
+    font-family:
+        var(--font-family);
+
+    font-size:
+        var(--font-size-md);
+
+    line-height:
+        var(--line-height-normal);
+
+    -webkit-font-smoothing:
+        antialiased;
+}
+
+button,
+a,
+input,
+select {
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+button {
+    border: 0;
+}
+
+.container {
+    width: min(
+        calc(100% - 40px),
+        var(--container-width)
+    );
+
+    margin-inline: auto;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.visually-hidden {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    padding: 0;
+    margin: -1px;
+
+    overflow: hidden;
+
+    clip: rect(0, 0, 0, 0);
+
+    white-space: nowrap;
+
+    border: 0;
+}
