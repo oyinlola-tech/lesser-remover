@@ -1,85 +1,38 @@
-import { compressFiles, cancelJob, getJob } from "./api.js";
+import { startBatchCompression, cancelJob, getJob } from "./api.js";
 import { hideElement, showElement, formatBytes } from "./utils.js";
+import { registerUse } from "./support-popup.js";
 
 const show = showElement;
 const hide = hideElement;
 
-const dropZone = document.querySelector(
-    "#compressor-drop-zone"
-);
-const fileInput = document.querySelector(
-    "#compressor-file-input"
-);
-const workspace = document.querySelector(
-    "#compressor-workspace"
-);
+const dropZone = document.querySelector("#compressor-drop-zone");
+const fileInput = document.querySelector("#compressor-file-input");
+const workspace = document.querySelector("#compressor-workspace");
 const fileQueue = document.querySelector("#file-queue");
-const processing = document.querySelector(
-    "#compression-processing"
-);
-const result = document.querySelector(
-    "#compression-result"
-);
-const errorMessage = document.querySelector(
-    "#compression-error"
-);
-const compressButton = document.querySelector(
-    "#compress-button"
-);
-const clearFilesButton = document.querySelector(
-    "#clear-files"
-);
-const qualityOptions = document.querySelectorAll(
-    ".quality-option"
-);
-const outputFormat = document.querySelector(
-    "#output-format"
-);
-const pdfQuality = document.querySelector(
-    "#pdf-quality"
-);
-const originalSize = document.querySelector(
-    "#original-size"
-);
-const compressedSize = document.querySelector(
-    "#compressed-size"
-);
-const savingsPercent = document.querySelector(
-    "#savings-percent"
-);
-const downloadButton = document.querySelector(
-    "#compression-download"
-);
-const compressAnotherButton =
-    document.querySelector(
-        "#compress-another"
-    );
-const processingMessage =
-    document.querySelector(
-        "#processing-message"
-    );
-const processingProgress =
-    document.querySelector(
-        "#processing-progress"
-    );
-const processingCount =
-    document.querySelector(
-        "#processing-count"
-    );
-const cancelCompressionButton =
-    document.querySelector(
-        "#cancel-compression"
-    );
-const resultMeta =
-    document.querySelector(
-        "#compression-result-meta"
-    );
-const completedFiles = document.querySelector(
-    "#completed-files"
-);
+const processing = document.querySelector("#compression-processing");
+const result = document.querySelector("#compression-result");
+const errorMessage = document.querySelector("#compression-error");
+const compressButton = document.querySelector("#compress-button");
+const clearFilesButton = document.querySelector("#clear-files");
+const qualityOptions = document.querySelectorAll(".quality-option");
+const targetSize = document.querySelector("#target-size");
+const stripMetadata = document.querySelector("#strip-metadata");
+const advancedFormat = document.querySelector("#advanced-format");
+const maxDimension = document.querySelector("#max-dimension");
+const originalSize = document.querySelector("#original-size");
+const compressedSize = document.querySelector("#compressed-size");
+const savingsPercent = document.querySelector("#savings-percent");
+const downloadButton = document.querySelector("#compression-download");
+const compressAnotherButton = document.querySelector("#compress-another");
+const processingMessage = document.querySelector("#processing-message");
+const processingProgress = document.querySelector("#processing-progress");
+const processingCount = document.querySelector("#processing-count");
+const cancelCompressionButton = document.querySelector("#cancel-compression");
+const resultMeta = document.querySelector("#compression-result-meta");
+const completedFiles = document.querySelector("#completed-files");
 
 let files = [];
-let selectedQuality = 85;
+let selectedPreset = "balanced";
 let activeJobId = null;
 let cancelling = false;
 
@@ -386,6 +339,15 @@ function syncJobToFiles(job) {
                 compressed_size_bytes: serverFile.compressed_size_bytes,
                 original_size_bytes: serverFile.original_size_bytes,
                 savings_percent: serverFile.savings_percent,
+
+                output_format: serverFile.output_format,
+                quality: serverFile.quality,
+                compression_preset: serverFile.compression_preset,
+                width: serverFile.width,
+                height: serverFile.height,
+
+                target_size_bytes: serverFile.target_size_bytes,
+                target_achieved: serverFile.target_achieved,
             };
         }
 
@@ -423,13 +385,61 @@ function renderCompletedFiles(job) {
 
         name.textContent = file.filename;
 
-        const meta = document.createElement("span");
-
+        const meta = document.createElement("div");
         meta.className = "completed-file-meta";
 
-        meta.textContent = `${formatBytes(file.original_size_bytes)} → ${formatBytes(file.compressed_size_bytes)} · Saved ${file.savings_percent}%`;
+        const sizeText = document.createElement("div");
+        sizeText.textContent = `${formatBytes(file.original_size_bytes)} → ${formatBytes(file.compressed_size_bytes)}`;
+        sizeText.className = "completed-file-size";
+
+        const details = document.createElement("div");
+        details.className = "completed-file-details";
+
+        // format
+        const formatSpan = document.createElement("span");
+        formatSpan.className = "completed-file-detail";
+        formatSpan.textContent = file.output_format ? String(file.output_format).toUpperCase() : "";
+        details.appendChild(formatSpan);
+
+        // dimensions
+        if (file.width && file.height) {
+            const dimensions = document.createElement("span");
+            dimensions.className = "completed-file-detail";
+            dimensions.textContent = `${file.width} × ${file.height}`;
+            details.appendChild(dimensions);
+        }
+
+        // preset label
+        function getPresetLabel(preset) {
+            if (preset === "best_quality") return "Best quality";
+            if (preset === "smallest") return "Smallest practical size";
+            return "Balanced";
+        }
+
+        if (file.compression_preset) {
+            const preset = document.createElement("span");
+            preset.className = "completed-file-detail";
+            preset.textContent = getPresetLabel(file.compression_preset);
+            details.appendChild(preset);
+        }
+
+        // target info
+        if (file.target_size_bytes) {
+            const target = document.createElement("span");
+            target.className = "completed-file-detail";
+            if (file.target_achieved) {
+                target.textContent = `Target ${formatBytes(file.target_size_bytes)} reached`;
+                target.classList.add("target-reached");
+            } else {
+                target.textContent = `Target ${formatBytes(file.target_size_bytes)} not reached`;
+                target.classList.add("target-not-reached");
+            }
+            details.appendChild(target);
+        }
 
         info.appendChild(name);
+        meta.appendChild(sizeText);
+        meta.appendChild(details);
         info.appendChild(meta);
 
         const download = document.createElement("a");
@@ -444,10 +454,138 @@ function renderCompletedFiles(job) {
 
         element.appendChild(info);
 
+        // thumbnail (click to open comparison modal)
+        const thumb = document.createElement("div");
+        thumb.className = "completed-file-thumb";
+        if (files) {
+            const local = files.find((f) => f.file.name === file.filename);
+            if (local && local.previewUrl) {
+                const img = document.createElement("img");
+                img.src = local.previewUrl;
+                img.alt = `Original ${file.filename}`;
+                img.className = "completed-thumb-img";
+                thumb.appendChild(img);
+                img.style.cursor = "pointer";
+                img.addEventListener("click", () => {
+                    showComparisonModal(local.previewUrl, file.download_url, file.filename);
+                });
+            }
+        }
+
+        element.appendChild(thumb);
         element.appendChild(download);
 
         completedFiles.appendChild(element);
     }
+}
+
+function showComparisonModal(originalUrl, compressedUrl, filename) {
+    const previousActive = document.activeElement;
+
+    const overlay = document.createElement("div");
+    overlay.className = "comparison-modal";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", `Comparison for ${filename}`);
+
+    const container = document.createElement("div");
+    container.className = "comparison-modal-inner";
+
+    const close = document.createElement("button");
+    close.className = "comparison-modal-close";
+    close.type = "button";
+    close.setAttribute("aria-label", "Close comparison");
+    close.textContent = "×";
+    close.tabIndex = 0;
+
+    const view = document.createElement("div");
+    view.className = "comparison-view";
+
+    const origImg = document.createElement("img");
+    origImg.src = originalUrl;
+    origImg.alt = `Original ${filename}`;
+    origImg.className = "comparison-original";
+
+    const procContainer = document.createElement("div");
+    procContainer.className = "comparison-processed-container";
+    const procImg = document.createElement("img");
+    procImg.src = compressedUrl;
+    procImg.alt = `Compressed ${filename}`;
+    procImg.className = "comparison-processed";
+    procContainer.appendChild(procImg);
+
+    const slider = document.createElement("input");
+    slider.type = "range";
+    slider.min = 0;
+    slider.max = 100;
+    slider.value = 50;
+    slider.className = "comparison-range";
+    slider.tabIndex = 0;
+
+    view.appendChild(origImg);
+    view.appendChild(procContainer);
+
+    container.appendChild(close);
+    container.appendChild(view);
+    container.appendChild(slider);
+    overlay.appendChild(container);
+    document.body.appendChild(overlay);
+
+    function update(v) {
+        const percent = Number(v);
+        procContainer.style.clipPath = `inset(0 0 0 ${percent}%)`;
+    }
+
+    slider.addEventListener("input", (e) => update(e.target.value));
+
+    // focus management / trap
+    const focusable = [close, slider];
+    let lastFocusedIndex = 0;
+
+    function keyHandler(e) {
+        if (e.key === "Tab") {
+            e.preventDefault();
+            // forward/backward
+            if (e.shiftKey) {
+                lastFocusedIndex = (lastFocusedIndex - 1 + focusable.length) % focusable.length;
+            } else {
+                lastFocusedIndex = (lastFocusedIndex + 1) % focusable.length;
+            }
+            focusable[lastFocusedIndex].focus();
+        }
+        if (e.key === "Escape") {
+            closeModal();
+        }
+    }
+
+    function clickOutside(e) {
+        if (e.target === overlay) closeModal();
+    }
+
+    function closeModal() {
+        document.removeEventListener("keydown", keyHandler);
+        overlay.removeEventListener("click", clickOutside);
+        if (document.body.contains(overlay)) {
+            document.body.removeChild(overlay);
+        }
+        if (previousActive && previousActive.focus) {
+            try {
+                previousActive.focus();
+            } catch (e) {}
+        }
+    }
+
+    close.addEventListener("click", closeModal);
+    document.addEventListener("keydown", keyHandler);
+    overlay.addEventListener("click", clickOutside);
+
+    // initial focus
+    close.focus();
+
+    // expose for tests
+    try {
+        window.__showComparisonModalForTest = showComparisonModal;
+    } catch (e) {}
 }
 
 qualityOptions.forEach((option) => {
@@ -456,7 +594,7 @@ qualityOptions.forEach((option) => {
             btn.classList.remove("active");
         });
         option.classList.add("active");
-        selectedQuality = Number(option.dataset.quality) || 85;
+        selectedPreset = option.dataset.preset || "balanced";
     });
 });
 
@@ -553,11 +691,13 @@ compressButton.addEventListener("click", async () => {
     const abortController = new AbortController();
 
     try {
-        const startResult = await compressFiles({
+        const startResult = await startBatchCompression({
             files: files.map((item) => item.file),
-            imageOutputFormat: outputFormat.value,
-            imageQuality: selectedQuality,
-            pdfQuality: pdfQuality.value,
+            imageOutputFormat: advancedFormat.value,
+            compressionPreset: selectedPreset,
+            maxDimension: maxDimension ? (maxDimension.value || null) : null,
+            targetSizeKb: targetSize ? (targetSize.value || null) : null,
+            stripMetadata: stripMetadata ? stripMetadata.checked : true,
         });
 
         activeJobId = startResult.job_id;
@@ -599,6 +739,12 @@ compressButton.addEventListener("click", async () => {
 
         hide(processing);
         show(result);
+        // Register a successful use for the support popup
+        try {
+            registerUse();
+        } catch (e) {
+            // ignore popup errors
+        }
     } catch (error) {
         hide(processing);
         show(workspace);
