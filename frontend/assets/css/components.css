@@ -52,7 +52,7 @@
 
   color: var(--color-text);
 
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
 
   font-weight: var(--font-weight-black);
 }
@@ -67,7 +67,7 @@
   align-items: center;
   margin-bottom: 20px;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   letter-spacing: var(--letter-spacing-wide);
   text-transform: uppercase;
@@ -184,7 +184,7 @@
 
   background: rgba(22, 51, 0, 0.08);
 
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
 
   font-weight: var(--font-weight-black);
 }
@@ -197,7 +197,7 @@
   display: block;
   margin-bottom: 12px;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wide);
@@ -205,7 +205,7 @@
 
 .tool-card h2 {
   margin: 0;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2rem, 4vw, var(--font-size-3xl));
   line-height: var(--line-height-snug);
   letter-spacing: var(--letter-spacing-tight);
   font-weight: var(--font-weight-black);
@@ -242,7 +242,7 @@
 .header-nav a {
   color: var(--color-text-secondary);
 
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
 
   font-weight: var(--font-weight-semibold);
 
@@ -270,7 +270,7 @@
   background: var(--color-surface);
   color: var(--color-text);
   font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   text-decoration: none;
   cursor: pointer;
   transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
@@ -415,7 +415,7 @@
 .file-hint {
   margin-top: 18px !important;
   color: var(--color-text-muted) !important;
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
 }
 .result-card {
   margin-top: 24px;
@@ -441,7 +441,7 @@
 }
 .result-meta {
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
 }
 .preview {
@@ -492,13 +492,13 @@
 .variant-size {
   margin-top: 8px;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: 600;
 }
 .variant-description {
   margin: 10px 0 0;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   line-height: 1.5;
 }
 .variant .primary-button {
@@ -547,7 +547,7 @@
 .processing-message {
   margin-top: 18px;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: 600;
   min-height: 20px;
 }
@@ -581,7 +581,7 @@
 .processing-count {
   margin-top: 10px;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
 }
   display: flex;
@@ -598,7 +598,7 @@
   background: var(--color-surface);
   color: var(--color-text);
   font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   transition:
     background var(--transition-fast),
     color var(--transition-fast),
@@ -618,7 +618,7 @@
   border-radius: var(--radius-md);
   background: #fff0f0;
   color: var(--color-danger);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: 600;
 }
 .cancel-button {
@@ -676,16 +676,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: 750;
 }
 .file-queue-size {
   color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
 }
 .file-queue-status {
   color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
 }
 .file-queue-remove {
@@ -823,7 +823,7 @@
   border-radius: 999px;
   background: var(--color-primary-soft);
   color: var(--color-success);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -877,7 +877,7 @@
 
   color: var(--color-text-secondary);
 
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
 }
 
 .file-queue-status.status-processing {
@@ -909,7 +909,7 @@
 
   color: var(--color-text);
 
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
 
   font-weight: var(--font-weight-bold);
 }
@@ -922,7 +922,7 @@
 }
 .tool-page-header h2 {
   margin: 0;
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2.5rem, 5vw, var(--font-size-3xl));
   line-height: var(--line-height-snug);
   letter-spacing: var(--letter-spacing-tight);
   font-weight: var(--font-weight-black);
@@ -984,7 +984,7 @@
 }
 .selected-file span {
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
 }
 .text-button {
   flex-shrink: 0;
@@ -1010,7 +1010,7 @@
   gap: 12px;
 }
 .setting-group > label {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
 }
 .quality-options {
@@ -1040,12 +1040,12 @@
   background: var(--color-primary-soft);
 }
 .quality-option strong {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
 }
 .quality-option span {
   margin-top: 4px;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
 }
 .advanced-settings {
   margin-top: 20px;
@@ -1061,7 +1061,7 @@
   cursor: pointer;
   list-style: none;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
 }
 .advanced-settings summary::-webkit-details-marker {
@@ -1119,7 +1119,7 @@
 }
 .toggle-label {
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
 }
 .background-settings {
   display: flex;
@@ -1154,12 +1154,12 @@
   background: var(--color-primary-soft);
 }
 .output-option strong {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
 }
 .output-option span {
   margin-top: 4px;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
 }
 .select-input,
 .target-size-input input {
@@ -1191,17 +1191,17 @@
 .target-size-input span {
   padding-right: 14px;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
 }
 .setting-group small {
   color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
 }
 .compress-button {
   width: 100%;
   min-height: 56px;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-lg);
 }
 .compression-result {
   padding: 28px;
@@ -1230,7 +1230,7 @@
 .size-block span,
 .saving-block span {
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -1375,7 +1375,7 @@
 
   white-space: nowrap;
 
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
 
   font-weight: 750;
 }
@@ -1383,7 +1383,7 @@
 .completed-file-meta {
   color: var(--color-text-secondary);
 
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
 }
 
 .completed-file-download {
@@ -1405,7 +1405,7 @@
 
   color: var(--color-text);
 
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
 
   font-weight: var(--font-weight-bold);
 }
@@ -1453,7 +1453,7 @@
 .local-content h2 {
   margin: 0;
 
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2rem, 5vw, var(--font-size-3xl));
 
   line-height: var(--line-height-tight);
 
@@ -1490,7 +1490,7 @@
 }
 
 .local-points strong {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-lg);
 }
 
 .local-points span {
@@ -1498,7 +1498,7 @@
 
   color: var(--color-text-secondary);
 
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
 }
 
 @media (max-width: 700px) {
@@ -1582,7 +1582,7 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.92);
   color: var(--color-text);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   box-shadow: var(--shadow-sm);
   pointer-events: none;
@@ -1601,12 +1601,12 @@
 .variant-description {
   margin: 8px 0 0;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   line-height: 1.5;
 }
 .completed-file-savings {
   color: var(--color-success);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
 }
 .reduction-indicator {
@@ -1636,14 +1636,14 @@
   gap: 12px;
   margin-top: 10px;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
 }
 .reduction-label strong {
   color: var(--color-text);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
 }
 .summary-message {
   margin-top: 16px;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
 }

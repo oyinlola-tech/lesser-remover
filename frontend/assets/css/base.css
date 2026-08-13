@@ -11,7 +11,7 @@ body {
         var(--font-family);
 
     font-size:
-        var(--font-size-md);
+        var(--font-size-lg);
 
     line-height:
         var(--line-height-normal);

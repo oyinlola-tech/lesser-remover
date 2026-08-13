@@ -25,14 +25,14 @@
         "Segoe UI",
         sans-serif;
 
-    --font-size-xs: 0.75rem;
-    --font-size-sm: 0.875rem;
-    --font-size-md: 1rem;
-    --font-size-lg: 1.125rem;
-    --font-size-xl: 1.5rem;
-    --font-size-2xl: 2rem;
-    --font-size-3xl: 3rem;
-    --font-size-4xl: 5rem;
+    --font-size-xs: 0.875rem;
+    --font-size-sm: 1rem;
+    --font-size-md: 1.125rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.75rem;
+    --font-size-2xl: 2.5rem;
+    --font-size-3xl: 4rem;
+    --font-size-4xl: 7rem;
 
     --font-weight-regular: 400;
     --font-weight-medium: 500;
@@ -40,11 +40,11 @@
     --font-weight-bold: 700;
     --font-weight-black: 900;
 
-    --line-height-snug: 1.25;
+    --line-height-snug: 1.15;
     --line-height-normal: 1.5;
     --line-height-relaxed: 1.65;
 
-    --letter-spacing-tight: -0.02em;
+    --letter-spacing-tight: -0.03em;
     --letter-spacing-normal: 0;
     --letter-spacing-wide: 0.04em;
 
