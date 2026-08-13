@@ -43,6 +43,14 @@
         display: none;
     }
 
+    .header-actions {
+        gap: 8px;
+    }
+
+    .header-star-button span {
+        display: none;
+    }
+
     .landing {
         padding:
             64px 0 72px;

@@ -2,11 +2,11 @@ import "./background-remover.js";
 import "./compressor.js";
 import { openSupport } from "./support-popup.js";
 
-const fabSupport = document.querySelector("#fab-support");
+const headerSupport = document.querySelector("#header-support-button");
 const footerSupport = document.querySelector("#footer-support-button");
 
-if (fabSupport) {
-  fabSupport.addEventListener("click", () => {
+if (headerSupport) {
+  headerSupport.addEventListener("click", () => {
     openSupport();
   });
 }
