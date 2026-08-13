@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from app.infrastructure.storage.local_storage import storage
+from app.infrastructure.storage import storage
 from app.shared.utils.file_util import resolve_safe_path
 
 

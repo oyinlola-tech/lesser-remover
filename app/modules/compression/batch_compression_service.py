@@ -14,9 +14,7 @@ from app.modules.compression.compression_service import (
 from app.modules.jobs.job_service import (
     job_service,
 )
-from app.infrastructure.jobs.local_job_storage import (
-    local_job_storage,
-)
+from app.infrastructure.jobs import local_job_storage
 from app.shared.file_inspection.file_validation import (
     inspect_and_validate,
 )

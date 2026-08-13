@@ -1,9 +1,7 @@
 import copy
 from datetime import datetime, timezone
 
-from app.infrastructure.jobs.local_job_storage import (
-    local_job_storage,
-)
+from app.infrastructure.jobs import local_job_storage
 
 
 class JobService:

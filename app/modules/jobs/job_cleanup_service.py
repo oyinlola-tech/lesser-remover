@@ -2,9 +2,7 @@ import shutil
 from datetime import datetime, timedelta, timezone
 
 from app.core.config import settings
-from app.infrastructure.jobs.local_job_storage import (
-    local_job_storage,
-)
+from app.infrastructure.jobs import local_job_storage
 
 
 class JobCleanupService:

@@ -24,9 +24,7 @@ from app.modules.compression.compression_repository import (
 from app.modules.jobs.job_service import (
     job_service,
 )
-from app.infrastructure.jobs.local_job_storage import (
-    local_job_storage,
-)
+from app.infrastructure.jobs import local_job_storage
 from app.shared.utils.file_util import is_safe_filename
 from app.shared.utils.file_util import (
     generate_filename,
