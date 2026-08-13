@@ -1,6 +1,6 @@
-# Local Image & File Tools
+# Image Tools
 
-A local-first, privacy-preserving desktop tool for **background removal** and **file compression**. Everything runs on your machine. No accounts, no cloud uploads, no external services.
+A fast, calm, and precise file utility for **background removal** and **file compression**. Runs entirely in your browser or on our server. No accounts, no cloud uploads, no external services required.
 
 ---
 
@@ -8,7 +8,7 @@ A local-first, privacy-preserving desktop tool for **background removal** and **
 
 - **Remove backgrounds** from images and download transparent PNG / WebP results.
 - **Compress files** (images + PDFs) with quality presets, target-size compression, and batch ZIP downloads.
-- **Batch queue** for multiple files with real local progress tracking.
+- **Batch queue** for multiple files with real progress tracking.
 - **Secure upload pipeline** with magic-byte validation, size limits, and decompression-bomb protection.
 
 ---
@@ -33,14 +33,14 @@ flowchart TD
         Pillow["Pillow"]
         GS["Ghostscript"]
         Zip["ZIP Adapter"]
-        Storage["Local Storage"]
-        Jobs["Local Job System"]
+        Storage["Storage Abstraction"]
+        Jobs["Job System"]
     end
 
-    UI -->|POST /api/background/remove| Routes
+    UI -->|POST /api/background/start| Routes
     UI -->|POST /api/compression/batch/start| Routes
-    UI -->|GET /api/jobs/:job_id| Routes
-    UI -->|GET /api/compression/download/:file| Routes
+    UI -->|GET /api/jobs/{job_id}| Routes
+    UI -->|GET /api/compression/download/{filename}| Routes
 
     Routes --> Controllers
     Controllers --> Services
@@ -54,6 +54,9 @@ flowchart TD
     Infrastructure --> Pillow
     Infrastructure --> GS
     Infrastructure --> Zip
+
+    Storage -->|local| LocalFS["./storage/"]
+    Storage -->|vercel| VercelBlob["Vercel Blob"]
 ```
 
 ### Data flow for background removal
@@ -66,7 +69,7 @@ flowchart LR
     Rembg --> ImageService["Image Service"]
     ImageService --> PNG["PNG encode"]
     ImageService --> WebP["WebP encode"]
-    PNG --> Storage["Local Storage"]
+    PNG --> Storage["Storage"]
     WebP --> Storage
     Storage --> Download["Download PNG / WebP"]
 ```
@@ -76,7 +79,7 @@ flowchart LR
 ```mermaid
 flowchart LR
     Upload["Upload Files"] --> Inspector["File Inspector"]
-    Inspector --> Job["Create Local Job\n(storage/jobs/{job-id}/)"]
+    Inspector --> Job["Create Job"]
     Job --> SaveInput["Save inputs"]
     SaveInput --> Process["Process sequentially"]
     Process --> Image["Pillow\n(WebP / JPEG / PNG)"]
@@ -84,10 +87,57 @@ flowchart LR
     Image --> Output["Job output/"]
     PDF --> Output
     Output --> Zip["ZIP archive"]
-    Zip --> Downloads["storage/downloads/"]
+    Zip --> Downloads["Downloads"]
     Downloads --> Poll["Browser polls\n/api/jobs/{job-id}"]
     Poll --> DownloadZIP["Download ZIP"]
 ```
+
+---
+
+## Deployment modes
+
+This repository supports two deployment targets with the same codebase.
+
+### Local mode
+
+```bash
+# 1. Clone or open the project
+cd Lesser-Remover
+
+# 2. Create virtual environment
+python3 -m venv .venv
+
+# 3. Activate virtual environment
+source .venv/bin/activate  # Linux / macOS
+# .venv\Scripts\activate   # Windows
+
+# 4. Upgrade pip
+python -m pip install --upgrade pip
+
+# 5. Install dependencies
+python -m pip install -r requirements.txt
+
+# 6. Verify Ghostscript
+gs --version
+
+# 7. Run
+./start.sh
+```
+
+Then open http://127.0.0.1:8000
+
+### Vercel mode
+
+1. Connect your GitHub repository to Vercel
+2. Set the project root to the repository root
+3. Add environment variables in Vercel:
+   - `STORAGE_DRIVER=vercel`
+   - `BLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>`
+   - `CORS_ORIGINS=https://your-domain.vercel.app`
+4. Connect Vercel Blob to your project
+5. Deploy
+
+Both modes use the same repository, same routes, and same frontend.
 
 ---
 
@@ -97,7 +147,9 @@ flowchart LR
 app/
 ├── main.py                          # FastAPI app, static files, startup cleanup
 ├── core/
-│   └── config.py                    # Central settings (paths, limits, env)
+│   ├── config.py                    # Central settings (paths, limits, env)
+│   ├── logging.py                   # Structured logging
+│   └── exceptions.py                # Exception handlers
 ├── modules/
 │   ├── background/                  # Background-removal feature
 │   ├── compression/                 # Image + PDF compression feature
@@ -105,14 +157,14 @@ app/
 │   │   ├── pdf_compression/         # Ghostscript-based PDF compression
 │   │   └── batch_compression_service.py
 │   ├── archive/                     # ZIP creation service
-│   ├── jobs/                        # Local job system (metadata + cleanup)
+│   ├── jobs/                        # Job system (metadata + cleanup)
 │   └── image/                       # Shared image schemas + processor
 ├── infrastructure/
-│   ├── storage/                     # Local filesystem storage abstraction
+│   ├── storage/                     # Storage abstraction (local + Vercel)
 │   ├── compression/                 # Pillow + Ghostscript adapters
 │   ├── archive/                     # ZIP adapter
 │   ├── image/                       # rembg adapter
-│   └── jobs/                        # Local job storage (filesystem)
+│   └── jobs/                        # Job storage (local + Vercel)
 └── shared/
     ├── constants/                   # Supported formats, limits
     ├── enums/                       # File types, compression levels
@@ -132,25 +184,30 @@ frontend/
     └── js/
         ├── app.js
         ├── api.js
-        ├── state.js
         ├── utils.js
+        ├── error-boundary.js
         ├── background-remover.js
-        └── compressor.js
+        ├── compressor.js
+        └── support-popup.js
+
+api/
+└── index.py                         # Vercel serverless entry point
 
 storage/
-├── uploads/         # Temporary uploads
-├── processed/       # Background-removal results
-├── compressed/      # Single-file compression results
-├── jobs/            # Batch job folders + metadata.json
-└── downloads/       # Public ZIP downloads
+├── uploads/         # Temporary uploads (local only)
+├── processed/       # Background-removal results (local only)
+├── compressed/      # Single-file compression results (local only)
+├── temp/            # Generic temp files (local only)
+├── jobs/            # Batch job folders + metadata.json (local only)
+└── downloads/       # Public ZIP downloads (local only)
 ```
 
 ---
 
 ## Design principles
 
-- **Local-only**: no database, no Redis, no cloud storage, no external APIs.
-- **Stateless backend**: temporary job state lives in `storage/jobs/` as `metadata.json`.
+- **Local-first**: no database, no Redis, no cloud storage, no external APIs.
+- **Stateless backend**: temporary job state lives in storage as `metadata.json`.
 - **Clean architecture**: controllers never call Pillow/Ghostscript directly; they go through services and adapters.
 - **Secure by default**: magic-byte inspection, Pillow verification, `MAX_IMAGE_PIXELS`, size limits.
 - **Progressive disclosure**: simple frontend flow, advanced settings available when needed.
@@ -182,132 +239,37 @@ Install Python from python.org and Ghostscript from ghostscript.com.
 
 ---
 
-## Setup
-
-```bash
-# 1. Clone or open the project
-cd Lesser\&Remover
-
-# 2. Create virtual environment
-python3 -m venv .venv
-
-# 3. Activate virtual environment
-# Linux / macOS:
-source .venv/bin/activate
-# Windows:
-# .venv\Scripts\activate
-
-# 4. Upgrade pip
-python -m pip install --upgrade pip
-
-# 5. Install dependencies
-python -m pip install -r requirements.txt
-
-# 6. Verify Ghostscript
-gs --version
-```
-
----
-
-## Run
-
-```bash
-uvicorn app.main:app --reload
-```
-
-Then open:
-
-- **Frontend**: http://127.0.0.1:8000
-- **API docs (Swagger)**: http://127.0.0.1:8000/docs
-- **Health check**: http://127.0.0.1:8000/health
-
----
-
-## How to use
-
-### Background remover
-
-1. Open http://127.0.0.1:8000
-2. Switch to **Remove background**
-3. Drag & drop an image or click **Choose image**
-4. Wait for processing
-5. Download PNG or WebP
-
-### Compressor (single file)
-
-1. Switch to **Compress files**
-2. Drag & drop an image or PDF
-3. Choose quality preset or output format
-4. Click **Compress files**
-5. Download the result
-
-### Compressor (batch)
-
-1. Drag & drop multiple files (images + PDFs)
-2. Adjust settings
-3. Click **Compress files**
-4. Watch real-time progress
-5. Download a ZIP containing all compressed files
-
----
-
-## API overview
-
-| Method | Path | Purpose |
-|--------|------|---------|
-| GET | `/` | Frontend |
-| GET | `/health` | Health check |
-| GET | `/docs` | Swagger UI |
-| GET | `/static/...` | Static assets |
-| POST | `/api/background/remove` | Remove background |
-| GET | `/api/background/download/{filename}` | Download transparent result |
-| POST | `/api/compression` | Compress single file |
-| POST | `/api/compression/batch/start` | Start batch compression |
-| GET | `/api/jobs/{job_id}` | Poll batch job status |
-| GET | `/api/compression/download/{filename}` | Download compressed file or ZIP |
-
----
-
-## Frontend & API: Compression UI changes
-
-- Compression now uses semantic presets instead of raw numeric quality values: `best_quality`, `balanced`, `smallest`.
-- The frontend compressor UI offers an optional `max-dimension` resizing control to cap image width/height while preserving aspect ratio.
-- API query parameters for compression endpoints:
-    - `compression_preset` (string): one of `best_quality`, `balanced`, `smallest`.
-    - `max_dimension` (int, optional): maximum width/height in pixels.
-    - `target_size_kb` (int, optional): desired maximum filesize in KB (engine attempts to fit by adjusting quality).
-
-Frontend behavior:
-- After compression completes, each completed file shows a thumbnail. Clicking the thumbnail opens a comparison modal that lets you slide between the original local preview and the compressed result from the server.
-- The background remover preview also offers a before/after slider.
-
-Testing note:
-- When running `pytest` locally, set `PYTHONPATH` to the project root (for example `export PYTHONPATH=$(pwd)`) so tests can import `app`.
-
 ## Environment variables
 
 Create a `.env` file at the project root:
 
 ```bash
-APP_NAME=Local Image & File Tools
+APP_NAME=Image Tools
 APP_VERSION=1.0.0
 APP_ENV=development
 DEBUG=true
 HOST=127.0.0.1
 PORT=8000
 MAX_UPLOAD_SIZE_MB=100
+
+STORAGE_DRIVER=local
+
 UPLOAD_DIRECTORY=storage/uploads
 PROCESSED_DIRECTORY=storage/processed
 COMPRESSED_DIRECTORY=storage/compressed
 TEMP_DIRECTORY=storage/temp
-JOB_DIRECTORY=storage/jobs
-DOWNLOAD_DIRECTORY=storage/downloads
-JOB_EXPIRATION_MINUTES=30
+
+JOB_TTL_MINUTES=30
+
+CORS_ORIGINS=http://127.0.0.1:8000,http://localhost:8000
+
+# Vercel only
+BLOB_READ_WRITE_TOKEN=
 ```
 
 ---
 
-## Storage layout
+## Storage layout (local mode)
 
 ```text
 storage/
@@ -332,6 +294,7 @@ storage/
 - `Image.MAX_IMAGE_PIXELS = 50_000_000` protects against decompression bombs.
 - Upload size limits: images 25 MB, PDFs 50 MB.
 - Filenames are sanitized before storage.
+- Vercel Blob token is never exposed to the frontend.
 
 ---
 
