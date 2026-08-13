@@ -1,3 +1,4 @@
+import logging
 import uuid
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
@@ -10,6 +11,8 @@ from app.modules.background.background_repository import (
     background_repository,
 )
 from app.shared.utils.file_util import is_safe_filename
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/api/background",
@@ -34,6 +37,11 @@ async def start_background(
     file: UploadFile = File(...),
     output_format: str = "webp",
 ):
+    logger.info(
+        "Starting background removal for file: %s, format: %s",
+        file.filename,
+        output_format,
+    )
     normalized_format = _validate_output_format(output_format)
     result = await background_controller.remove_background(file, normalized_format)
     job_id = uuid.uuid4().hex
@@ -42,6 +50,11 @@ async def start_background(
         "status": "completed",
         "result": result,
     }
+    logger.info(
+        "Background removal completed for file: %s, job_id: %s",
+        file.filename,
+        job_id,
+    )
     return {
         "success": True,
         "job_id": job_id,

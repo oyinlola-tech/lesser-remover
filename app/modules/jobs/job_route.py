@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, HTTPException
 
 from app.modules.jobs.job_controller import (
@@ -7,6 +9,8 @@ from app.modules.jobs.job_service import (
     job_service,
 )
 
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/api/jobs",
@@ -18,6 +22,7 @@ router = APIRouter(
 async def get_job(
     job_id: str,
 ):
+    logger.debug("Job status requested: %s", job_id)
     return job_controller.get_job(job_id)
 
 
@@ -25,6 +30,7 @@ async def get_job(
 async def cancel_job(
     job_id: str,
 ):
+    logger.info("Job cancellation requested: %s", job_id)
     job = job_service.get(job_id)
     if not job:
         raise HTTPException(
