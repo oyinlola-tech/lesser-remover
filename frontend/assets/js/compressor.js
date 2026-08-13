@@ -158,6 +158,9 @@ function clearFiles() {
     hide(workspace);
 
     show(dropZone);
+    
+    const badge = document.querySelector("#compression-success-badge");
+    if (badge) hideElement(badge);
 }
 
 function renderQueue() {
@@ -377,6 +380,8 @@ function renderCompletedFiles(job) {
         const element = document.createElement("div");
 
         element.className = "completed-file";
+
+        element.style.animation = "slideIn 300ms ease-out";
 
         const info = document.createElement("div");
 
@@ -685,15 +690,15 @@ function updateProcessingUI(job) {
 }
 
 compressButton.addEventListener("click", async () => {
-    console.log("Compress button clicked, files length:", files.length, "activeJobId:", activeJobId);
     if (!files.length || activeJobId) {
-        console.log("Compress button early return");
         return;
     }
     compressButton.disabled = true;
     hide(workspace);
     hide(result);
     hide(errorMessage);
+    const badge = document.querySelector("#compression-success-badge");
+    if (badge) hideElement(badge);
     show(processing);
 
     processingProgress.style.width = "0%";
@@ -752,6 +757,13 @@ compressButton.addEventListener("click", async () => {
 
         hide(processing);
         show(result);
+        const badge = document.querySelector("#compression-success-badge");
+        if (badge) showElement(badge);
+        
+        result.style.animation = "none";
+        result.offsetHeight;
+        result.style.animation = "fadeIn 400ms ease-out";
+        
         // Register a successful use for the support popup
         try {
             registerUse();
@@ -795,5 +807,7 @@ compressAnotherButton.addEventListener("click", () => {
     clearFiles();
     hide(result);
     hide(errorMessage);
+    const badge = document.querySelector("#compression-success-badge");
+    if (badge) hideElement(badge);
     show(dropZone);
 });

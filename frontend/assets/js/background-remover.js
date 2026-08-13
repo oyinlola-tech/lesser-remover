@@ -34,6 +34,8 @@ function resetUI() {
     hideElement(processing);
     hideElement(result);
     hideElement(errorMessage);
+    const badge = document.querySelector("#bg-success-badge");
+    if (badge) hideElement(badge);
     dropZone.classList.remove("hidden");
     if (originalObjectUrl) {
         URL.revokeObjectURL(originalObjectUrl);
@@ -78,11 +80,19 @@ function showResult(data) {
     updateComparison(50);
 
     showElement(result);
+    const badge = document.querySelector("#bg-success-badge");
+    if (badge) showElement(badge);
+    
+    result.style.animation = "none";
+    result.offsetHeight;
+    result.style.animation = "fadeIn 400ms ease-out";
+    
     try {
         registerUse();
     } catch (e) {
-        logger.error("Error occurred while registering use:", e);
+        // ignore popup errors
     }
+}
 }
 
 async function processFile(file) {

@@ -339,13 +339,16 @@
                   <h2 class="result-title">Your image is ready</h2>
                   <div class="result-meta" id="bg-result-meta"></div>
                 </div>
-                <button
-                  type="button"
-                  class="secondary-button"
-                  id="bg-new-image-button"
-                >
-                  Process another
-                </button>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <span class="success-badge hidden" id="bg-success-badge">Done</span>
+                  <button
+                    type="button"
+                    class="secondary-button"
+                    id="bg-new-image-button"
+                  >
+                    Process another
+                  </button>
+                </div>
               </div>
                 <div
                   class="image-comparison"
@@ -646,28 +649,31 @@
                     </button>
                   </div>
                 </div>
-                <div
-                  id="compression-result"
-                  class="compression-result hidden"
-                >
-                  <div class="result-header">
-                    <div>
-                      <h2 class="result-title">
-                        Your files are ready
-                      </h2>
-                      <div
-                        id="compression-result-meta"
-                        class="result-meta"
-                      ></div>
-                    </div>
-                    <button
-                      type="button"
-                      class="secondary-button"
-                      id="compress-another"
-                    >
-                      Compress another
-                    </button>
-                  </div>
+                 <div
+                   id="compression-result"
+                   class="compression-result hidden"
+                 >
+                   <div class="result-header">
+                     <div>
+                       <h2 class="result-title">
+                         Your files are ready
+                       </h2>
+                       <div
+                         id="compression-result-meta"
+                         class="result-meta"
+                       ></div>
+                     </div>
+                     <div style="display: flex; gap: 10px; align-items: center;">
+                       <span class="success-badge hidden" id="compression-success-badge">Done</span>
+                       <button
+                         type="button"
+                         class="secondary-button"
+                         id="compress-another"
+                       >
+                         Compress another
+                       </button>
+                     </div>
+                   </div>
                   <div class="compression-summary">
                     <div class="size-block">
                       <span>
