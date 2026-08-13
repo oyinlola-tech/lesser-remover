@@ -1,0 +1,39 @@
+from fastapi import APIRouter, HTTPException
+
+from app.modules.jobs.job_controller import (
+    job_controller,
+)
+from app.modules.jobs.job_service import (
+    job_service,
+)
+
+
+router = APIRouter(
+    prefix="/api/jobs",
+    tags=["Jobs"],
+)
+
+
+@router.get("/{job_id}")
+async def get_job(
+    job_id: str,
+):
+    return job_controller.get_job(job_id)
+
+
+@router.delete("/{job_id}")
+async def cancel_job(
+    job_id: str,
+):
+    job = job_service.get(job_id)
+    if not job:
+        raise HTTPException(
+            status_code=404,
+            detail="Job not found.",
+        )
+    job_service.cancel(job_id)
+    return {
+        "success": True,
+        "job_id": job_id,
+        "status": "cancelled",
+    }
