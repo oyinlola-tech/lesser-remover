@@ -225,14 +225,22 @@ class BatchCompressionService:
                     compressed_data
                 )
 
-                savings_percent = (
-                    (
-                        1 - (
-                            compressed_size /
-                            original_size
-                        )
-                    ) * 100
+                compression_repository.save(
+                    compressed_data,
+                    output_filename,
                 )
+
+                if original_size > 0:
+                    savings_percent = (
+                        (
+                            1 - (
+                                compressed_size /
+                                original_size
+                            )
+                        ) * 100
+                    )
+                else:
+                    savings_percent = 0.0
 
                 target_achieved = (
                     target_size_bytes is not None

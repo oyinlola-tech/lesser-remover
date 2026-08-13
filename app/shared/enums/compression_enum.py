@@ -11,10 +11,3 @@ class PdfCompressionLevel(StrEnum):
     BEST_QUALITY = "printer"
     BALANCED = "ebook"
     SMALLEST = "screen"
-from enum import Enum
-
-
-class CompressionLevel(str, Enum):
-    QUALITY = "quality"
-    BALANCED = "balanced"
-    MAXIMUM = "maximum"
