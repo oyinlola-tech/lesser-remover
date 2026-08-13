@@ -355,36 +355,48 @@ class BatchCompressionService:
 
             return
 
-        zip_filename = (
-            f"compressed_{job_id}.zip"
-        )
-
-        zip_path = (
-            local_job_storage
-            .get_job_path(job_id)
-            / zip_filename
-        )
-
-        archive_service.create_zip_from_directory(
-            output_directory,
-            zip_path,
-        )
-
-        download_path = (
-            local_job_storage.move_download(
-                zip_path,
-                zip_filename,
+        try:
+            zip_filename = (
+                f"compressed_{job_id}.zip"
             )
-        )
 
-        job_service.set_download_url(
-            job_id,
-            (
-                "/api/compression/"
-                "download/"
-                f"{download_path.name}"
-            ),
-        )
+            zip_path = (
+                local_job_storage
+                .get_job_path(job_id)
+                / zip_filename
+            )
+
+            archive_service.create_zip_from_directory(
+                output_directory,
+                zip_path,
+            )
+
+            download_path = (
+                local_job_storage.move_download(
+                    zip_path,
+                    zip_filename,
+                )
+            )
+
+            job_service.set_download_url(
+                job_id,
+                (
+                    "/api/compression/"
+                    "download/"
+                    f"{download_path.name}"
+                ),
+            )
+        except Exception as error:
+            logger.exception(
+                "Failed to finalize job %s: %s",
+                job_id,
+                error,
+            )
+            job_service.update_status(
+                job_id,
+                "failed",
+            )
+            return
 
         metadata = job_service.get(
             job_id

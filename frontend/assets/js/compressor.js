@@ -629,8 +629,14 @@ dropZone.addEventListener("drop", (event) => {
 clearFilesButton.addEventListener("click", clearFiles);
 
 async function waitForJob(jobId, signal) {
-    console.log("Waiting for job:", jobId);
+    const maxWaitMs = 10 * 60 * 1000;
+    const startTime = Date.now();
+
     while (!signal?.aborted) {
+        if (Date.now() - startTime > maxWaitMs) {
+            throw new Error("Compression timed out. Please try again with smaller files.");
+        }
+
         const job = await getJob(jobId);
         console.log("Job status:", job.status, "completed:", job.completed_files, "failed:", job.failed_files);
 
@@ -648,7 +654,9 @@ async function waitForJob(jobId, signal) {
 
         if (job.status === "failed") {
             console.error("Job failed");
-            throw new Error("Compression failed.");
+            const failedFile = job.files?.find((f) => f.status === "failed");
+            const errorMsg = failedFile?.error || "Compression failed. Please try again.";
+            throw new Error(errorMsg);
         }
 
         if (job.status === "cancelled") {

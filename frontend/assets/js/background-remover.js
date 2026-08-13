@@ -54,10 +54,8 @@ function resetUI() {
     if (processingMessage) processingMessage.textContent = "Preparing your image...";
 }
 
-function updateBackgroundProgress(stage, percent) {
+function updateBackgroundProgress(stage) {
     if (processingMessage) processingMessage.textContent = stage;
-    if (processingProgress) processingProgress.style.width = `${percent}%`;
-    if (processingCount) processingCount.textContent = `${percent}%`;
 }
 
 function showError(message) {
@@ -120,7 +118,7 @@ async function processFile(file) {
     hideElement(errorMessage);
     showElement(processing);
 
-    updateBackgroundProgress("Preparing your image...", 10);
+    updateBackgroundProgress("Preparing your image...");
 
     try {
         if (originalObjectUrl) {
@@ -130,14 +128,14 @@ async function processFile(file) {
         originalPreview.src = originalObjectUrl;
         originalPreview.alt = file.name || "Original image";
 
-        updateBackgroundProgress("Removing background...", 40);
+        updateBackgroundProgress("Removing background...");
 
         const data = await startBackgroundRemoval(file, selectedOutputFormat);
         
-        updateBackgroundProgress("Encoding result...", 80);
+        updateBackgroundProgress("Encoding result...");
         showResult(data.result);
         
-        updateBackgroundProgress("Complete", 100);
+        updateBackgroundProgress("Complete");
     } catch (error) {
         showError(error.message || "Something went wrong while processing the image.");
     }

@@ -65,14 +65,14 @@ button {
 
 .site-footer {
   border-top: 1px solid var(--color-border);
-  padding: 64px 0 32px;
+  padding: 48px 0 24px;
   background: var(--color-surface);
 }
 
 .footer-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
-  gap: 48px;
+  gap: 28px;
 }
 
 .footer-brand-section {
@@ -144,8 +144,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 48px;
-  padding-top: 24px;
+  margin-top: 28px;
+  padding-top: 16px;
   border-top: 1px solid var(--color-border);
   color: var(--color-text-muted);
   font-size: var(--font-size-xs);
