@@ -165,9 +165,9 @@ class ImageCompressionService:
         preset: str = "balanced",
         output_format: str = "webp",
         max_dimension: int | None = None,
-    ) -> tuple[bytes, str, int]:
+    ) -> tuple[bytes, str, int, int, int]:
 
-        best_data, best_content_type, best_quality, _, _ = (
+        best_data, best_content_type, best_quality, width, height = (
             self._compress_with_preset_details(
                 file_data=file_data,
                 preset=preset,
@@ -180,6 +180,8 @@ class ImageCompressionService:
             best_data,
             best_content_type,
             best_quality,
+            width,
+            height,
         )
 
     def _compress_to_target_details(
@@ -269,9 +271,9 @@ class ImageCompressionService:
         target_size_bytes: int,
         output_format: str = "webp",
         max_dimension: int | None = None,
-    ) -> tuple[bytes, str, int]:
+    ) -> tuple[bytes, str, int, int, int]:
 
-        best_data, best_content_type, best_quality, _, _ = (
+        best_data, best_content_type, best_quality, width, height = (
             self._compress_to_target_details(
                 file_data=file_data,
                 target_size_bytes=target_size_bytes,
@@ -284,6 +286,8 @@ class ImageCompressionService:
             best_data,
             best_content_type,
             best_quality,
+            width,
+            height,
         )
 
 
