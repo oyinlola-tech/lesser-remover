@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 from app.core.config import settings
@@ -22,6 +23,9 @@ from app.shared.file_inspection.file_validation import (
 from app.shared.utils.file_util import (
     generate_filename,
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 class BatchCompressionService:
@@ -60,6 +64,10 @@ class BatchCompressionService:
             if job_service.is_cancelled(
                 job_id
             ):
+                logger.info(
+                    "Job %s cancelled, stopping processing",
+                    job_id,
+                )
                 return
 
             file_id = file_info["id"]
@@ -70,6 +78,13 @@ class BatchCompressionService:
 
             input_filename = (
                 file_info["input_filename"]
+            )
+
+            logger.info(
+                "Processing file %s (id=%s) for job %s",
+                original_filename,
+                file_id,
+                job_id,
             )
 
             job_service.update_file_status(
@@ -226,6 +241,16 @@ class BatchCompressionService:
                     and compressed_size <= target_size_bytes
                 )
 
+                logger.info(
+                    "Completed file %s (id=%s) for job %s: %s -> %s bytes, saved %.2f%%",
+                    original_filename,
+                    file_id,
+                    job_id,
+                    original_size,
+                    compressed_size,
+                    savings_percent,
+                )
+
                 job_service.update_file_status(
                     job_id,
                     file_id,
@@ -266,6 +291,14 @@ class BatchCompressionService:
 
             except Exception as error:
 
+                logger.exception(
+                    "Failed to process file %s (id=%s) for job %s: %s",
+                    original_filename,
+                    file_id,
+                    job_id,
+                    error,
+                )
+
                 job_service.update_file_status(
                     job_id,
                     file_id,
@@ -285,10 +318,22 @@ class BatchCompressionService:
         if job_service.is_cancelled(
             job_id
         ):
+            logger.info(
+                "Job %s was cancelled, skipping finalization",
+                job_id,
+            )
             return
 
         metadata = job_service.get(
             job_id
+        )
+
+        logger.info(
+            "Finalizing job %s: status=%s, completed=%s, failed=%s",
+            job_id,
+            metadata.get("status"),
+            metadata.get("completed_files"),
+            metadata.get("failed_files"),
         )
 
         output_directory = (

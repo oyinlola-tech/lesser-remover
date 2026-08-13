@@ -95,8 +95,10 @@ async function getImageDimensions(file) {
 }
 
 async function addFiles(newFiles) {
+    console.log("Adding files:", Array.from(newFiles).map(f => f.name));
     for (const file of newFiles) {
         if (!isSupportedFile(file)) {
+            console.log("Skipping unsupported file:", file.name);
             continue;
         }
 
@@ -127,6 +129,7 @@ async function addFiles(newFiles) {
     }
 
     renderQueue();
+    console.log("Files added, total files:", files.length);
 }
 
 function removeFile(id) {
@@ -621,8 +624,10 @@ dropZone.addEventListener("drop", (event) => {
 clearFilesButton.addEventListener("click", clearFiles);
 
 async function waitForJob(jobId, signal) {
+    console.log("Waiting for job:", jobId);
     while (!signal?.aborted) {
         const job = await getJob(jobId);
+        console.log("Job status:", job.status, "completed:", job.completed_files, "failed:", job.failed_files);
 
         syncJobToFiles(job);
 
@@ -631,19 +636,23 @@ async function waitForJob(jobId, signal) {
         renderQueue();
 
         if (job.status === "completed") {
+            console.log("Job completed");
             renderCompletedFiles(job);
             return job;
         }
 
         if (job.status === "failed") {
+            console.error("Job failed");
             throw new Error("Compression failed.");
         }
 
         if (job.status === "cancelled") {
+            console.log("Job cancelled");
             throw new Error("Compression was cancelled.");
         }
 
         if (cancelling || activeJobId !== jobId) {
+            console.log("Job cancelled by user or different job");
             throw new Error("Compression was cancelled.");
         }
 
@@ -676,7 +685,9 @@ function updateProcessingUI(job) {
 }
 
 compressButton.addEventListener("click", async () => {
+    console.log("Compress button clicked, files length:", files.length, "activeJobId:", activeJobId);
     if (!files.length || activeJobId) {
+        console.log("Compress button early return");
         return;
     }
     compressButton.disabled = true;
@@ -691,6 +702,7 @@ compressButton.addEventListener("click", async () => {
     const abortController = new AbortController();
 
     try {
+        console.log("Starting batch compression with files:", files.map(f => f.file.name));
         const startResult = await startBatchCompression({
             files: files.map((item) => item.file),
             imageOutputFormat: advancedFormat.value,
@@ -699,6 +711,7 @@ compressButton.addEventListener("click", async () => {
             targetSizeKb: targetSize ? (targetSize.value || null) : null,
             stripMetadata: stripMetadata ? stripMetadata.checked : true,
         });
+        console.log("Batch compression started:", startResult);
 
         activeJobId = startResult.job_id;
         cancelCompressionButton.disabled = false;

@@ -6,6 +6,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
+from app.core.logging import setup_logging
 from app.modules.background.background_route import (
     router as background_router,
 )
@@ -16,6 +17,8 @@ from app.modules.jobs.job_cleanup_service import (
     job_cleanup_service,
 )
 from app.modules.jobs.job_route import router as job_router
+
+setup_logging()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BASE_DIR / "frontend"

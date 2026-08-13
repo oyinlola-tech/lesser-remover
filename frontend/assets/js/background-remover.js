@@ -108,7 +108,7 @@ async function processFile(file) {
         originalPreview.alt = file.name || "Original image";
 
         const data = await startBackgroundRemoval(file, selectedOutputFormat);
-        showResult(data);
+        showResult(data.result);
     } catch (error) {
         showError(error.message || "Something went wrong while processing the image.");
     }

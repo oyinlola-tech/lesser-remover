@@ -1,3 +1,4 @@
+import logging
 from typing import Annotated
 
 from fastapi import (
@@ -9,6 +10,8 @@ from fastapi import (
 )
 from pathlib import Path
 from fastapi.responses import FileResponse
+
+logger = logging.getLogger(__name__)
 from app.modules.compression.batch_compression_service import (
     batch_compression_service,
 )
@@ -47,12 +50,17 @@ async def start_batch_compression(
     strip_metadata: bool = True,
 ):
     if not files:
+        logger.warning("Compression request rejected: no files uploaded")
         raise HTTPException(
             status_code=400,
             detail="No files were uploaded.",
         )
 
     if len(files) > 20:
+        logger.warning(
+            "Compression request rejected: %s files exceed limit of 20",
+            len(files),
+        )
         raise HTTPException(
             status_code=400,
             detail="Maximum of 20 files.",
@@ -63,6 +71,11 @@ async def start_batch_compression(
         for file in files
     ]
 
+    logger.info(
+        "Starting batch compression job for %s files: %s",
+        len(filenames),
+        filenames,
+    )
 
     job_id = job_service.create(
         filenames
@@ -155,6 +168,14 @@ async def start_batch_compression(
             max_dimension,
             target_size_kb,
             strip_metadata,
+        )
+
+        logger.info(
+            "Batch compression job created: job_id=%s, files=%s, format=%s, preset=%s",
+            job_id,
+            len(stored_files),
+            image_output_format,
+            compression_preset,
         )
 
     except Exception:
