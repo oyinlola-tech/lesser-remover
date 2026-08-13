@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+# Virtual environment
+.venv/
+# Environment
+.env
+# Storage
+storage/uploads/*
+storage/processed/*
+storage/compressed/*
+storage/temp/*
+!storage/uploads/.gitkeep
+!storage/processed/.gitkeep
+!storage/compressed/.gitkeep
+!storage/temp/.gitkeep
+# IDE
+.vscode/
+.idea/
+# OS
+.DS_Store
+Thumbs.db
