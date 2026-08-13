@@ -7,6 +7,8 @@ from app.infrastructure.jobs import local_job_storage
 
 class JobCleanupService:
     def cleanup_expired_jobs(self) -> int:
+        if settings.storage_driver == "vercel":
+            return 0
         now = datetime.now(timezone.utc)
         expiration = timedelta(
             minutes=settings.job_expiration_minutes
@@ -73,6 +75,8 @@ class JobCleanupService:
     def cleanup_expired_downloads(
         self,
     ) -> int:
+        if settings.storage_driver == "vercel":
+            return 0
         now = datetime.now(timezone.utc)
         expiration = timedelta(
             minutes=settings.job_expiration_minutes

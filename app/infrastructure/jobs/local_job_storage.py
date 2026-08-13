@@ -1,4 +1,5 @@
 import json
+import logging
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
@@ -12,14 +13,26 @@ class LocalJobStorage:
     def __init__(self) -> None:
         self.root_path = settings.job_path
         self.download_path = settings.download_path
-        self.root_path.mkdir(
-            parents=True,
-            exist_ok=True,
-        )
-        self.download_path.mkdir(
-            parents=True,
-            exist_ok=True,
-        )
+        try:
+            self.root_path.mkdir(
+                parents=True,
+                exist_ok=True,
+            )
+        except OSError:
+            logging.getLogger(__name__).warning(
+                "Could not create job directory %s (filesystem not writable)",
+                self.root_path,
+            )
+        try:
+            self.download_path.mkdir(
+                parents=True,
+                exist_ok=True,
+            )
+        except OSError:
+            logging.getLogger(__name__).warning(
+                "Could not create download directory %s (filesystem not writable)",
+                self.download_path,
+            )
 
     def create_job(self) -> str:
         job_id = uuid4().hex

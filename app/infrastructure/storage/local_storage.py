@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 from app.core.config import settings
@@ -19,10 +20,16 @@ class LocalStorage:
             self.temp_path,
         )
         for directory in directories:
-            directory.mkdir(
-                parents=True,
-                exist_ok=True,
-            )
+            try:
+                directory.mkdir(
+                    parents=True,
+                    exist_ok=True,
+                )
+            except OSError:
+                logging.getLogger(__name__).warning(
+                    "Could not create directory %s (filesystem not writable)",
+                    directory,
+                )
 
     def save(
         self,
