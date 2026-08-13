@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 40" fill="none">
+  <rect x="0" y="0" width="40" height="40" rx="10" fill="#0f172a"/>
+  <rect x="10" y="10" width="30" height="30" rx="7" fill="#334155"/>
+  <text x="56" y="28" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif" font-size="26" font-weight="800" fill="#0f172a" letter-spacing="-0.02em">Image</text>
+  <text x="138" y="28" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif" font-size="26" font-weight="400" fill="#475569" letter-spacing="-0.01em">Tools</text>
+</svg>

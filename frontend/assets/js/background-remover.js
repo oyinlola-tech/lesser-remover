@@ -93,7 +93,6 @@ function showResult(data) {
         // ignore popup errors
     }
 }
-}
 
 async function processFile(file) {
     if (!file) {
