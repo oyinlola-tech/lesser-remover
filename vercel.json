@@ -22,6 +22,8 @@
     "DEBUG": "false",
     "NUMBA_DISABLE_JIT": "1",
     "STORAGE_DRIVER": "vercel",
-    "MODEL_CHECKSUM_DISABLED": "1"
+    "MODEL_CHECKSUM_DISABLED": "1",
+    "HOME": "/tmp",
+    "XDG_CACHE_HOME": "/tmp"
   }
 }
