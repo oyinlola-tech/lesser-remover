@@ -130,3 +130,18 @@
         grid-row: 1;
     }
 }
+
+@media (max-width: 700px) {
+
+    .image-comparison {
+        min-height: 330px;
+    }
+
+    .comparison-label {
+        top: 12px;
+        padding: 6px 10px;
+    }
+
+    .comparison-label-original { left:12px; }
+    .comparison-label-processed { right:12px; }
+}
