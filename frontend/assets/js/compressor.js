@@ -482,8 +482,8 @@ dropZone.addEventListener("drop", (event) => {
 
 clearFilesButton.addEventListener("click", clearFiles);
 
-async function waitForJob(jobId) {
-    while (true) {
+async function waitForJob(jobId, signal) {
+    while (!signal?.aborted) {
         const job = await getJob(jobId);
 
         syncJobToFiles(job);
@@ -505,8 +505,14 @@ async function waitForJob(jobId) {
             throw new Error("Compression was cancelled.");
         }
 
+        if (cancelling || activeJobId !== jobId) {
+            throw new Error("Compression was cancelled.");
+        }
+
         await new Promise((resolve) => setTimeout(resolve, 500));
     }
+
+    throw new Error("Compression was cancelled.");
 }
 
 function updateProcessingUI(job) {

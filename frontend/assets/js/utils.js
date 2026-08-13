@@ -8,8 +8,10 @@ export function formatBytes(bytes) {
     return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 export function showElement(element) {
+    if (!element) return;
     element.classList.remove("hidden");
 }
 export function hideElement(element) {
+    if (!element) return;
     element.classList.add("hidden");
 }

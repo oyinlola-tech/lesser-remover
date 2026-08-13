@@ -1,135 +1,132 @@
+@media (max-width: 900px) {
+
+    .tool-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .compression-settings {
+        grid-template-columns: 1fr;
+    }
+
+    .compression-summary {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .size-arrow {
+        display: none;
+    }
+
+    .saving-block {
+        padding-left: 0;
+
+        border-left: 0;
+    }
+}
+
+
 @media (max-width: 700px) {
+
     .container {
-        width: min(
-            @media (max-width: 900px) {
+        width:
+            min(
+                calc(100% - 24px),
+                var(--container-width)
+            );
+    }
 
-                .tool-grid {
-                    grid-template-columns: 1fr;
-                }
+    .header-inner {
+        min-height: 64px;
+    }
 
-                .compression-settings {
-                    grid-template-columns: 1fr;
-                }
+    .header-nav {
+        display: none;
+    }
 
-                .compression-summary {
-                    grid-template-columns:
-                        1fr 1fr;
-                }
+    .landing {
+        padding:
+            64px 0 72px;
+    }
 
-                .size-arrow {
-                    display: none;
-                }
+    .landing h1 {
+        font-size:
+            3rem;
+    }
 
-                .saving-block {
-                    padding-left: 0;
+    .landing-description {
+        font-size:
+            var(--font-size-md);
+    }
 
-                    border-left: 0;
-                }
-            }
+    .tool-grid {
+        margin-top: 40px;
+    }
 
+    .tool-card {
+        min-height: 330px;
 
-            @media (max-width: 700px) {
+        padding: 24px;
+    }
 
-                .container {
-                    width:
-                        min(
-                            calc(100% - 24px),
-                            var(--container-width)
-                        );
-                }
+    .hero {
+        padding:
+            64px 0 48px;
+    }
 
-                .header-inner {
-                    min-height: 64px;
-                }
+    .hero h1 {
+        font-size:
+            2.8rem;
+    }
 
-                .header-nav {
-                    display: none;
-                }
+    .hero-description {
+        font-size:
+            var(--font-size-md);
+    }
 
-                .landing {
-                    padding:
-                        64px 0 72px;
-                }
+    .drop-zone {
+        min-height: 320px;
 
-                .landing h1 {
-                    font-size:
-                        3rem;
-                }
+        padding: 24px;
+    }
 
-                .landing-description {
-                    font-size:
-                        var(--font-size-md);
-                }
+    .compression-summary {
+        grid-template-columns: 1fr;
+    }
 
-                .tool-grid {
-                    margin-top: 40px;
-                }
+    .saving-block {
+        padding-top: 18px;
 
-                .tool-card {
-                    min-height: 330px;
+        border-top:
+            1px solid var(--color-border);
+    }
 
-                    padding: 24px;
-                }
+    .compression-result-actions {
+        display: block;
+    }
 
-                .hero {
-                    padding:
-                        64px 0 48px;
-                }
+    .compression-result-actions
+    .primary-button {
+        width: 100%;
+    }
 
-                .hero h1 {
-                    font-size:
-                        2.8rem;
-                }
+    .queue-header {
+        align-items:
+            flex-start;
+    }
 
-                .hero-description {
-                    font-size:
-                        var(--font-size-md);
-                }
+    .file-queue-item {
+        grid-template-columns:
+            auto
+            minmax(0, 1fr)
+            auto;
+    }
 
-                .drop-zone {
-                    min-height: 320px;
+    .file-queue-status {
+        grid-column: 2;
+    }
 
-                    padding: 24px;
-                }
-
-                .compression-summary {
-                    grid-template-columns: 1fr;
-                }
-
-                .saving-block {
-                    padding-top: 18px;
-
-                    border-top:
-                        1px solid var(--color-border);
-                }
-
-                .compression-result-actions {
-                    display: block;
-                }
-
-                .compression-result-actions
-                .primary-button {
-                    width: 100%;
-                }
-
-                .queue-header {
-                    align-items:
-                        flex-start;
-                }
-
-                .file-queue-item {
-                    grid-template-columns:
-                        auto
-                        minmax(0, 1fr)
-                        auto;
-                }
-
-                .file-queue-status {
-                    grid-column: 2;
-                }
-
-                .file-queue-remove {
-                    grid-column: 3;
-                    grid-row: 1;
-                }
-            }
+    .file-queue-remove {
+        grid-column: 3;
+        grid-row: 1;
+    }
+}
