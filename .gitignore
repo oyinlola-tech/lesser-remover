@@ -11,10 +11,14 @@ storage/uploads/*
 storage/processed/*
 storage/compressed/*
 storage/temp/*
+storage/jobs/*
+storage/downloads/*
 !storage/uploads/.gitkeep
 !storage/processed/.gitkeep
 !storage/compressed/.gitkeep
 !storage/temp/.gitkeep
+!storage/jobs/.gitkeep
+!storage/downloads/.gitkeep
 # IDE
 .vscode/
 .idea/
