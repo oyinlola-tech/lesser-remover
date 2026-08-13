@@ -19,6 +19,11 @@ class Settings(BaseSettings):
     download_directory: str = "storage/downloads"
     job_expiration_minutes: int = 30
 
+    storage_driver: str = "local"
+    blob_read_write_token: str = ""
+
+    cors_origins: str = "http://127.0.0.1:8000,http://localhost:8000"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
@@ -52,6 +57,10 @@ class Settings(BaseSettings):
     @property
     def download_path(self) -> Path:
         return Path(self.download_directory)
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
 
 settings = Settings()
