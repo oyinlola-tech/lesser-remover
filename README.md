@@ -268,6 +268,22 @@ Then open:
 
 ---
 
+## Frontend & API: Compression UI changes
+
+- Compression now uses semantic presets instead of raw numeric quality values: `best_quality`, `balanced`, `smallest`.
+- The frontend compressor UI offers an optional `max-dimension` resizing control to cap image width/height while preserving aspect ratio.
+- API query parameters for compression endpoints:
+    - `compression_preset` (string): one of `best_quality`, `balanced`, `smallest`.
+    - `max_dimension` (int, optional): maximum width/height in pixels.
+    - `target_size_kb` (int, optional): desired maximum filesize in KB (engine attempts to fit by adjusting quality).
+
+Frontend behavior:
+- After compression completes, each completed file shows a thumbnail. Clicking the thumbnail opens a comparison modal that lets you slide between the original local preview and the compressed result from the server.
+- The background remover preview also offers a before/after slider.
+
+Testing note:
+- When running `pytest` locally, set `PYTHONPATH` to the project root (for example `export PYTHONPATH=$(pwd)`) so tests can import `app`.
+
 ## Environment variables
 
 Create a `.env` file at the project root:
