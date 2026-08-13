@@ -1,5 +1,6 @@
 const STORAGE_KEY = "lr_usage_count";
 const SHOWN_KEY = "lr_support_popup_shown";
+const SUPPORT_IFRAME = `<iframe src="https://myhappr.com/embed/oyinlola?color=%235EB5FF&title=Support+Oluwayemi+Oyinlola" width="100%" height="600" frameborder="0" scrolling="no" style="border-radius: 12px;"></iframe>`;
 
 function getCount() {
   try {
@@ -87,16 +88,18 @@ function createModal(iframeHtml) {
   return { overlay, closeModal };
 }
 
+export function openSupport() {
+  const { overlay } = createModal(SUPPORT_IFRAME);
+  document.body.appendChild(overlay);
+}
+
 export function registerUse() {
   const count = getCount() + 1;
   setCount(count);
 
   if (count >= 3 && !alreadyShown()) {
-    const iframeHtml = `<iframe src="https://myhappr.com/embed/oyinlola?color=%235EB5FF&title=Support+Oluwayemi+Oyinlola" width="100%" height="600" frameborder="0" scrolling="no" style="border-radius: 12px;"></iframe>`;
-
     setTimeout(() => {
-      const { overlay } = createModal(iframeHtml);
-      document.body.appendChild(overlay);
+      openSupport();
       markShown();
     }, 200);
   }
@@ -109,4 +112,5 @@ export function resetUsage() {
   } catch (e) {}
 }
 
-export default { registerUse, resetUsage };
+export default { registerUse, resetUsage, openSupport };
+

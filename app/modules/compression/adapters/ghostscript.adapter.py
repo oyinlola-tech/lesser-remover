@@ -1,0 +1,3 @@
+from app.infrastructure.compression.ghostscript_adapter import ghostscript_adapter
+
+ghostscript_adapter = ghostscript_adapter

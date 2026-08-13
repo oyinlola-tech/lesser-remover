@@ -30,6 +30,8 @@ app = FastAPI(
     ),
     version=settings.app_version,
 )
+from app.core.exceptions import register_exception_handlers
+register_exception_handlers(app)
 app.mount(
     "/static",
     StaticFiles(directory=FRONTEND_DIR),

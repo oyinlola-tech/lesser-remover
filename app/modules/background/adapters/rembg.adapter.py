@@ -1,3 +1,3 @@
 from app.infrastructure.image.rembg_adapter import rembg_adapter
 
-__all__ = ["rembg_adapter"]
+rembg_adapter = rembg_adapter

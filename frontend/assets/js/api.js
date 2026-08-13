@@ -12,6 +12,32 @@ async function parseJsonResponse(response) {
     }
 }
 
+async function safeFetch(url, options = {}) {
+    const controller = new AbortController();
+    const timeout = options.timeout || 0;
+    let timeoutId;
+    if (timeout > 0) {
+        timeoutId = setTimeout(() => controller.abort(), timeout);
+    }
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal,
+        });
+        return response;
+    } catch (error) {
+        if (error.name === "AbortError") {
+            throw new Error("Request timed out. Please check your connection and try again.");
+        }
+        if (!navigator.onLine) {
+            throw new Error("You appear to be offline. Please check your internet connection.");
+        }
+        throw new Error("Network error. Please try again.");
+    } finally {
+        if (timeoutId) clearTimeout(timeoutId);
+    }
+}
+
 export async function startBackgroundRemoval(file, outputFormat = "webp") {
     const formData = new FormData();
     formData.append("file", file);
@@ -19,7 +45,7 @@ export async function startBackgroundRemoval(file, outputFormat = "webp") {
     const params = new URLSearchParams();
     params.set("output_format", outputFormat);
 
-    const response = await fetch(
+    const response = await safeFetch(
         `${API_BASE_URL}/background/start?${params.toString()}`,
         {
             method: "POST",
@@ -61,7 +87,7 @@ export async function startBatchCompression({
 
     params.set("strip_metadata", String(stripMetadata));
 
-    const response = await fetch(
+    const response = await safeFetch(
         `${API_BASE_URL}/compression/batch/start?${params.toString()}`,
         {
             method: "POST",
@@ -77,7 +103,7 @@ export async function startBatchCompression({
 }
 
 export async function cancelJob(jobId) {
-    const response = await fetch(`/api/jobs/${jobId}`, {
+    const response = await safeFetch(`/api/jobs/${jobId}`, {
         method: "DELETE",
     });
     const data = await parseJsonResponse(response);
@@ -88,7 +114,7 @@ export async function cancelJob(jobId) {
 }
 
 export async function getJob(jobId) {
-    const response = await fetch(`/api/jobs/${jobId}`);
+    const response = await safeFetch(`/api/jobs/${jobId}`);
     const data = await parseJsonResponse(response);
     if (!response.ok) {
         throw new Error(data?.detail || "Unable to load job.");

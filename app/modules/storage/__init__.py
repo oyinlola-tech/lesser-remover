@@ -1,0 +1,1 @@
+# Lesser Remover storage module
