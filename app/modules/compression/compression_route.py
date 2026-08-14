@@ -105,41 +105,39 @@ async def start_batch_compression(
                 )
             )
 
-            destination = (
-                local_job_storage
-                .get_input_path(job_id)
-                / stored_filename
-            )
-
             total_size = 0
 
-            with destination.open(
-                "wb"
-            ) as output:
+            buffer = bytearray()
 
-                while True:
-                    chunk = await file.read(
-                        1024 * 1024
+            while True:
+                chunk = await file.read(
+                    1024 * 1024
+                )
+
+                if not chunk:
+                    break
+
+                buffer.extend(chunk)
+
+                total_size += len(chunk)
+
+                if total_size > (
+                    50 * 1024 * 1024
+                ):
+                    raise HTTPException(
+                        status_code=413,
+                        detail=(
+                            f"{original_filename} "
+                            "is larger than the "
+                            "50 MB upload limit."
+                        ),
                     )
 
-                    if not chunk:
-                        break
-
-                    output.write(chunk)
-
-                    total_size += len(chunk)
-
-                    if total_size > (
-                        50 * 1024 * 1024
-                    ):
-                        raise HTTPException(
-                            status_code=413,
-                            detail=(
-                                f"{original_filename} "
-                                "is larger than the "
-                                "50 MB upload limit."
-                            ),
-                        )
+            local_job_storage.save_input(
+                job_id,
+                stored_filename,
+                bytes(buffer),
+            )
 
             file_id = str(index)
 
@@ -202,6 +200,11 @@ async def download_compressed_file(
     file_path = compression_repository.get(
         filename
     )
+    if not file_path.is_file():
+        file_path = (
+            local_job_storage
+            .materialize_download(filename)
+        )
     if not file_path.is_file():
         raise HTTPException(
             status_code=404,

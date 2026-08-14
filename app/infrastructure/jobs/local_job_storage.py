@@ -135,6 +135,14 @@ class LocalJobStorage:
         path.write_bytes(data)
         return path
 
+    def materialize_download(
+        self,
+        filename: str,
+    ) -> Path:
+        if not is_safe_filename(filename):
+            raise ValueError("Invalid filename")
+        return self.download_path / filename
+
     def move_download(
         self,
         source_path: Path,

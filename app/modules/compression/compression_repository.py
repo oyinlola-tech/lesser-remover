@@ -15,20 +15,18 @@ class CompressionRepository:
             storage.compressed_path,
             filename,
         )
-        output_path.parent.mkdir(
-            parents=True,
-            exist_ok=True,
-        )
-        output_path.write_bytes(data)
+        storage.write(output_path, data)
         return output_path
 
     def get(
         self,
         filename: str,
     ) -> Path:
-        return resolve_safe_path(
-            storage.compressed_path,
-            filename,
+        return storage.materialize(
+            resolve_safe_path(
+                storage.compressed_path,
+                filename,
+            )
         )
 
     def save_download(

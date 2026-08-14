@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     storage_driver: str = "local"
     blob_read_write_token: str = ""
 
+    rembg_model: str = "silueta"
+
     cors_origins: str = "http://127.0.0.1:8000,http://localhost:8000"
 
     model_config = SettingsConfigDict(
