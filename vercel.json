@@ -16,6 +16,7 @@
     "APP_ENV": "production",
     "DEBUG": "false",
     "NUMBA_DISABLE_JIT": "1",
-    "STORAGE_DRIVER": "vercel"
+    "STORAGE_DRIVER": "vercel",
+    "MODEL_CHECKSUM_DISABLED": "1"
   }
 }
