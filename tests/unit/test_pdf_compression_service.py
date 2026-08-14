@@ -2,7 +2,9 @@ from app.modules.compression.pdf_compression.pdf_compression_service import (
     pdf_compression_service,
 )
 
-from app.infrastructure.compression import ghostscript_adapter
+from app.infrastructure.compression.ghostscript_adapter import (
+    ghostscript_adapter,
+)
 
 
 class DummyGs:
@@ -22,7 +24,7 @@ def test_compress_best_prefers_smallest(monkeypatch):
     mapping = {"ebook": 800, "screen": 600, "printer": 700}
     dummy = DummyGs(mapping)
 
-    monkeypatch.setattr(ghostscript_adapter.ghostscript_adapter, "compress", dummy.compress)
+    monkeypatch.setattr(ghostscript_adapter, "compress", dummy.compress)
 
     data, q = pdf_compression_service.compress_best(original, preset="balanced")
 
@@ -35,7 +37,7 @@ def test_compress_best_keeps_original_if_no_improvement(monkeypatch):
     mapping = {"ebook": 500, "screen": 600, "printer": 700}
     dummy = DummyGs(mapping)
 
-    monkeypatch.setattr(ghostscript_adapter.ghostscript_adapter, "compress", dummy.compress)
+    monkeypatch.setattr(ghostscript_adapter, "compress", dummy.compress)
 
     data, q = pdf_compression_service.compress_best(original, preset="balanced")
 
@@ -49,12 +51,9 @@ def test_compress_best_raises_when_all_fail(monkeypatch):
     def fail_compress(file_data: bytes, quality: str) -> bytes:
         raise RuntimeError("failed")
 
-    monkeypatch.setattr(ghostscript_adapter.ghostscript_adapter, "compress", fail_compress)
+    monkeypatch.setattr(ghostscript_adapter, "compress", fail_compress)
 
-    try:
+    import pytest
+
+    with pytest.raises(RuntimeError):
         pdf_compression_service.compress_best(original, preset="balanced")
-        raised = False
-    except RuntimeError:
-        raised = True
-
-    assert raised

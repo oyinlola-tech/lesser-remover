@@ -1,15 +1,20 @@
 # Utils Tools
 
-A fast, calm, and precise file utility for **background removal** and **file compression**. Runs entirely in your browser or on our server. No accounts, no cloud uploads, no external services required.
-
----
+A local-first file and media utility suite: **27 tools** for images, PDFs,
+files, developer assets and everyday utilities. One codebase runs locally with
+full features, or on Vercel as a serverless app. No database, no Redis, no
+accounts, no cloud uploads required.
 
 ## What it does
 
-- **Remove backgrounds** from images and download transparent PNG / WebP results.
-- **Compress files** (images + PDFs) with quality presets, target-size compression, and batch ZIP downloads.
-- **Batch queue** for multiple files with real progress tracking.
-- **Secure upload pipeline** with magic-byte validation, size limits, and decompression-bomb protection.
+- **Image tools** — background remover, image compressor, converter (JPG/PNG/WebP/AVIF), resizer, cropper, editor, metadata remover, watermark, background replacement
+- **PDF tools** — compressor, merger, splitter, rotator, page extractor, PDF→image, image→PDF
+- **File tools** — analyzer (type/size/hash/dimensions), ZIP creator, duplicate finder
+- **Developer tools** — favicon generator, SVG optimizer, image↔Base64, QR code generator, barcode generator
+- **Utility tools** — social media resizer (platform presets), screenshot beautifier
+- **Batch queue** for multi-file tools with real progress tracking
+- **Secure upload pipeline** with magic-byte validation, size limits, and decompression-bomb protection
+- **Capability system** — every tool declares its runtime needs; the frontend shows, hides or disables tools automatically per environment
 
 ---
 
@@ -18,11 +23,11 @@ A fast, calm, and precise file utility for **background removal** and **file com
 ```mermaid
 flowchart TD
     subgraph Browser["Browser / Frontend"]
-        UI["Static UI\n(HTML + CSS + JS)"]
+        UI["Static UI\n(HTML + CSS + JS)\npages/*.html + shared tool-kit.js"]
     end
 
     subgraph FastAPI["FastAPI Backend"]
-        Routes["Routes"]
+        Routes["Routes\n/api/v1/..."]
         Controllers["Controllers"]
         Services["Services"]
         Repositories["Repositories"]
@@ -31,16 +36,20 @@ flowchart TD
     subgraph Infrastructure["Infrastructure"]
         Rembg["rembg"]
         Pillow["Pillow"]
+        Pikepdf["pikepdf"]
         GS["Ghostscript"]
         Zip["ZIP Adapter"]
+        QR["qrcode / python-barcode"]
         Storage["Storage Abstraction"]
-        Jobs["Job System"]
     end
 
-    UI -->|POST /api/background/start| Routes
-    UI -->|POST /api/compression/batch/start| Routes
-    UI -->|GET /api/jobs/{job_id}| Routes
-    UI -->|GET /api/compression/download/{filename}| Routes
+    UI -->|/api/v1/tools/image/*| Routes
+    UI -->|/api/v1/tools/pdf/*| Routes
+    UI -->|/api/v1/tools/file/*| Routes
+    UI -->|/api/v1/tools/dev/*| Routes
+    UI -->|/api/v1/background/*| Routes
+    UI -->|/api/v1/compression/*| Routes
+    UI -->|/api/v1/capabilities| Routes
 
     Routes --> Controllers
     Controllers --> Services
@@ -48,169 +57,109 @@ flowchart TD
     Services --> Infrastructure
 
     Repositories --> Storage
-    Repositories --> Jobs
-
     Infrastructure --> Rembg
     Infrastructure --> Pillow
+    Infrastructure --> Pikepdf
     Infrastructure --> GS
     Infrastructure --> Zip
+    Infrastructure --> QR
 
     Storage -->|local| LocalFS["./storage/"]
     Storage -->|vercel| VercelBlob["Vercel Blob"]
 ```
 
-### Data flow for background removal
+Every tool follows the same layered flow:
 
 ```mermaid
 flowchart LR
-    Upload["Upload Image"] --> Inspector["File Inspector\n(magic bytes + validation)"]
-    Inspector --> BGService["Background Service"]
-    BGService --> Rembg["rembg"]
-    Rembg --> ImageService["Image Service"]
-    ImageService --> PNG["PNG encode"]
-    ImageService --> WebP["WebP encode"]
-    PNG --> Storage["Storage"]
-    WebP --> Storage
-    Storage --> Download["Download PNG / WebP"]
+    Page["Tool page\npages/{tool}.html"] -->|api.js| Route["/api/v1/tools/{group}/{action}"]
+    Route --> Controller["Controller\n(validation + HTTP")]
+    Controller --> Service["Service\n(business logic)"]
+    Service --> Adapter["Infrastructure adapter\n(Pillow / pikepdf / gs / zip / qrcode)"]
+    Service --> Repository["Repository\n(byte I/O)"]
+    Repository --> Storage["Local disk or Vercel Blob"]
+    Service --> Response["Result JSON + /download/{file}"]
 ```
-
-### Data flow for compression
-
-```mermaid
-flowchart LR
-    Upload["Upload Files"] --> Inspector["File Inspector"]
-    Inspector --> Job["Create Job"]
-    Job --> SaveInput["Save inputs"]
-    SaveInput --> Process["Process sequentially"]
-    Process --> Image["Pillow\n(WebP / JPEG / PNG)"]
-    Process --> PDF["Ghostscript\n(PDF)"]
-    Image --> Output["Job output/"]
-    PDF --> Output
-    Output --> Zip["ZIP archive"]
-    Zip --> Downloads["Downloads"]
-    Downloads --> Poll["Browser polls\n/api/jobs/{job-id}"]
-    Poll --> DownloadZIP["Download ZIP"]
-```
-
----
-
-## Deployment modes
-
-This repository supports two deployment targets with the same codebase.
-
-### Local mode
-
-```bash
-# 1. Clone or open the project
-cd Utils-tool
-
-# 2. Create virtual environment
-python3 -m venv .venv
-
-# 3. Activate virtual environment
-source .venv/bin/activate  # Linux / macOS
-# .venv\Scripts\activate   # Windows
-
-# 4. Upgrade pip
-python -m pip install --upgrade pip
-
-# 5. Install dependencies
-python -m pip install -r requirements.txt
-
-# 6. Verify Ghostscript
-gs --version
-
-# 7. Run
-./start.sh
-```
-
-Then open http://127.0.0.1:8000
-
-### Vercel mode
-
-1. Connect your GitHub repository to Vercel
-2. Set the project root to the repository root
-3. Add environment variables in Vercel:
-   - `STORAGE_DRIVER=vercel`
-   - `BLOB_READ_WRITE_TOKEN=<your-vercel-blob-token>`
-   - `CORS_ORIGINS=https://your-domain.vercel.app`
-4. Connect Vercel Blob to your project
-5. Deploy
-
-Both modes use the same repository, same routes, and same frontend.
-
----
 
 ## Project structure
 
 ```text
 app/
-├── main.py                          # FastAPI app, static files, startup cleanup
+├── main.py                          # FastAPI app, routers, static files, startup
+├── api/
+│   └── __init__.py                  # API_PREFIX = /api/v1, route registration
 ├── core/
 │   ├── config.py                    # Central settings (paths, limits, env)
+│   ├── capabilities.py              # 27-tool capability registry (env gating)
 │   ├── logging.py                   # Structured logging
-│   └── exceptions.py                # Exception handlers
+│   ├── exceptions.py                # Unified error format + handlers
+│   └── middleware.py                # Request ID + CORS
 ├── modules/
-│   ├── background/                  # Background-removal feature
-│   ├── compression/                 # Image + PDF compression feature
-│   │   ├── image_compression/       # Pillow-based image compression
-│   │   ├── pdf_compression/         # Ghostscript-based PDF compression
-│   │   └── batch_compression_service.py
-│   ├── archive/                     # ZIP creation service
-│   ├── jobs/                        # Job system (metadata + cleanup)
-│   └── image/                       # Shared image schemas + processor
+│   ├── background/                  # Background removal + replacement
+│   ├── compression/                 # Image + PDF compression
+│   ├── image/                       # Converter, resizer, metadata, watermark
+│   ├── pdf/                         # Merge, split, rotate, extract, PDF<->image
+│   ├── file_tools/                  # Analyzer, ZIP, duplicate finder
+│   ├── devtools/                    # Favicon, SVG optimizer, QR, barcode
+│   └── jobs/                        # Job system (metadata + cleanup)
 ├── infrastructure/
-│   ├── storage/                     # Storage abstraction (local + Vercel)
+│   ├── storage/                     # Storage abstraction (local + Vercel Blob)
 │   ├── compression/                 # Pillow + Ghostscript adapters
 │   ├── archive/                     # ZIP adapter
 │   ├── image/                       # rembg adapter
 │   └── jobs/                        # Job storage (local + Vercel)
 └── shared/
-    ├── constants/                   # Supported formats, limits
-    ├── enums/                       # File types, compression levels
-    ├── types/                       # Shared typing helpers
+    ├── constants/                   # Formats, limits, social presets
     ├── utils/                       # Filename, size, formatting helpers
     └── file_inspection/             # Magic-byte validation, Pillow verification
 
 frontend/
-├── index.html
+├── index.html                       # Capability-driven landing grid
+├── pages/                           # 27 tool pages (one HTML + one JS per tool)
 └── assets/
-    ├── css/
-    │   ├── reset.css
-    │   ├── variables.css
-    │   ├── base.css
-    │   ├── components.css
-    │   └── responsive.css
+    ├── css/                         # reset / variables / base / components / responsive
     └── js/
-        ├── app.js
-        ├── api.js
-        ├── utils.js
-        ├── error-boundary.js
-        ├── background-remover.js
-        ├── compressor.js
-        └── support-popup.js
+        ├── api.js                   # apiGet / apiUpload / apiDownload
+        ├── pages/tool-kit.js        # Shared tool page bootstrap (capability gating)
+        ├── pages/{tool}.js          # Per-tool page logic
+        └── ...
 
 api/
-└── index.py                         # Vercel serverless entry point
+└── index.py                         # Vercel serverless entry point (Mangum)
 
-storage/
-├── uploads/         # Temporary uploads (local only)
-├── processed/       # Background-removal results (local only)
-├── compressed/      # Single-file compression results (local only)
-├── temp/            # Generic temp files (local only)
-├── jobs/            # Batch job folders + metadata.json (local only)
-└── downloads/       # Public ZIP downloads (local only)
+storage/                             # Local mode only
+├── uploads/         # Temporary uploads
+├── processed/       # Background-removal results
+├── compressed/      # Compression results
+├── temp/            # Generic temp files
+├── jobs/            # Batch job folders + metadata.json
+└── downloads/       # Public ZIP downloads
 ```
 
 ---
 
 ## Design principles
 
-- **Local-first**: no database, no Redis, no cloud storage, no external APIs.
+- **Local-first**: no database, no Redis, no cloud storage, no external APIs required for local use.
 - **Stateless backend**: temporary job state lives in storage as `metadata.json`.
-- **Clean architecture**: controllers never call Pillow/Ghostscript directly; they go through services and adapters.
-- **Secure by default**: magic-byte inspection, Pillow verification, `MAX_IMAGE_PIXELS`, size limits.
-- **Progressive disclosure**: simple frontend flow, advanced settings available when needed.
+- **Clean architecture**: controllers never call Pillow/Ghostscript/pikepdf directly; they go through services and adapters.
+- **Capability-driven UI**: the `/api/v1/capabilities` endpoint tells the frontend which tools are available in the current environment (e.g. Ghostscript tools are local-only); pages adapt automatically.
+- **Secure by default**: magic-byte inspection, Pillow verification, `MAX_IMAGE_PIXELS`, size limits, sanitized filenames.
+- **Progressive disclosure**: simple default flow, advanced settings available when needed.
+
+## Testing
+
+```bash
+source .venv/bin/activate
+python -m pytest tests/ -q        # 110 tests: units, API contracts, capability gating
+```
+
+Covers the unified error format, all 27 tools' services, the capability registry
+(including Vercel gating), and every frontend page + page script serving correctly.
+
+## Environment variables
+
+Create a `.env` file at the project root (see `.env.example`):
 
 ---
 
@@ -266,6 +215,27 @@ CORS_ORIGINS=http://127.0.0.1:8000,http://localhost:8000
 # Vercel only
 BLOB_READ_WRITE_TOKEN=
 ```
+
+---
+
+## Deployment
+
+One codebase, two targets — see [DEPLOYMENT.md](DEPLOYMENT.md) for full details.
+
+### Local mode
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+python -m pip install -r requirements.txt
+gs --version          # required for PDF compression / PDF->image
+./start.sh            # serves http://127.0.0.1:8000
+```
+
+### Vercel mode
+
+Set `STORAGE_DRIVER=vercel` and `BLOB_READ_WRITE_TOKEN=<token>` in Vercel,
+connect Vercel Blob, and deploy. The capability system automatically restricts
+Ghostscript-based tools (PDF compression, PDF→image) to local runs.
 
 ---
 

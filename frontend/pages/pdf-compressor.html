@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Compress PDF files locally with maximum, balanced or high-quality modes. Free, private, no account required." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.oyinlola.site/tools/pdf-compressor" />
+    <meta property="og:title" content="PDF Compressor - Utils Tools" />
+    <meta property="og:description" content="Reduce PDF file sizes with maximum, balanced or high-quality compression." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.oyinlola.site/tools/pdf-compressor" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>PDF Compressor - Utils Tools</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+    <script type="module" src="/static/assets/js/error-boundary.js"></script>
+
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/components.css" />
+    <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+
+    <main class="tool-page">
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <span class="eyebrow">PDF tool</span>
+            <h1>Smaller PDFs, same quality.</h1>
+            <p class="hero-description">
+              Reduce PDF file sizes with maximum, balanced or
+              high-quality compression modes.
+            </p>
+          </div>
+
+          <section class="compressor-card">
+            <div class="compressor-drop-zone" id="compressor-drop-zone">
+              <div class="upload-icon">↑</div>
+              <h2>Drop your PDFs here</h2>
+              <p>Or choose files from your computer</p>
+              <label for="compressor-file-input" class="primary-button">Choose file</label>
+              <input id="compressor-file-input" type="file" accept=".pdf,application/pdf" multiple class="visually-hidden" />
+              <p class="file-hint">PDF files up to 50 MB each</p>
+            </div>
+
+            <div id="compressor-workspace" class="compressor-workspace hidden">
+              <div class="queue-header">
+                <div>
+                  <span class="eyebrow">Files</span>
+                  <h2>Ready to compress</h2>
+                </div>
+                <button type="button" class="text-button" id="clear-files">Clear all</button>
+              </div>
+              <div id="file-queue" class="file-queue"></div>
+
+              <div class="compression-settings">
+                <div class="setting-group">
+                  <label>Compression</label>
+                  <div class="quality-options">
+                    <button type="button" class="quality-option" data-preset="best_quality">
+                      <strong>High quality</strong>
+                      <span>Keep maximum detail</span>
+                    </button>
+                    <button type="button" class="quality-option active" data-preset="balanced">
+                      <strong>Balanced</strong>
+                      <span>A strong balance of quality and size</span>
+                    </button>
+                    <button type="button" class="quality-option" data-preset="smallest">
+                      <strong>Maximum compression</strong>
+                      <span>Smallest practical file size</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <button type="button" class="compress-button primary-button" id="compress-button">Compress files</button>
+            </div>
+
+            <div id="compression-processing" class="processing hidden">
+              <div class="processing-content">
+                <div class="spinner"></div>
+                <h2>Compressing your files</h2>
+                <p id="processing-message" class="processing-message" role="status" aria-live="polite">
+                  Preparing your files...
+                </p>
+                <div class="progress-bar">
+                  <div id="processing-progress" class="progress-bar-value"></div>
+                </div>
+                <div id="processing-count" class="processing-count">0 of 0 completed</div>
+                <button type="button" class="secondary-button cancel-button" id="cancel-compression">Cancel</button>
+              </div>
+            </div>
+
+            <div id="compression-result" class="compression-result hidden">
+              <div class="result-header">
+                <div>
+                  <h2 class="result-title">Your files are ready</h2>
+                  <div id="compression-result-meta" class="result-meta" aria-live="polite"></div>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <span class="success-badge hidden" id="compression-success-badge">Done</span>
+                  <button type="button" class="secondary-button" id="compress-another">Compress another</button>
+                </div>
+              </div>
+              <div class="compression-summary">
+                <div class="size-block">
+                  <span>Original</span>
+                  <strong id="original-size">0 MB</strong>
+                </div>
+                <div class="size-arrow">→</div>
+                <div class="size-block">
+                  <span>Compressed</span>
+                  <strong id="compressed-size">0 MB</strong>
+                </div>
+                <div class="saving-block">
+                  <span>You saved</span>
+                  <strong id="savings-percent">0%</strong>
+                </div>
+                <div class="reduction-indicator">
+                  <div class="reduction-track">
+                    <div id="reduction-value" class="reduction-value"></div>
+                  </div>
+                  <div class="reduction-label">
+                    <span>File size after compression</span>
+                    <strong id="reduction-label">0%</strong>
+                  </div>
+                </div>
+                <p id="compression-summary-message" class="summary-message"></p>
+              </div>
+              <div id="completed-files" class="completed-files"></div>
+              <div id="compression-failed-files" class="failed-files hidden" role="status" aria-live="polite"></div>
+              <div class="compression-result-actions">
+                <a id="compression-download" class="primary-button" href="#">Download file</a>
+              </div>
+            </div>
+
+            <div id="compression-error" class="error-message hidden" role="alert"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script type="module" src="/static/assets/js/pages/pdf-compressor.js"></script>
+  </body>
+</html>

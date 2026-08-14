@@ -1,15 +1,71 @@
 from io import BytesIO
+from pathlib import Path
 
 from fastapi import HTTPException
 from PIL import Image
 from PIL import UnidentifiedImageError
 
+from app.shared.constants.file_constants import (
+    EXPECTED_EXTENSION_BY_MIME,
+    MAX_FILES_PER_BATCH,
+)
 
 Image.MAX_IMAGE_PIXELS = 50_000_000
 
 
 MAX_IMAGE_SIZE = 25 * 1024 * 1024
 MAX_PDF_SIZE = 50 * 1024 * 1024
+
+
+def validate_file_count(
+    count: int,
+    limit: int = MAX_FILES_PER_BATCH,
+) -> None:
+    if count < 1:
+        raise HTTPException(
+            status_code=400,
+            detail="At least one file is required.",
+        )
+    if count > limit:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Maximum of {limit} files per request.",
+        )
+
+
+def extension_matches_mime(
+    filename: str,
+    mime_type: str,
+) -> bool:
+    """Cross-check the client filename extension against the detected MIME.
+
+    The MIME type comes from magic-byte inspection and is authoritative;
+    a mismatch means the client either renamed the file or is hiding its
+    real content.
+    """
+    expected = EXPECTED_EXTENSION_BY_MIME.get(mime_type)
+    if expected is None:
+        return True
+    actual = Path(filename).suffix.lower()
+    if actual == expected:
+        return True
+    if mime_type == "image/jpeg" and actual == ".jpeg":
+        return True
+    return False
+
+
+def validate_filename_extension(
+    filename: str,
+    mime_type: str,
+) -> None:
+    if not extension_matches_mime(filename, mime_type):
+        raise HTTPException(
+            status_code=415,
+            detail=(
+                f"File extension '{Path(filename).suffix}' does not "
+                "match the detected file content."
+            ),
+        )
 
 
 def validate_file_size(

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Generate Code 128, EAN-13, EAN-8, UPC-A, Code 39 and ITF barcodes with a live preview." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.oyinlola.site/tools/barcode-generator" />
+    <meta property="og:title" content="Barcode Generator - Utils Tools" />
+    <meta property="og:description" content="Generate Code 128, EAN-13, EAN-8, UPC-A, Code 39 and ITF barcodes with a live preview." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.oyinlola.site/tools/barcode-generator" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Barcode Generator - Utils Tools</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+    <script type="module" src="/static/assets/js/error-boundary.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/components.css" />
+    <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="tool-page">
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <span class="eyebrow">Developer tool</span>
+            <h1>Create barcodes.</h1>
+            <p class="hero-description">Generate Code 128, EAN-13, EAN-8, UPC-A, Code 39 and ITF barcodes with a live preview.</p>
+          </div>
+          <section class="tool-card">
+            <div id="tool-unavailable" class="hidden" role="alert"></div>
+            
+            <div id="tool-upload" data-accept="" data-multiple="false" data-max-files="1" data-hint=""></div>
+        
+            <div class="tool-options" id="tool-options">
+<div class="option-row">
+              <div class="option-field">
+                <label for="barcode-content">Content</label>
+                <input type="text" id="barcode-content" placeholder="e.g. 5901234123457" value="5901234123457" />
+              </div>
+              <div class="option-field">
+                <label for="barcode-type">Barcode type</label>
+                <select id="barcode-type">
+                  <option value="code128" selected>Code 128</option>
+                  <option value="ean13">EAN-13</option>
+                  <option value="ean8">EAN-8</option>
+                  <option value="upca">UPC-A</option>
+                  <option value="code39">Code 39</option>
+                  <option value="itf">ITF</option>
+                </select>
+              </div>
+              <div class="option-field">
+                <label for="barcode-format">Format</label>
+                <select id="barcode-format">
+                  <option value="png" selected>PNG</option>
+                  <option value="webp">WebP</option>
+                  <option value="svg">SVG</option>
+                </select>
+              </div>
+            </div>
+        
+            </div>
+            <button type="button" class="primary-button tool-run" id="tool-run">Generate barcode</button>
+            <div id="tool-processing"></div>
+            <div id="tool-results"></div>
+            <div id="tool-error"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <div id="site-footer"></div>
+    <script type="module" src="/static/assets/js/pages/barcode-generator.js"></script>
+  </body>
+</html>

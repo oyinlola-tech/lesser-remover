@@ -2,9 +2,10 @@ import logging
 from pathlib import Path
 
 from app.core.config import settings
+from app.infrastructure.storage.base import StorageInterface
 
 
-class LocalStorage:
+class LocalStorage(StorageInterface):
     def __init__(self) -> None:
         self.upload_path = settings.upload_path
         self.processed_path = settings.processed_path
@@ -54,6 +55,9 @@ class LocalStorage:
         )
         file_path.write_bytes(data)
 
+    def read(self, file_path: Path) -> bytes:
+        return file_path.read_bytes()
+
     def materialize(
         self,
         file_path: Path,
@@ -69,6 +73,9 @@ class LocalStorage:
 
     def get_size(self, file_path: Path) -> int:
         return file_path.stat().st_size
+
+    def get_url(self, file_path: Path) -> str:
+        return ""
 
 
 storage = LocalStorage()

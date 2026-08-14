@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Adjust brightness, contrast, saturation and sharpness with a live preview. Everything runs in your browser." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.oyinlola.site/tools/image-editor" />
+    <meta property="og:title" content="Image Editor - Utils Tools" />
+    <meta property="og:description" content="Adjust brightness, contrast, saturation and sharpness with a live preview. Everything runs in your browser." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.oyinlola.site/tools/image-editor" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Image Editor - Utils Tools</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+    <script type="module" src="/static/assets/js/error-boundary.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/components.css" />
+    <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="tool-page">
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <span class="eyebrow">Image tool</span>
+            <h1>Fine-tune image adjustments.</h1>
+            <p class="hero-description">Adjust brightness, contrast, saturation and sharpness with a live preview. Everything runs in your browser.</p>
+          </div>
+          <section class="tool-card">
+            <div id="tool-unavailable" class="hidden" role="alert"></div>
+            
+            <div id="tool-upload" data-accept="image/*" data-multiple="false" data-max-files="1" data-hint="Runs entirely in your browser - nothing is uploaded"></div>
+        
+            <div class="tool-options" id="tool-options">
+<div class="option-row">
+              <div class="option-field">
+                <label for="brightness">Brightness <span id="brightness-value">0</span></label>
+                <input type="range" id="brightness" min="-100" max="100" value="0" />
+              </div>
+              <div class="option-field">
+                <label for="contrast">Contrast <span id="contrast-value">0</span></label>
+                <input type="range" id="contrast" min="-100" max="100" value="0" />
+              </div>
+              <div class="option-field">
+                <label for="saturation">Saturation <span id="saturation-value">0</span></label>
+                <input type="range" id="saturation" min="-100" max="100" value="0" />
+              </div>
+              <div class="option-field">
+                <label for="sharpness">Sharpness <span id="sharpness-value">0</span></label>
+                <input type="range" id="sharpness" min="-100" max="100" value="0" />
+              </div>
+            </div>
+            <div class="result-actions">
+              <button type="button" class="secondary-button" id="editor-reset">Reset adjustments</button>
+            </div>
+            <div class="canvas-frame" id="editor-canvas-frame"></div>
+            </div>
+            <button type="button" class="primary-button tool-run" id="tool-run">Export edited image</button>
+            <div id="tool-processing"></div>
+            <div id="tool-results"></div>
+            <div id="tool-error"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <div id="site-footer"></div>
+    <script type="module" src="/static/assets/js/pages/image-editor.js"></script>
+  </body>
+</html>

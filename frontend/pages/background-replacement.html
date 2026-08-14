@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Remove the subject from your photo and place it on a solid color, another image or a blurred copy of itself." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.oyinlola.site/tools/background-replacement" />
+    <meta property="og:title" content="Background Replacement - Utils Tools" />
+    <meta property="og:description" content="Remove the subject from your photo and place it on a solid color, another image or a blurred copy of itself." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.oyinlola.site/tools/background-replacement" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Background Replacement - Utils Tools</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+    <script type="module" src="/static/assets/js/error-boundary.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/components.css" />
+    <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="tool-page">
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <span class="eyebrow">Image tool</span>
+            <h1>Swap image backgrounds.</h1>
+            <p class="hero-description">Remove the subject from your photo and place it on a solid color, another image or a blurred copy of itself.</p>
+          </div>
+          <section class="tool-card">
+            <div id="tool-unavailable" class="hidden" role="alert"></div>
+            
+            <div id="tool-upload" data-accept="image/*" data-multiple="false" data-max-files="1" data-hint="Image up to 25 MB"></div>
+        
+            <div class="tool-options" id="tool-options">
+<div class="option-field">
+              <label>Background type</label>
+              <div class="segmented" id="background-type">
+                <button type="button" data-type="color" class="active">Solid color</button>
+                <button type="button" data-type="image">Image</button>
+                <button type="button" data-type="blur">Blur</button>
+              </div>
+            </div>
+            <div class="option-row">
+              <div class="option-field" id="background-color-field">
+                <label for="background-color">Color</label>
+                <input type="color" id="background-color" value="#9fe870" />
+              </div>
+              <div class="option-field hidden" id="background-image-field">
+                <label for="background-image">Background image</label>
+                <input type="file" id="background-image" accept="image/*" />
+              </div>
+              <div class="option-field">
+                <label for="background-format">Output format</label>
+                <select id="background-format">
+                  <option value="png" selected>PNG</option>
+                  <option value="webp">WebP</option>
+                </select>
+              </div>
+            </div>
+            <div class="option-row" id="background-blur-field">
+              <div class="option-field">
+                <label for="background-blur">Blur amount: <span id="background-blur-value">0</span></label>
+                <input type="range" id="background-blur" min="0" max="60" value="0" />
+              </div>
+            </div>
+        
+            </div>
+            <button type="button" class="primary-button tool-run" id="tool-run">Replace background</button>
+            <div id="tool-processing"></div>
+            <div id="tool-results"></div>
+            <div id="tool-error"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <div id="site-footer"></div>
+    <script type="module" src="/static/assets/js/pages/background-replacement.js"></script>
+  </body>
+</html>

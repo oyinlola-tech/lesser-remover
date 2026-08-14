@@ -12,6 +12,7 @@ from pathlib import Path
 from fastapi.responses import FileResponse
 
 logger = logging.getLogger(__name__)
+from app.api import API_PREFIX
 from app.modules.compression.batch_compression_service import (
     batch_compression_service,
 )
@@ -32,7 +33,7 @@ from app.shared.utils.file_util import (
 from app.shared.enums.compression_enum import CompressionLevel
 
 router = APIRouter(
-    prefix="/api/compression",
+    prefix=f"{API_PREFIX}/compression",
     tags=["Compression"],
 )
 

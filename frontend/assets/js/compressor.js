@@ -744,7 +744,7 @@ compressButton.addEventListener("click", async () => {
     try {
         const startResult = await startBatchCompression({
             files: files.map((item) => item.file),
-            imageOutputFormat: advancedFormat.value,
+            imageOutputFormat: advancedFormat ? advancedFormat.value : "webp",
             compressionPreset: selectedPreset,
             maxDimension: maxDimension ? (maxDimension.value || null) : null,
             targetSizeKb: targetSize ? (targetSize.value || null) : null,

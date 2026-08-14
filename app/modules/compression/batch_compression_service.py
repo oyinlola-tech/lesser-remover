@@ -275,7 +275,7 @@ class BatchCompressionService:
                         output_path.name
                     ),
                     download_url=(
-                        "/api/compression/"
+                        "/api/v1/compression/"
                         "download/"
                         f"{output_path.name}"
                     ),
@@ -387,7 +387,7 @@ class BatchCompressionService:
             job_service.set_download_url(
                 job_id,
                 (
-                    "/api/compression/"
+                    "/api/v1/compression/"
                     "download/"
                     f"{download_path.name}"
                 ),

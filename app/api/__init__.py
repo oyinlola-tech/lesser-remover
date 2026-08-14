@@ -1,1 +1,3 @@
-# Lesser Remover API package
+"""Utils Tools API layer."""
+
+API_PREFIX = "/api/v1"

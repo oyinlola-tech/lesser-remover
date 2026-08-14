@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="See file type, size, SHA-256 hash, image dimensions and PDF page counts at a glance." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.oyinlola.site/tools/file-analyzer" />
+    <meta property="og:title" content="File Analyzer - Utils Tools" />
+    <meta property="og:description" content="See file type, size, SHA-256 hash, image dimensions and PDF page counts at a glance." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.oyinlola.site/tools/file-analyzer" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>File Analyzer - Utils Tools</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+    <script type="module" src="/static/assets/js/error-boundary.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/components.css" />
+    <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="tool-page">
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <span class="eyebrow">File tool</span>
+            <h1>Inspect any file.</h1>
+            <p class="hero-description">See file type, size, SHA-256 hash, image dimensions and PDF page counts at a glance.</p>
+          </div>
+          <section class="tool-card">
+            <div id="tool-unavailable" class="hidden" role="alert"></div>
+            
+            <div id="tool-upload" data-accept="" data-multiple="true" data-max-files="20" data-hint="Up to 20 files"></div>
+        
+            <div class="tool-options" id="tool-options">
+<p class="file-hint">Files are inspected with content-based detection, not just their extension.</p>
+        
+            </div>
+            <button type="button" class="primary-button tool-run" id="tool-run">Analyze files</button>
+            <div id="tool-processing"></div>
+            <div id="tool-results"></div>
+            <div id="tool-error"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <div id="site-footer"></div>
+    <script type="module" src="/static/assets/js/pages/file-analyzer.js"></script>
+  </body>
+</html>

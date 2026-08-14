@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Scale by percentage, exact dimensions or a maximum size while keeping aspect ratio under control." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.oyinlola.site/tools/image-resizer" />
+    <meta property="og:title" content="Image Resizer - Utils Tools" />
+    <meta property="og:description" content="Scale by percentage, exact dimensions or a maximum size while keeping aspect ratio under control." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.oyinlola.site/tools/image-resizer" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Image Resizer - Utils Tools</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+    <script type="module" src="/static/assets/js/error-boundary.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/components.css" />
+    <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="tool-page">
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <span class="eyebrow">Image tool</span>
+            <h1>Resize images to any size.</h1>
+            <p class="hero-description">Scale by percentage, exact dimensions or a maximum size while keeping aspect ratio under control.</p>
+          </div>
+          <section class="tool-card">
+            <div id="tool-unavailable" class="hidden" role="alert"></div>
+            
+            <div id="tool-upload" data-accept="image/*" data-multiple="false" data-max-files="1" data-hint="JPG, PNG, WebP or AVIF up to 25 MB"></div>
+        
+            <div class="tool-options" id="tool-options">
+<div class="option-field">
+              <label>Mode</label>
+              <div class="segmented" id="resize-mode">
+                <button type="button" data-mode="percent" class="active">Percentage</button>
+                <button type="button" data-mode="dimensions">Dimensions</button>
+                <button type="button" data-mode="max">Max size</button>
+              </div>
+            </div>
+            <div class="option-row">
+              <div class="option-field" id="field-percent">
+                <label for="percent">Percentage</label>
+                <input type="number" id="percent" min="1" max="500" value="50" />
+              </div>
+              <div class="option-field hidden" id="field-dimensions">
+                <label for="width">Width (px)</label>
+                <input type="number" id="width" min="1" value="800" />
+              </div>
+              <div class="option-field hidden" id="field-height">
+                <label for="height">Height (px)</label>
+                <input type="number" id="height" min="1" value="600" />
+              </div>
+              <div class="option-field hidden" id="field-max">
+                <label for="max-dimension">Max dimension (px)</label>
+                <input type="number" id="max-dimension" min="16" max="8192" value="1600" />
+              </div>
+              <div class="option-field">
+                <label for="resize-format">Output format</label>
+                <select id="resize-format">
+                  <option value="png" selected>PNG</option>
+                  <option value="jpg">JPG</option>
+                  <option value="webp">WebP</option>
+                  <option value="avif">AVIF</option>
+                </select>
+              </div>
+            </div>
+        
+            </div>
+            <button type="button" class="primary-button tool-run" id="tool-run">Resize image</button>
+            <div id="tool-processing"></div>
+            <div id="tool-results"></div>
+            <div id="tool-error"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <div id="site-footer"></div>
+    <script type="module" src="/static/assets/js/pages/image-resizer.js"></script>
+  </body>
+</html>

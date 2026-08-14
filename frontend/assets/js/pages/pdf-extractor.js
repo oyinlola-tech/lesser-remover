@@ -1,0 +1,42 @@
+import { initToolPage, setupUpload, renderFileResult } from "./tool-kit.js";
+import { apiUpload } from "../api.js";
+
+const kit = await initToolPage("pdf-extractor");
+if (!kit.available) {
+    setupUpload({ onFiles: () => {} });
+} else {
+    let currentFile = null;
+    setupUpload({
+        onFiles: (files) => {
+            currentFile = files[0];
+        },
+    });
+
+    document.querySelector("#tool-run").addEventListener("click", async () => {
+        if (!currentFile) {
+            kit.banner.show("Choose a PDF file.");
+            return;
+        }
+        kit.banner.hide();
+        kit.setBusy(true, "Extracting pages...");
+        try {
+            const result = await apiUpload("/tools/pdf/extract", {
+                files: [{ name: "file", file: currentFile }],
+                fields: {
+                    pages: document.querySelector("#pages").value,
+                },
+            });
+            kit.setBusy(false);
+            const meta = document.createElement("p");
+            meta.className = "file-hint";
+            meta.textContent = `${result.details.page_count} extracted page PDFs inside the ZIP archive.`;
+            const host = document.querySelector("#tool-results");
+            host.innerHTML = "";
+            host.appendChild(meta);
+            renderFileResult(host, result, { originalSize: currentFile.size });
+        } catch (error) {
+            kit.setBusy(false);
+            kit.banner.show(error.message);
+        }
+    });
+}

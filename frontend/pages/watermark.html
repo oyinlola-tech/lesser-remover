@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Add text or logo watermarks with full control over position, opacity, size and rotation." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.oyinlola.site/tools/watermark" />
+    <meta property="og:title" content="Image Watermark - Utils Tools" />
+    <meta property="og:description" content="Add text or logo watermarks with full control over position, opacity, size and rotation." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.oyinlola.site/tools/watermark" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Image Watermark - Utils Tools</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+    <script type="module" src="/static/assets/js/error-boundary.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/components.css" />
+    <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="tool-page">
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <span class="eyebrow">Image tool</span>
+            <h1>Protect images with watermarks.</h1>
+            <p class="hero-description">Add text or logo watermarks with full control over position, opacity, size and rotation.</p>
+          </div>
+          <section class="tool-card">
+            <div id="tool-unavailable" class="hidden" role="alert"></div>
+            
+            <div id="tool-upload" data-accept="image/*" data-multiple="false" data-max-files="1" data-hint="Image up to 25 MB; optional logo under 10 MB"></div>
+        
+            <div class="tool-options" id="tool-options">
+<div class="option-field">
+              <label>Watermark type</label>
+              <div class="segmented" id="watermark-type">
+                <button type="button" data-type="text" class="active">Text</button>
+                <button type="button" data-type="logo">Logo image</button>
+              </div>
+            </div>
+            <div class="option-row">
+              <div class="option-field" id="watermark-text-field">
+                <label for="watermark-text">Watermark text</label>
+                <input type="text" id="watermark-text" placeholder="e.g. yourname.com" value="UTILS TOOLS" />
+              </div>
+              <div class="option-field hidden" id="watermark-logo-field">
+                <label for="watermark-logo">Logo image</label>
+                <input type="file" id="watermark-logo" accept="image/*" />
+              </div>
+              <div class="option-field">
+                <label for="watermark-position">Position</label>
+                <select id="watermark-position">
+                  <option value="bottom-right" selected>Bottom right</option>
+                  <option value="bottom-left">Bottom left</option>
+                  <option value="top-right">Top right</option>
+                  <option value="top-left">Top left</option>
+                  <option value="center">Center</option>
+                </select>
+              </div>
+            </div>
+            <div class="option-row">
+              <div class="option-field">
+                <label for="watermark-opacity">Opacity: <span id="watermark-opacity-value">70%</span></label>
+                <input type="range" id="watermark-opacity" min="5" max="100" value="70" />
+              </div>
+              <div class="option-field">
+                <label for="watermark-size">Size: <span id="watermark-size-value">10%</span></label>
+                <input type="range" id="watermark-size" min="2" max="40" value="10" />
+              </div>
+              <div class="option-field">
+                <label for="watermark-rotation">Rotation: <span id="watermark-rotation-value">0&deg;</span></label>
+                <input type="range" id="watermark-rotation" min="-90" max="90" value="0" />
+              </div>
+            </div>
+        
+            </div>
+            <button type="button" class="primary-button tool-run" id="tool-run">Add watermark</button>
+            <div id="tool-processing"></div>
+            <div id="tool-results"></div>
+            <div id="tool-error"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <div id="site-footer"></div>
+    <script type="module" src="/static/assets/js/pages/watermark.js"></script>
+  </body>
+</html>

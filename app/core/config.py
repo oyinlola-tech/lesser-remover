@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,7 +18,7 @@ class Settings(BaseSettings):
     temp_directory: str = "storage/temp"
     job_directory: str = "storage/jobs"
     download_directory: str = "storage/downloads"
-    job_expiration_minutes: int = 30
+    job_ttl_minutes: int = 30
 
     storage_driver: str = "local"
     blob_read_write_token: str = ""
@@ -31,6 +32,32 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         case_sensitive=False,
     )
+
+    @field_validator("storage_driver")
+    @classmethod
+    def validate_storage_driver(cls, value: str) -> str:
+        normalized = value.strip().lower()
+        if normalized not in {"local", "vercel"}:
+            raise ValueError(
+                "STORAGE_DRIVER must be 'local' or 'vercel', "
+                f"got '{value}'."
+            )
+        return normalized
+
+    @field_validator("app_env")
+    @classmethod
+    def validate_app_env(cls, value: str) -> str:
+        normalized = value.strip().lower()
+        if normalized not in {
+            "development",
+            "production",
+            "test",
+        }:
+            raise ValueError(
+                "APP_ENV must be 'development', 'production' "
+                f"or 'test', got '{value}'."
+            )
+        return normalized
 
     @property
     def max_upload_size_bytes(self) -> int:

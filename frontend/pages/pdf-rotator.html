@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Rotate every page or just the pages you choose by 90, 180 or 270 degrees." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.oyinlola.site/tools/pdf-rotator" />
+    <meta property="og:title" content="PDF Rotator - Utils Tools" />
+    <meta property="og:description" content="Rotate every page or just the pages you choose by 90, 180 or 270 degrees." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.oyinlola.site/tools/pdf-rotator" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>PDF Rotator - Utils Tools</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+    <script type="module" src="/static/assets/js/error-boundary.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/components.css" />
+    <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="tool-page">
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <span class="eyebrow">PDF tool</span>
+            <h1>Rotate PDF pages.</h1>
+            <p class="hero-description">Rotate every page or just the pages you choose by 90, 180 or 270 degrees.</p>
+          </div>
+          <section class="tool-card">
+            <div id="tool-unavailable" class="hidden" role="alert"></div>
+            
+            <div id="tool-upload" data-accept=".pdf,application/pdf" data-multiple="false" data-max-files="1" data-hint="PDF up to 50 MB"></div>
+        
+            <div class="tool-options" id="tool-options">
+<div class="option-row">
+              <div class="option-field">
+                <label for="angle">Rotation</label>
+                <select id="angle">
+                  <option value="90">90&deg;</option>
+                  <option value="180">180&deg;</option>
+                  <option value="270">270&deg;</option>
+                </select>
+              </div>
+              <div class="option-field">
+                <label for="rotate-pages">Pages</label>
+                <input type="text" id="rotate-pages" value="all" placeholder='e.g. all or 1,3-5' />
+                <span class="file-hint">Use "all" or a list like 1,3-5</span>
+              </div>
+            </div>
+        
+            </div>
+            <button type="button" class="primary-button tool-run" id="tool-run">Rotate PDF</button>
+            <div id="tool-processing"></div>
+            <div id="tool-results"></div>
+            <div id="tool-error"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <div id="site-footer"></div>
+    <script type="module" src="/static/assets/js/pages/pdf-rotator.js"></script>
+  </body>
+</html>

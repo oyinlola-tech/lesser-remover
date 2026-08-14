@@ -107,7 +107,7 @@ class CompressionController:
             compression_ratio=round(compression_ratio, 4),
             savings_percent=round(savings_percent, 2),
             content_type=content_type,
-            download_url=f"/api/compression/download/{output_path.name}",
+            download_url=f"/api/v1/compression/download/{output_path.name}",
         )
 
     async def compress_batch(
@@ -180,7 +180,7 @@ class CompressionController:
                         compression_ratio=round(compressed_size / original_size, 4) if original_size else 0,
                         savings_percent=round(savings_percent, 2),
                         content_type=content_type,
-                        download_url=f"/api/compression/download/{output_path.name}",
+                        download_url=f"/api/v1/compression/download/{output_path.name}",
                     )
                     results.append(result)
                     archive_files.append((output_path.name, compressed_data))
@@ -226,7 +226,7 @@ class CompressionController:
                 compressed_size_bytes=total_compressed_size,
                 savings_percent=round(overall_savings, 2),
                 files=results,
-                download_all_url=f"/api/compression/download/{archive_filename}",
+                download_all_url=f"/api/v1/compression/download/{archive_filename}",
             )
         except Exception:
             job_service.update_status(job_id, "failed")

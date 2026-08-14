@@ -6,6 +6,7 @@ from pathlib import Path
 import requests
 
 from app.core.config import settings
+from app.infrastructure.storage.base import StorageInterface
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +15,7 @@ BLOB_BASE_URL = "https://blob.vercel-storage.com"
 _LOCAL_ROOT = Path(tempfile.gettempdir()) / "vercel_storage"
 
 
-class VercelStorage:
+class VercelStorage(StorageInterface):
     def __init__(self) -> None:
         self._token = settings.blob_read_write_token
         if not self._token:

@@ -68,5 +68,49 @@ class PillowAdapter:
         finally:
             output.close()
 
+    def encode_avif(
+        self,
+        image: Image.Image,
+        quality: int = 85,
+    ) -> bytes:
+        if image.mode not in ("RGBA", "RGB", "LA"):
+            image = image.convert("RGBA")
+        output = BytesIO()
+        try:
+            image.save(
+                output,
+                format="AVIF",
+                quality=quality,
+            )
+            return output.getvalue()
+        finally:
+            output.close()
+
+    def encode(
+        self,
+        image: Image.Image,
+        output_format: str,
+        quality: int = 92,
+    ) -> tuple[bytes, str]:
+        output_format = output_format.lower()
+        if output_format in {"jpg", "jpeg"}:
+            return (
+                self.encode_jpeg(image, quality=quality),
+                "image/jpeg",
+            )
+        if output_format == "png":
+            return self.encode_png(image), "image/png"
+        if output_format == "webp":
+            return (
+                self.encode_webp(image, quality=quality),
+                "image/webp",
+            )
+        if output_format == "avif":
+            return (
+                self.encode_avif(image, quality=quality),
+                "image/avif",
+            )
+        raise ValueError(f"Unsupported output format: {output_format}")
+
 
 pillow_adapter = PillowAdapter()

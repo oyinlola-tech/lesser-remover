@@ -11,7 +11,7 @@ class JobCleanupService:
             return 0
         now = datetime.now(timezone.utc)
         expiration = timedelta(
-            minutes=settings.job_expiration_minutes
+            minutes=settings.job_ttl_minutes
         )
         removed = 0
         if not local_job_storage.root_path.exists():
@@ -79,7 +79,7 @@ class JobCleanupService:
             return 0
         now = datetime.now(timezone.utc)
         expiration = timedelta(
-            minutes=settings.job_expiration_minutes
+            minutes=settings.job_ttl_minutes
         )
         removed = 0
         if not local_job_storage.download_path.exists():

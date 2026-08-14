@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 40" fill="none">
-  <rect x="0" y="0" width="40" height="40" rx="10" fill="#0f172a"/>
-  <rect x="10" y="10" width="30" height="30" rx="7" fill="#334155"/>
-  <text x="56" y="28" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif" font-size="26" font-weight="800" fill="#0f172a" letter-spacing="-0.02em">Utils</text>
-  <text x="126" y="28" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif" font-size="26" font-weight="400" fill="#475569" letter-spacing="-0.01em">Tools</text>
+  <rect x="0" y="0" width="40" height="40" rx="10" fill="#163300"/>
+  <path d="M9 30 V17.5 a6.5 6.5 0 0 1 6.5-6.5 h4 a6.5 6.5 0 0 1 6.5 6.5 V30" stroke="#9fe870" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+  <path d="M9 30 h17" stroke="#9fe870" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+  <text x="54" y="28" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif" font-size="26" font-weight="800" fill="#163300" letter-spacing="-0.02em">Utils</text>
+  <text x="124" y="28" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif" font-size="26" font-weight="500" fill="#5b6b52" letter-spacing="-0.01em">Tools</text>
 </svg>

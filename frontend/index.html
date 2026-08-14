@@ -3,26 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Free local image background removal and file compression tools. Remove image backgrounds and compress JPG, PNG, WebP, and PDF files entirely in your browser or on our server." />
-    <meta name="keywords" content="background remover, image compressor, compress images, remove background, free file tools, webp, png, jpg, pdf compressor" />
+    <meta name="description" content="Utils Tools - free, local-first file utilities. Compress, convert, edit, remove backgrounds, process PDFs and analyze files. No accounts, no cloud uploads." />
+    <meta name="keywords" content="image tools, pdf tools, file tools, background remover, image compressor, image converter, pdf compressor, developer tools, free file utilities" />
     <meta name="author" content="Oluwayemi Oyinlola" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://www.oyinlola.site/" />
-    <meta property="og:title" content="Utils Tools - Free Background Remover & File Compressor" />
-    <meta property="og:description" content="Remove image backgrounds and compress files for free. Built by Oluwayemi Oyinlola." />
+    <meta property="og:title" content="Utils Tools - Simple tools for better files" />
+    <meta property="og:description" content="Compress, convert, edit, remove backgrounds, process PDFs and analyze files. Private by default." />
     <meta property="og:url" content="https://www.oyinlola.site/" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://www.oyinlola.site/static/assets/img/og-image.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Utils Tools - Free Background Remover & File Compressor" />
-    <meta name="twitter:description" content="Remove image backgrounds and compress files for free. Built by Oluwayemi Oyinlola." />
-    <title>Utils Tools - Free Background Remover & File Compressor</title>
+    <meta name="twitter:title" content="Utils Tools - Simple tools for better files" />
+    <meta name="twitter:description" content="Compress, convert, edit, remove backgrounds, process PDFs and analyze files. Private by default." />
+    <title>Utils Tools - Simple tools for better files</title>
     <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
     <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
     <script type="module" src="/static/assets/js/error-boundary.js"></script>
-    
+
     <link rel="stylesheet" href="/static/assets/css/reset.css" />
     <link rel="stylesheet" href="/static/assets/css/variables.css" />
     <link rel="stylesheet" href="/static/assets/css/base.css" />
@@ -30,816 +30,73 @@
     <link rel="stylesheet" href="/static/assets/css/responsive.css" />
   </head>
   <body>
-    <header class="site-header">
-
-      <div class="container header-inner">
-
-        <a
-          href="/"
-          class="brand"
-          aria-label="Utils Tools home"
-        >
-          <img src="/static/assets/brand/logo.svg" alt="" width="32" height="32" style="display:block;" />
-          <span>
-            Utils Tools
-          </span>
-        </a>
-
-
-        <nav
-          class="header-nav"
-          aria-label="Main navigation"
-        >
-
-          <a
-            href="#tools"
-            class="active"
-          >
-            Tools
-          </a>
-
-          <a href="#background-remover">
-            Background remover
-          </a>
-
-          <a href="#compressor">
-            Compressor
-          </a>
-
-        </nav>
-
-        <div class="header-actions">
-          <a href="https://github.com/oyinlola-tech/utils-tools" target="_blank" rel="noopener noreferrer" class="header-star-button" aria-label="Star this project on GitHub">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"></polygon>
-            </svg>
-            <span>Star</span>
-          </a>
-        </div>
-
-      </div>
-
-    </header>
+    <div id="site-header"></div>
 
     <section class="landing">
-
       <div class="container">
-
         <div class="landing-content">
-
-          <span class="eyebrow">
-            Private by default
-          </span>
-
-          <h1>
-            Make your files lighter,
-            cleaner and easier to use.
-          </h1>
-
+          <span class="eyebrow">Private by default</span>
+          <h1>Simple tools for better files.</h1>
           <p class="landing-description">
-            Remove image backgrounds and compress
-            your files directly on your computer.
-            Nothing needs to leave your machine.
+            Compress, convert, edit, remove backgrounds, process PDFs
+            and analyze files — all in one calm, fast tool.
+            No accounts. No cloud uploads. Your files stay yours.
           </p>
-
+          <div class="landing-actions">
+            <a href="/tools/image-compressor" class="primary-button">Compress a file</a>
+            <a href="/tools/background-remover" class="secondary-button">Remove a background</a>
+          </div>
         </div>
-
-
-        <div
-          class="tool-grid"
-          id="tools"
-        >
-
-          <a
-            href="#background-remover"
-            class="tool-card tool-card-primary"
-          >
-
-            <div class="tool-card-top">
-
-              <span class="tool-card-icon">
-                BG
-              </span>
-
-              <span class="tool-card-arrow">
-                ↗
-              </span>
-
-            </div>
-
-
-            <div>
-
-              <span class="tool-card-label">
-                Image tool
-              </span>
-
-              <h2>
-                Remove background
-              </h2>
-
-              <p>
-                Turn ordinary images into
-                transparent PNG or WebP files
-                while keeping the original
-                resolution.
-              </p>
-
-            </div>
-
-
-            <span class="tool-card-action">
-              Start removing
-            </span>
-
-          </a>
-
-
-          <a
-            href="#compressor"
-            class="tool-card"
-          >
-
-            <div class="tool-card-top">
-
-              <span class="tool-card-icon">
-                %
-              </span>
-
-              <span class="tool-card-arrow">
-                ↗
-              </span>
-
-            </div>
-
-
-            <div>
-
-              <span class="tool-card-label">
-                File tool
-              </span>
-
-              <h2>
-                Compress files
-              </h2>
-
-              <p>
-                Reduce image and PDF sizes
-                without blindly sacrificing
-                quality.
-              </p>
-
-            </div>
-
-
-            <span class="tool-card-action">
-              Start compressing
-            </span>
-
-          </a>
-
-        </div>
-
       </div>
-
     </section>
 
-    <section class="local-section">
-
-      <div class="container">
-
-        <div class="local-content">
-
-          <span class="eyebrow">
-            Local processing
-          </span>
-
-          <h2>
-            Your files stay on your computer.
-          </h2>
-
-          <p>
-            The application runs on your machine.
-            Uploads are processed by the local
-            Python server and stored locally while
-            they're being processed.
-          </p>
-
-        </div>
-
-
-        <div class="local-points">
-
-          <div>
-            <strong>
-              No account
-            </strong>
-
-            <span>
-              Nothing to sign up for.
-            </span>
-          </div>
-
-
-          <div>
-            <strong>
-              No database
-            </strong>
-
-            <span>
-              Temporary state lives on disk.
-            </span>
-          </div>
-
-
-          <div>
-            <strong>
-              No cloud upload
-            </strong>
-
-            <span>
-              Processing happens locally.
-            </span>
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <main id="background-remover">
-      <section class="hero">
+    <main id="categories">
+      <section class="tool-catalog-section">
         <div class="container">
-          <div class="hero-content">
-
-            <span class="eyebrow">
-                Background remover
-            </span>
-
-            <h1>
-                Make any image transparent.
-            </h1>
-
-            <p class="hero-description">
-                Upload an image and we'll remove the
-                background locally while keeping the
-                original resolution.
+          <div class="catalog-heading">
+            <span class="eyebrow">All tools</span>
+            <h2>Everything you need, in one place.</h2>
+            <p>
+              Tools are grouped by what they do. Available tools open
+              directly; planned tools are marked as coming soon.
             </p>
-
           </div>
-          <section class="uploader" id="background-uploader">
-            <div class="background-settings">
-              <div>
-                <span class="eyebrow">
-                  Output
-                </span>
+          <div id="tool-catalog" class="tool-catalog" aria-live="polite"></div>
+        </div>
+      </section>
 
-                <h2>
-                  Choose your format.
-                </h2>
-              </div>
-
-              <div class="output-options">
-                <button
-                  type="button"
-                  class="output-option active"
-                  data-format="webp"
-                >
-                  <strong>
-                    WebP
-                  </strong>
-
-                  <span>
-                    Smaller with transparency
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  class="output-option"
-                  data-format="png"
-                >
-                  <strong>
-                    PNG
-                  </strong>
-
-                  <span>
-                    Lossless transparency
-                  </span>
-                </button>
-              </div>
+      <section class="local-section">
+        <div class="container">
+          <div class="local-content">
+            <span class="eyebrow">Local processing</span>
+            <h2>Your files stay on your computer.</h2>
+            <p>
+              The application runs on your machine. Uploads are processed
+              by the local Python server and stored locally while they're
+              being processed.
+            </p>
+          </div>
+          <div class="local-points">
+            <div>
+              <strong>No account</strong>
+              <span>Nothing to sign up for.</span>
             </div>
-
-            <div class="drop-zone" id="bg-drop-zone">
-              <div class="upload-icon">↑</div>
-              <h2>Drop an image here</h2>
-              <p>Or choose an image from your computer</p>
-              <label for="bg-file-input" class="primary-button">
-                Choose image
-              </label>
-              <input
-                id="bg-file-input"
-                type="file"
-                accept="image/*"
-                class="visually-hidden"
-              />
-              <p class="file-hint">
-                JPG, JPEG, PNG, WebP and other common image formats
-              </p>
+            <div>
+              <strong>No database</strong>
+              <span>Temporary state lives on disk.</span>
             </div>
-            <div class="processing hidden" id="bg-processing">
-              <div class="processing-content">
-                <div class="spinner"></div>
-                <h2>Removing the background</h2>
-                <p id="bg-processing-message" class="processing-message" role="status" aria-live="polite">
-                  Preparing your image...
-                </p>
-                <div class="progress-bar">
-                  <div
-                    id="bg-processing-progress"
-                    class="progress-bar-value"
-                  ></div>
-                </div>
-                <div
-                  id="bg-processing-count"
-                  class="processing-count"
-                >
-                </div>
-              </div>
+            <div>
+              <strong>No cloud upload</strong>
+              <span>Processing happens locally.</span>
             </div>
-            <div class="result-card hidden" id="bg-result">
-              <div class="result-header">
-                <div>
-                  <h2 class="result-title">Your image is ready</h2>
-                  <div class="result-meta" id="bg-result-meta" aria-live="polite"></div>
-                </div>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                  <span class="success-badge hidden" id="bg-success-badge">Done</span>
-                  <button
-                    type="button"
-                    class="secondary-button"
-                    id="bg-new-image-button"
-                  >
-                    Process another
-                  </button>
-                </div>
-              </div>
-                <div
-                  class="image-comparison"
-                  id="image-comparison"
-                >
-                  <div class="comparison-image original">
-                    <img id="original-preview" alt="Original image" />
-                  </div>
-
-                  <div
-                    class="comparison-image processed"
-                    id="processed-preview-container"
-                  >
-                    <img id="processed-preview" alt="Background removed image" />
-                  </div>
-
-                  <div
-                    class="comparison-divider"
-                    id="comparison-divider"
-                  >
-                    <span class="comparison-handle">↔</span>
-                  </div>
-
-                  <div class="comparison-label comparison-label-original">
-                    Original
-                  </div>
-
-                  <div class="comparison-label comparison-label-processed">
-                    Removed background
-                  </div>
-
-                  <input
-                    id="comparison-slider"
-                    type="range"
-                    min="0"
-                    max="100"
-                    value="50"
-                    aria-label="Compare original and processed image"
-                  />
-                </div>
-              <div class="variant-grid" id="bg-variant-grid"></div>
-            </div>
-            <div class="error-message hidden" id="bg-error-message" role="alert"></div>
-          </section>
-          <section
-            id="compressor"
-            class="compressor-section"
-          >
-            <div class="container">
-              <div class="tool-page-header">
-                <span class="eyebrow">
-                  File compression
-                </span>
-                <h2>
-                  Make your files smaller.
-                </h2>
-                <p>
-                  Reduce file size while keeping the quality
-                  that matters.
-                </p>
-              </div>
-              <section class="compressor-card">
-                <div
-                  class="compressor-drop-zone"
-                  id="compressor-drop-zone"
-                >
-                  <div class="upload-icon">
-                    ↑
-                  </div>
-                  <h2>
-                    Drop your files here
-                  </h2>
-                  <p>
-                    Or choose files from your computer
-                  </p>
-                  <label
-                    for="compressor-file-input"
-                    class="primary-button"
-                  >
-                    Choose file
-                  </label>
-                  <input
-                    id="compressor-file-input"
-                    type="file"
-                    accept="image/*,.pdf,application/pdf"
-                    multiple
-                    class="visually-hidden"
-                  />
-                  <p class="file-hint">
-                    JPG, JPEG, PNG, WebP and PDF
-                  </p>
-                </div>
-                <div
-                  id="compressor-workspace"
-                  class="compressor-workspace hidden"
-                >
-                  <div class="queue-header">
-                    <div>
-                      <span class="eyebrow">
-                        Files
-                      </span>
-                      <h2>
-                        Ready to compress
-                      </h2>
-                    </div>
-                    <button
-                      type="button"
-                      class="text-button"
-                      id="clear-files"
-                    >
-                      Clear all
-                    </button>
-                  </div>
-                  <div
-                    id="file-queue"
-                    class="file-queue"
-                  ></div>
-                  <div class="compression-settings">
-                    <div class="setting-group">
-                      <label>
-                        Compression
-                      </label>
-                      <div class="quality-options">
-                        <button
-                          type="button"
-                          class="quality-option"
-                          data-preset="best_quality"
-                        >
-                          <strong>
-                            Best quality
-                          </strong>
-                          <span>
-                            Keep more detail
-                          </span>
-                        </button>
-                        <button
-                          type="button"
-                          class="quality-option active"
-                          data-preset="balanced"
-                        >
-                          <strong>
-                            Balanced
-                          </strong>
-                          <span>
-                            A strong balance of quality and size
-                          </span>
-                        </button>
-                        <button
-                          type="button"
-                          class="quality-option"
-                          data-preset="smallest"
-                        >
-                          <strong>
-                            Smallest practical size
-                          </strong>
-                          <span>
-                            Prioritize a smaller file
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="setting-group">
-                      <label for="max-dimension">
-                        Maximum dimension
-                      </label>
-                      <select id="max-dimension" class="select-input">
-                        <option value="">Keep original dimensions</option>
-                        <option value="5000">5000 px</option>
-                        <option value="4000">4000 px</option>
-                        <option value="3000">3000 px</option>
-                        <option value="2000">2000 px</option>
-                        <option value="1500">1500 px</option>
-                      </select>
-                      <small>
-                        Large images can be resized while keeping their proportions.
-                      </small>
-                    </div>
-                  </div>
-
-                  <details class="advanced-settings">
-                    <summary>
-                      <span>
-                        Advanced settings
-                      </span>
-
-                      <span class="advanced-settings-chevron">
-                        +
-                      </span>
-                    </summary>
-
-                    <div class="advanced-settings-content">
-                      <div class="setting-group">
-                        <label for="target-size">
-                          Target size
-                        </label>
-
-                        <div class="target-size-input">
-                          <input
-                            id="target-size"
-                            type="number"
-                            min="10"
-                            placeholder="Optional"
-                          >
-
-                          <span>
-                            KB
-                          </span>
-                        </div>
-
-                        <small>
-                          The compressor will try to find
-                          the highest quality below this size.
-                        </small>
-                      </div>
-
-                      <div class="setting-group">
-                        <label>
-                          Metadata
-                        </label>
-
-                        <label class="toggle">
-                          <input
-                            id="strip-metadata"
-                            type="checkbox"
-                            checked
-                          >
-
-                          <span class="toggle-track">
-                            <span class="toggle-thumb"></span>
-                          </span>
-
-                          <span class="toggle-label">
-                            Remove unnecessary metadata
-                          </span>
-                        </label>
-                      </div>
-
-                      <div class="setting-group">
-                        <label for="advanced-format">
-                          Output format
-                        </label>
-
-                        <select
-                          id="advanced-format"
-                          class="select-input"
-                        >
-                          <option value="webp">
-                            WebP
-                          </option>
-                          <option value="jpeg">
-                            JPEG
-                          </option>
-                          <option value="png">
-                            PNG
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                  </details>
-                  <button
-                    type="button"
-                    class="compress-button primary-button"
-                    id="compress-button"
-                  >
-                    Compress files
-                  </button>
-                </div>
-                <div
-                  id="compression-processing"
-                  class="processing hidden"
-                >
-                  <div class="processing-content">
-                    <div class="spinner"></div>
-                    <h2>
-                      Compressing your files
-                    </h2>
-                    <p id="processing-message" class="processing-message" role="status" aria-live="polite">
-                      Preparing your files...
-                    </p>
-                    <div class="progress-bar">
-                      <div
-                        id="processing-progress"
-                        class="progress-bar-value"
-                      ></div>
-                    </div>
-                    <div
-                      id="processing-count"
-                      class="processing-count"
-                    >
-                      0 of 0 completed
-                    </div>
-                    <button
-                      type="button"
-                      class="secondary-button cancel-button"
-                      id="cancel-compression"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-                 <div
-                   id="compression-result"
-                   class="compression-result hidden"
-                 >
-                   <div class="result-header">
-                     <div>
-                       <h2 class="result-title">
-                         Your files are ready
-                       </h2>
-                        <div
-                          id="compression-result-meta"
-                          class="result-meta"
-                          aria-live="polite"
-                        ></div>
-                     </div>
-                     <div style="display: flex; gap: 10px; align-items: center;">
-                       <span class="success-badge hidden" id="compression-success-badge">Done</span>
-                       <button
-                         type="button"
-                         class="secondary-button"
-                         id="compress-another"
-                       >
-                         Compress another
-                       </button>
-                     </div>
-                   </div>
-                  <div class="compression-summary">
-                    <div class="size-block">
-                      <span>
-                        Original
-                      </span>
-                      <strong
-                        id="original-size"
-                      >
-                        0 MB
-                      </strong>
-                    </div>
-                    <div class="size-arrow">
-                      →
-                    </div>
-                    <div class="size-block">
-                      <span>
-                        Compressed
-                      </span>
-                      <strong
-                        id="compressed-size"
-                      >
-                        0 MB
-                      </strong>
-                    </div>
-                    <div class="saving-block">
-                      <span>
-                        You saved
-                      </span>
-                      <strong
-                        id="savings-percent"
-                      >
-                        0%
-                      </strong>
-                    </div>
-                    <div class="reduction-indicator">
-
-                        <div class="reduction-track">
-                            <div id="reduction-value" class="reduction-value"></div>
-                        </div>
-
-                        <div class="reduction-label">
-                            <span>File size after compression</span>
-                            <strong id="reduction-label">0%</strong>
-                        </div>
-
-                    </div>
-                    <p id="compression-summary-message" class="summary-message"></p>
-                  </div>
-                  <div
-                    id="completed-files"
-                    class="completed-files"
-                  ></div>
-
-                  <div
-                    id="compression-failed-files"
-                    class="failed-files hidden"
-                    role="status"
-                    aria-live="polite"
-                  ></div>
-
-                  <div class="compression-result-actions">
-                    <a
-                      id="compression-download"
-                      class="primary-button"
-                      href="#"
-                    >
-                      Download file
-                    </a>
-                  </div>
-                </div>
-                <div
-                  id="compression-error"
-                  class="error-message hidden"
-                  role="alert"
-                ></div>
-              </section>
-            </div>
-          </section>
+          </div>
         </div>
       </section>
     </main>
-    <footer class="site-footer">
-      <div class="container">
-        <div class="footer-grid">
-          <div class="footer-brand-section">
-            <div class="footer-brand">
-              <img src="/static/assets/brand/logo.svg" alt="" width="28" height="28" />
-              <span>Utils Tools</span>
-            </div>
-            <p class="footer-tagline">
-              Private by default. Fast, calm, and precise file tools that run in your browser.
-            </p>
-            <div class="footer-actions">
-              <a href="https://github.com/oyinlola-tech/utils-tools" target="_blank" rel="noopener noreferrer" class="footer-star-button" aria-label="Star this project on GitHub">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"></polygon>
-                </svg>
-                Star
-              </a>
-              <button type="button" class="footer-support-button" id="footer-support-button">
-                Support this project
-              </button>
-            </div>
-          </div>
-          <div class="footer-links">
-            <div class="footer-column">
-              <h4 class="footer-heading">Product</h4>
-              <a href="#background-remover">Background remover</a>
-              <a href="#compressor">Image compressor</a>
-              <a href="#tools">All tools</a>
-            </div>
-            <div class="footer-column">
-              <h4 class="footer-heading">Connect</h4>
-              <a href="https://www.oyinlola.site/" target="_blank" rel="noopener noreferrer">oyinlola.site</a>
-              <a href="https://github.com/oyinlola-tech/utils-tools" target="_blank" rel="noopener noreferrer">GitHub</a>
-            </div>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <span>© <span id="footer-year">2026</span> Oluwayemi Oyinlola. All rights reserved.</span>
-          <span class="footer-divider">·</span>
-          <span>Built with care. Runs locally in your browser.</span>
-        </div>
-      </div>
-    </footer>
-    <button type="button" class="fab-support" id="fab-support" aria-label="Support this project">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-      </svg>
-    </button>
+
+    <div id="site-footer"></div>
+
     <script type="module" src="/static/assets/js/app.js"></script>
+    <script type="module" src="/static/assets/js/landing.js"></script>
   </body>
 </html>

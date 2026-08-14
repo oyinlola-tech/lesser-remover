@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Pick a platform preset and your image is cropped and resized to the exact dimensions that platform expects." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.oyinlola.site/tools/social-media-resizer" />
+    <meta property="og:title" content="Social Media Resizer - Utils Tools" />
+    <meta property="og:description" content="Pick a platform preset and your image is cropped and resized to the exact dimensions that platform expects." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.oyinlola.site/tools/social-media-resizer" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Social Media Resizer - Utils Tools</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+    <script type="module" src="/static/assets/js/error-boundary.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/components.css" />
+    <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="tool-page">
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <span class="eyebrow">Utility tool</span>
+            <h1>Resize for social media.</h1>
+            <p class="hero-description">Pick a platform preset and your image is cropped and resized to the exact dimensions that platform expects.</p>
+          </div>
+          <section class="tool-card">
+            <div id="tool-unavailable" class="hidden" role="alert"></div>
+            
+            <div id="tool-upload" data-accept="image/*" data-multiple="false" data-max-files="1" data-hint="JPG, PNG, WebP or AVIF up to 25 MB"></div>
+        
+            <div class="tool-options" id="tool-options">
+<div class="option-field">
+              <label>Platform preset</label>
+              <div class="preset-grid" id="preset-grid">
+                <p class="file-hint">Loading presets...</p>
+              </div>
+            </div>
+            <div class="option-row">
+              <div class="option-field">
+                <label for="social-format">Output format</label>
+                <select id="social-format">
+                  <option value="jpg" selected>JPG</option>
+                  <option value="png">PNG</option>
+                  <option value="webp">WebP</option>
+                </select>
+              </div>
+            </div>
+        
+            </div>
+            <button type="button" class="primary-button tool-run" id="tool-run">Resize for preset</button>
+            <div id="tool-processing"></div>
+            <div id="tool-results"></div>
+            <div id="tool-error"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <div id="site-footer"></div>
+    <script type="module" src="/static/assets/js/pages/social-media-resizer.js"></script>
+  </body>
+</html>

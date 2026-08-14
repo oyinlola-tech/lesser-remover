@@ -1,4 +1,4 @@
-const API_BASE_URL = "/api";
+const API_BASE_URL = "/api/v1";
 
 async function parseJsonResponse(response) {
     const text = await response.text();
@@ -10,6 +10,16 @@ async function parseJsonResponse(response) {
     } catch {
         return null;
     }
+}
+
+function extractErrorMessage(data, fallback) {
+    if (data && data.error && data.error.message) {
+        return data.error.message;
+    }
+    if (data && data.detail) {
+        return data.detail;
+    }
+    return fallback;
 }
 
 async function safeFetch(url, options = {}) {
@@ -55,7 +65,7 @@ export async function startBackgroundRemoval(file, outputFormat = "webp") {
 
     const data = await parseJsonResponse(response);
     if (!response.ok) {
-        throw new Error(data?.detail || "Unable to process image.");
+        throw new Error(extractErrorMessage(data, "Unable to process image."));
     }
     return data;
 }
@@ -97,27 +107,104 @@ export async function startBatchCompression({
 
     const data = await parseJsonResponse(response);
     if (!response.ok) {
-        throw new Error(data?.detail || "Unable to compress files.");
+        throw new Error(extractErrorMessage(data, "Unable to compress files."));
     }
     return data;
 }
 
 export async function cancelJob(jobId) {
-    const response = await safeFetch(`/api/jobs/${jobId}`, {
+    const response = await safeFetch(`${API_BASE_URL}/jobs/${jobId}`, {
         method: "DELETE",
     });
     const data = await parseJsonResponse(response);
     if (!response.ok) {
-        throw new Error(data?.detail || "Unable to cancel job.");
+        throw new Error(extractErrorMessage(data, "Unable to cancel job."));
     }
     return data;
 }
 
 export async function getJob(jobId) {
-    const response = await safeFetch(`/api/jobs/${jobId}`);
+    const response = await safeFetch(`${API_BASE_URL}/jobs/${jobId}`);
     const data = await parseJsonResponse(response);
     if (!response.ok) {
-        throw new Error(data?.detail || "Unable to load job.");
+        throw new Error(extractErrorMessage(data, "Unable to load job."));
     }
     return data;
+}
+
+export async function getCapabilities() {
+    const response = await safeFetch(`${API_BASE_URL}/capabilities`);
+    const data = await parseJsonResponse(response);
+    if (!response.ok) {
+        throw new Error(extractErrorMessage(data, "Unable to load capabilities."));
+    }
+    return data;
+}
+
+/**
+ * Generic JSON API call.
+ */
+export async function apiGet(path) {
+    const response = await safeFetch(`${API_BASE_URL}${path}`);
+    const data = await parseJsonResponse(response);
+    if (!response.ok) {
+        throw new Error(extractErrorMessage(data, "Request failed."));
+    }
+    return data;
+}
+
+function buildFormData(files = [], fields = {}) {
+    const formData = new FormData();
+    for (const item of files) {
+        if (item instanceof File) {
+            formData.append("file", item);
+        } else {
+            formData.append(item.name, item.file);
+        }
+    }
+    for (const [key, value] of Object.entries(fields)) {
+        if (value !== null && value !== undefined && value !== "") {
+            formData.append(key, String(value));
+        }
+    }
+    return formData;
+}
+
+/**
+ * Generic multipart upload that returns parsed JSON.
+ */
+export async function apiUpload(path, { files = [], fields = {} } = {}) {
+    const formData = buildFormData(files, fields);
+    const response = await safeFetch(`${API_BASE_URL}${path}`, {
+        method: "POST",
+        body: formData,
+    });
+    const data = await parseJsonResponse(response);
+    if (!response.ok) {
+        throw new Error(extractErrorMessage(data, "Request failed."));
+    }
+    return data;
+}
+
+/**
+ * Generic multipart upload that returns the raw file blob.
+ */
+export async function apiDownload(path, { files = [], fields = {} } = {}) {
+    const formData = buildFormData(files, fields);
+    const response = await safeFetch(`${API_BASE_URL}${path}`, {
+        method: "POST",
+        body: formData,
+    });
+    if (!response.ok) {
+        const data = await parseJsonResponse(response);
+        throw new Error(extractErrorMessage(data, "Request failed."));
+    }
+    const blob = await response.blob();
+    let filename = "download";
+    const disposition = response.headers.get("Content-Disposition") || "";
+    const match = disposition.match(/filename="?([^";]+)"?/);
+    if (match) {
+        filename = match[1];
+    }
+    return { blob, filename, contentType: response.headers.get("Content-Type") || "" };
 }

@@ -2,6 +2,7 @@ import logging
 
 from fastapi import APIRouter, HTTPException
 
+from app.api import API_PREFIX
 from app.modules.jobs.job_controller import (
     job_controller,
 )
@@ -13,7 +14,7 @@ from app.modules.jobs.job_service import (
 logger = logging.getLogger(__name__)
 
 router = APIRouter(
-    prefix="/api/jobs",
+    prefix=f"{API_PREFIX}/jobs",
     tags=["Jobs"],
 )
 

@@ -1,1 +1,1 @@
-# Lesser Remover shared package
+"""Utils Tools shared package."""
