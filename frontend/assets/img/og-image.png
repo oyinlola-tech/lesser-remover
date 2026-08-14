@@ -3,7 +3,7 @@
   <rect x="80" y="80" width="1040" height="470" rx="20" fill="#ffffff" stroke="#deded6" stroke-width="2"/>
   <rect x="120" y="140" width="80" height="80" rx="20" fill="#9fe870"/>
   <path d="M140 200L160 220L180 180" stroke="#163300" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="240" y="185" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif" font-size="42" font-weight="800" fill="#163300">Image Tools</text>
+  <text x="240" y="185" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif" font-size="42" font-weight="800" fill="#163300">Utils Tools</text>
   <text x="240" y="235" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif" font-size="22" fill="#55634f">Free Background Remover & File Compressor</text>
   <text x="120" y="340" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif" font-size="18" fill="#7b8476">Built by Oluwayemi Oyinlola</text>
   <text x="120" y="380" font-family="Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif" font-size="18" fill="#7b8476">oyinlola.site</text>
