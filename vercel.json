@@ -12,11 +12,6 @@
       "dest": "/api/index.py"
     }
   ],
-  "functions": {
-    "api/index.py": {
-      "maxDuration": 60
-    }
-  },
   "env": {
     "APP_ENV": "production",
     "DEBUG": "false",
