@@ -287,6 +287,25 @@ storage/
 
 ---
 
+## Logs (local mode)
+
+Logs are written to `logs/` and split into separate files so each area can be
+audited independently:
+
+```text
+logs/
+├── system.log              # App core, infrastructure, storage, uvicorn
+├── activities.log          # Job lifecycle (create, status, cancel, cleanup)
+├── background_remover.log  # Background-removal requests and results
+└── compression.log         # Compression jobs and per-file results
+```
+
+Every log line records the timestamp, level, logger name, and the source
+function/line. In production (Vercel) file logging is disabled and all
+categories stream to stdout, which Vercel surfaces in the dashboard.
+
+---
+
 ## Security notes
 
 - File type is determined by **magic bytes**, not by filename or browser-provided MIME type.
