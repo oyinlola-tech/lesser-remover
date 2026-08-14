@@ -43,6 +43,23 @@ class LocalStorage:
         source_path.replace(destination_path)
         return destination_path
 
+    def write(
+        self,
+        file_path: Path,
+        data: bytes,
+    ) -> None:
+        file_path.parent.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+        file_path.write_bytes(data)
+
+    def materialize(
+        self,
+        file_path: Path,
+    ) -> Path:
+        return file_path
+
     def delete(self, file_path: Path) -> None:
         if file_path.exists():
             file_path.unlink()
