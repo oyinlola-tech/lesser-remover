@@ -22,9 +22,18 @@ const processingCount = document.querySelector("#bg-processing-count");
 
 let originalObjectUrl = null;
 let selectedOutputFormat = "webp";
+let originalFileSize = 0;
+let originalFileName = "";
+
+function setOutputOptionsDisabled(disabled) {
+    outputOptions.forEach((option) => {
+        option.disabled = disabled;
+    });
+}
 
 outputOptions.forEach((option) => {
     option.addEventListener("click", () => {
+        if (option.disabled) return;
         outputOptions.forEach((other) => {
             other.classList.remove("active");
         });
@@ -39,6 +48,7 @@ function resetUI() {
     hideElement(errorMessage);
     const badge = document.querySelector("#bg-success-badge");
     if (badge) hideElement(badge);
+    setOutputOptionsDisabled(false);
     dropZone.classList.remove("hidden");
     if (originalObjectUrl) {
         URL.revokeObjectURL(originalObjectUrl);
@@ -49,6 +59,8 @@ function resetUI() {
     resultMeta.textContent = "";
     variantGrid.innerHTML = "";
     fileInput.value = "";
+    originalFileSize = 0;
+    originalFileName = "";
     if (processingProgress) processingProgress.style.width = "0%";
     if (processingCount) processingCount.textContent = "";
     if (processingMessage) processingMessage.textContent = "Preparing your image...";
@@ -61,6 +73,7 @@ function updateBackgroundProgress(stage) {
 function showError(message) {
     hideElement(processing);
     hideElement(result);
+    setOutputOptionsDisabled(false);
     dropZone.classList.remove("hidden");
     errorMessage.textContent = message;
     showElement(errorMessage);
@@ -71,19 +84,37 @@ function showResult(data) {
     hideElement(processing);
     hideElement(errorMessage);
 
-    resultMeta.textContent = `${data.width} × ${data.height} · ${data.format.toUpperCase()}`;
-    processedPreview.src = data.download_url;
-    processedPreview.alt = `Processed image (${data.format})`;
+    const result = data.result || data;
+    const originalLabel = result.original_filename || originalFileName;
+    resultMeta.textContent = [
+        originalLabel,
+        `${result.width} × ${result.height}`,
+        String(result.format || "").toUpperCase(),
+        formatBytes(Number(result.size_bytes || 0)),
+    ].filter(Boolean).join(" · ");
+    processedPreview.src = result.download_url;
+    processedPreview.alt = `Processed image (${result.format})`;
 
     variantGrid.innerHTML = "";
     const card = document.createElement("div");
     card.className = "variant";
     card.innerHTML = `
-        <h3>${String(data.format).toUpperCase()}</h3>
-        <div class="variant-size">${formatBytes(Number(data.size_bytes || 0))}</div>
+        <h3>${String(result.format).toUpperCase()}</h3>
+        <div class="variant-size">${formatBytes(Number(result.size_bytes || 0))}</div>
         <p class="variant-description">Transparent background, original resolution.</p>
-        <a class="primary-button" href="${data.download_url}" download="${data.filename}">Download ${String(data.format).toUpperCase()}</a>
+        <a class="primary-button" href="${result.download_url}" download="${result.filename}">Download ${String(result.format).toUpperCase()}</a>
     `;
+
+    if (originalFileSize > 0 && result.size_bytes) {
+        const savings = (1 - Number(result.size_bytes) / originalFileSize) * 100;
+        const chip = document.createElement("span");
+        chip.className = "variant-savings";
+        chip.textContent = savings > 0
+            ? `${savings.toFixed(1)}% smaller than original`
+            : "Similar size to original";
+        card.appendChild(chip);
+    }
+
     variantGrid.appendChild(card);
 
     comparisonSlider.value = 50;
@@ -117,8 +148,12 @@ async function processFile(file) {
     hideElement(result);
     hideElement(errorMessage);
     showElement(processing);
+    setOutputOptionsDisabled(true);
 
     updateBackgroundProgress("Preparing your image...");
+    originalFileSize = file.size || 0;
+    originalFileName = file.name || "";
+    if (processingCount) processingCount.textContent = file.name;
 
     try {
         if (originalObjectUrl) {
@@ -134,9 +169,11 @@ async function processFile(file) {
         
         updateBackgroundProgress("Encoding result...");
         showResult(data.result);
+        setOutputOptionsDisabled(false);
         
         updateBackgroundProgress("Complete");
     } catch (error) {
+        setOutputOptionsDisabled(false);
         showError(error.message || "Something went wrong while processing the image.");
     }
 }
