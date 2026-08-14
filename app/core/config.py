@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    app_name: str = "Local Image & File Tools"
+    app_name: str = "Utils Tools"
     app_version: str = "1.0.0"
     app_env: str = "development"
     debug: bool = True

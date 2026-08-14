@@ -1,4 +1,4 @@
-# Image Tools
+# Utils Tools
 
 A fast, calm, and precise file utility for **background removal** and **file compression**. Runs entirely in your browser or on our server. No accounts, no cloud uploads, no external services required.
 
@@ -102,7 +102,7 @@ This repository supports two deployment targets with the same codebase.
 
 ```bash
 # 1. Clone or open the project
-cd Lesser-Remover
+cd Utils-tool
 
 # 2. Create virtual environment
 python3 -m venv .venv
@@ -244,7 +244,7 @@ Install Python from python.org and Ghostscript from ghostscript.com.
 Create a `.env` file at the project root:
 
 ```bash
-APP_NAME=Image Tools
+APP_NAME=Utils Tools
 APP_VERSION=1.0.0
 APP_ENV=development
 DEBUG=true
