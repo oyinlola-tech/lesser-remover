@@ -1,1 +1,0 @@
-# Lesser Remover PDF module
