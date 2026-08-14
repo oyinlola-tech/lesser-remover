@@ -1,29 +1,9 @@
-import { loadCapabilities, toolsByCategory } from "./capabilities.js";
-
-const CATEGORY_META = {
-    image: {
-        title: "Image tools",
-        description: "Remove backgrounds, compress, convert, resize, crop, edit and more.",
-    },
-    pdf: {
-        title: "PDF tools",
-        description: "Compress, merge, split, convert and reorganize PDF documents.",
-    },
-    file: {
-        title: "File tools",
-        description: "Analyze files, package archives and find duplicates.",
-    },
-    developer: {
-        title: "Developer tools",
-        description: "Favicons, SVG optimization, Base64, QR codes and barcodes.",
-    },
-    utility: {
-        title: "Utility",
-        description: "Social media presets and screenshot beautification.",
-    },
-};
-
-const CATEGORY_ORDER = ["image", "pdf", "file", "developer", "utility"];
+import {
+    CATEGORY_META,
+    CATEGORY_ORDER,
+    loadCapabilities,
+    toolsByCategory,
+} from "./capabilities.js";
 
 function renderToolCard(tool) {
     if (tool.status === "available") {

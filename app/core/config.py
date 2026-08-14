@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    app_name: str = "Utils Tools"
+    app_name: str = "Utils-tool"
     app_version: str = "1.0.0"
     app_env: str = "development"
     debug: bool = True

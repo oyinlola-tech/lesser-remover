@@ -1,4 +1,4 @@
-# Utils Tools
+# Utils-tool
 
 A local-first file and media utility suite: **27 tools** for images, PDFs,
 files, developer assets and everyday utilities. One codebase runs locally with
@@ -193,7 +193,7 @@ Install Python from python.org and Ghostscript from ghostscript.com.
 Create a `.env` file at the project root:
 
 ```bash
-APP_NAME=Utils Tools
+APP_NAME=Utils-tool
 APP_VERSION=1.0.0
 APP_ENV=development
 DEBUG=true

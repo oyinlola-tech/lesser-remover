@@ -47,7 +47,7 @@ FRONTEND_DIR = BASE_DIR / "frontend"
 app = FastAPI(
     title=settings.app_name,
     description=(
-        "Utils Tools - local-first file and media utility application"
+        "Utils-tool - local-first file and media utility application"
     ),
     version=settings.app_version,
 )

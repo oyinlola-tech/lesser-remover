@@ -1,4 +1,9 @@
 import { openSupport } from "./support-popup.js";
+import {
+    CATEGORY_META,
+    CATEGORY_ORDER,
+    loadCapabilities,
+} from "./capabilities.js";
 
 const GITHUB_URL = "https://github.com/oyinlola-tech/utils-tools";
 const SITE_URL = "https://www.oyinlola.site/";
@@ -17,9 +22,9 @@ function renderHeader() {
     return `
 <header class="site-header">
   <div class="container header-inner">
-    <a href="/" class="brand" aria-label="Utils Tools home">
+    <a href="/" class="brand" aria-label="Utils-tool home">
       <img src="/static/assets/brand/logo.svg" alt="" width="32" height="32" style="display:block;" />
-      <span>Utils Tools</span>
+      <span>Utils-tool</span>
     </a>
     <nav class="header-nav" aria-label="Main navigation">
       <a href="/#tools">Tools</a>
@@ -43,7 +48,7 @@ function renderFooter() {
       <div class="footer-brand-section">
         <div class="footer-brand">
           <img src="/static/assets/brand/logo.svg" alt="" width="28" height="28" />
-          <span>Utils Tools</span>
+          <span>Utils-tool</span>
         </div>
         <p class="footer-tagline">
           Private by default. Fast, calm, and precise file tools that run in your browser.
@@ -56,13 +61,11 @@ function renderFooter() {
           <button type="button" class="footer-support-button" data-shell-support>Support this project</button>
         </div>
       </div>
-      <div class="footer-links">
+      <div class="footer-links" data-footer-categories>
         <div class="footer-column">
           <h4 class="footer-heading">Product</h4>
           <a href="/#tools">All tools</a>
-          <a href="/tools/background-remover">Background remover</a>
-          <a href="/tools/image-compressor">Image compressor</a>
-          <a href="/tools/pdf-compressor">PDF compressor</a>
+          <a href="/#categories">Categories</a>
         </div>
         <div class="footer-column">
           <h4 class="footer-heading">Connect</h4>
@@ -96,6 +99,7 @@ export function renderShell() {
         if (year) {
             year.textContent = String(new Date().getFullYear());
         }
+        renderFooterCategories(footerHost);
     }
 
     document.querySelectorAll("[data-shell-fab], [data-shell-support]").forEach((button) => {
@@ -115,4 +119,45 @@ export function renderShell() {
             }
         }
     }
+}
+
+async function renderFooterCategories(footerHost) {
+    const host = footerHost.querySelector("[data-footer-categories]");
+    if (!host) {
+        return;
+    }
+    let tools;
+    try {
+        const data = await loadCapabilities();
+        tools = data.tools;
+    } catch (error) {
+        return;
+    }
+    const available = new Set(
+        tools.filter((tool) => tool.status === "available").map((tool) => tool.id)
+    );
+    const columns = CATEGORY_ORDER.map((category) => {
+        const meta = CATEGORY_META[category];
+        if (!meta) {
+            return "";
+        }
+        const links = tools
+            .filter((tool) => tool.category === category)
+            .map((tool) => {
+                if (available.has(tool.id)) {
+                    return `<a href="/tools/${tool.id}">${tool.name}</a>`;
+                }
+                return `<a href="/tools/${tool.id}" aria-disabled="true">${tool.name}</a>`;
+            })
+            .join("");
+        if (!links) {
+            return "";
+        }
+        return `
+            <div class="footer-column">
+                <h4 class="footer-heading">${meta.title}</h4>
+                ${links}
+            </div>`;
+    }).join("");
+    host.insertAdjacentHTML("afterbegin", columns);
 }

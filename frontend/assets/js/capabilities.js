@@ -50,3 +50,28 @@ export function toolsByCategory(category) {
 export function getAppInfo() {
     return cache ? cache.app : null;
 }
+
+export const CATEGORY_META = {
+    image: {
+        title: "Image tools",
+        description: "Remove backgrounds, compress, convert, resize, crop, edit and more.",
+    },
+    pdf: {
+        title: "PDF tools",
+        description: "Compress, merge, split, convert and reorganize PDF documents.",
+    },
+    file: {
+        title: "File tools",
+        description: "Analyze files, package archives and find duplicates.",
+    },
+    developer: {
+        title: "Developer tools",
+        description: "Favicons, SVG optimization, Base64, QR codes and barcodes.",
+    },
+    utility: {
+        title: "Utility tools",
+        description: "Social media presets and screenshot beautification.",
+    },
+};
+
+export const CATEGORY_ORDER = ["image", "pdf", "file", "developer", "utility"];

@@ -9,9 +9,9 @@ from app.core.config import Settings
 def test_defaults_are_local_first():
     settings = Settings(
         _env_file=None,
-        app_name="Utils Tools",
+        app_name="Utils-tool",
     )
-    assert settings.app_name == "Utils Tools"
+    assert settings.app_name == "Utils-tool"
     assert settings.storage_driver == "local"
     assert settings.app_env == "development"
     assert settings.job_ttl_minutes == 30

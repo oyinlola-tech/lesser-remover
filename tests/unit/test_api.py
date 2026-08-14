@@ -12,14 +12,14 @@ def test_health_endpoint_is_under_api_v1():
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "ok"
-    assert body["application"] == "Utils Tools"
+    assert body["application"] == "Utils-tool"
 
 
 def test_capabilities_endpoint_is_public_and_safe():
     response = client.get("/api/v1/capabilities")
     assert response.status_code == 200
     body = response.json()
-    assert body["app"]["name"] == "Utils Tools"
+    assert body["app"]["name"] == "Utils-tool"
     assert body["storage_driver"] == "local"
     assert len(body["tools"]) == 27
     serialized = str(body).lower()

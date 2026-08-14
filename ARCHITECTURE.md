@@ -2,7 +2,7 @@
 
 ## Overview
 
-Utils Tools is a **local-first, serverless-ready** FastAPI application with a
+Utils-tool is a **local-first, serverless-ready** FastAPI application with a
 vanilla-JavaScript frontend. The same codebase runs in two environments:
 
 | | Local | Vercel |
