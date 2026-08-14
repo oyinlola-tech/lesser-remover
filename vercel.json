@@ -12,18 +12,12 @@
       "dest": "/api/index.py"
     }
   ],
-  "functions": {
-    "api/index.py": {
-      "maxDuration": 60
-    }
-  },
   "env": {
     "APP_ENV": "production",
     "DEBUG": "false",
     "NUMBA_DISABLE_JIT": "1",
     "STORAGE_DRIVER": "vercel",
     "MODEL_CHECKSUM_DISABLED": "1",
-    "HOME": "/tmp",
     "XDG_CACHE_HOME": "/tmp"
   }
 }
