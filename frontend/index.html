@@ -352,7 +352,7 @@
               <div class="processing-content">
                 <div class="spinner"></div>
                 <h2>Removing the background</h2>
-                <p id="bg-processing-message" class="processing-message">
+                <p id="bg-processing-message" class="processing-message" role="status" aria-live="polite">
                   Preparing your image...
                 </p>
                 <div class="progress-bar">
@@ -372,7 +372,7 @@
               <div class="result-header">
                 <div>
                   <h2 class="result-title">Your image is ready</h2>
-                  <div class="result-meta" id="bg-result-meta"></div>
+                  <div class="result-meta" id="bg-result-meta" aria-live="polite"></div>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
                   <span class="success-badge hidden" id="bg-success-badge">Done</span>
@@ -426,7 +426,7 @@
                 </div>
               <div class="variant-grid" id="bg-variant-grid"></div>
             </div>
-            <div class="error-message hidden" id="bg-error-message"></div>
+            <div class="error-message hidden" id="bg-error-message" role="alert"></div>
           </section>
           <section
             id="compressor"
@@ -660,7 +660,7 @@
                     <h2>
                       Compressing your files
                     </h2>
-                    <p id="processing-message" class="processing-message">
+                    <p id="processing-message" class="processing-message" role="status" aria-live="polite">
                       Preparing your files...
                     </p>
                     <div class="progress-bar">
@@ -693,10 +693,11 @@
                        <h2 class="result-title">
                          Your files are ready
                        </h2>
-                       <div
-                         id="compression-result-meta"
-                         class="result-meta"
-                       ></div>
+                        <div
+                          id="compression-result-meta"
+                          class="result-meta"
+                          aria-live="polite"
+                        ></div>
                      </div>
                      <div style="display: flex; gap: 10px; align-items: center;">
                        <span class="success-badge hidden" id="compression-success-badge">Done</span>
@@ -762,6 +763,13 @@
                     class="completed-files"
                   ></div>
 
+                  <div
+                    id="compression-failed-files"
+                    class="failed-files hidden"
+                    role="status"
+                    aria-live="polite"
+                  ></div>
+
                   <div class="compression-result-actions">
                     <a
                       id="compression-download"
@@ -775,6 +783,7 @@
                 <div
                   id="compression-error"
                   class="error-message hidden"
+                  role="alert"
                 ></div>
               </section>
             </div>
