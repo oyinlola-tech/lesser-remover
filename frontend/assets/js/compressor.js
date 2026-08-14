@@ -35,6 +35,7 @@ let files = [];
 let selectedPreset = "balanced";
 let activeJobId = null;
 let cancelling = false;
+let userCancelled = false;
 
 // use formatBytes, showElement, hideElement from utils
 
@@ -55,15 +56,6 @@ function isPdf(file) {
 
 function createFileId(file) {
     return [file.name, file.size, file.lastModified].join("-");
-}
-
-function escapeHtml(value) {
-    return value
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
 }
 
 async function getImageDimensions(file) {
@@ -95,10 +87,8 @@ async function getImageDimensions(file) {
 }
 
 async function addFiles(newFiles) {
-    console.log("Adding files:", Array.from(newFiles).map(f => f.name));
     for (const file of newFiles) {
         if (!isSupportedFile(file)) {
-            console.log("Skipping unsupported file:", file.name);
             continue;
         }
 
@@ -129,7 +119,6 @@ async function addFiles(newFiles) {
     }
 
     renderQueue();
-    console.log("Files added, total files:", files.length);
 }
 
 function removeFile(id) {
@@ -362,6 +351,45 @@ function syncJobToFiles(job) {
                 error: serverFile.error,
             };
         }
+    }
+}
+
+function renderFailedFiles(job) {
+    const container = document.querySelector("#compression-failed-files");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const failedFiles = (job.files || []).filter((file) => file.status === "failed");
+    if (!failedFiles.length) {
+        hide(container);
+        return;
+    }
+
+    show(container);
+
+    const heading = document.createElement("h3");
+    heading.className = "failed-files-heading";
+    heading.textContent = `Couldn't compress ${failedFiles.length} file${failedFiles.length === 1 ? "" : "s"}`;
+
+    container.appendChild(heading);
+
+    for (const file of failedFiles) {
+        const element = document.createElement("div");
+        element.className = "failed-file";
+
+        const name = document.createElement("strong");
+        name.className = "failed-file-name";
+        name.textContent = file.filename;
+
+        const error = document.createElement("span");
+        error.className = "failed-file-error";
+        error.textContent = file.error || "Something went wrong.";
+
+        element.appendChild(name);
+        element.appendChild(error);
+
+        container.appendChild(element);
     }
 }
 
@@ -638,7 +666,6 @@ async function waitForJob(jobId, signal) {
         }
 
         const job = await getJob(jobId);
-        console.log("Job status:", job.status, "completed:", job.completed_files, "failed:", job.failed_files);
 
         syncJobToFiles(job);
 
@@ -647,25 +674,21 @@ async function waitForJob(jobId, signal) {
         renderQueue();
 
         if (job.status === "completed") {
-            console.log("Job completed");
             renderCompletedFiles(job);
             return job;
         }
 
         if (job.status === "failed") {
-            console.error("Job failed");
             const failedFile = job.files?.find((f) => f.status === "failed");
             const errorMsg = failedFile?.error || "Compression failed. Please try again.";
             throw new Error(errorMsg);
         }
 
         if (job.status === "cancelled") {
-            console.log("Job cancelled");
             throw new Error("Compression was cancelled.");
         }
 
         if (cancelling || activeJobId !== jobId) {
-            console.log("Job cancelled by user or different job");
             throw new Error("Compression was cancelled.");
         }
 
@@ -707,6 +730,10 @@ compressButton.addEventListener("click", async () => {
     hide(errorMessage);
     const badge = document.querySelector("#compression-success-badge");
     if (badge) hideElement(badge);
+    const failedFilesContainer = document.querySelector("#compression-failed-files");
+    if (failedFilesContainer) hideElement(failedFilesContainer);
+    const reductionValue = document.querySelector("#reduction-value");
+    if (reductionValue) reductionValue.style.width = "0%";
     show(processing);
 
     processingProgress.style.width = "0%";
@@ -715,7 +742,6 @@ compressButton.addEventListener("click", async () => {
     const abortController = new AbortController();
 
     try {
-        console.log("Starting batch compression with files:", files.map(f => f.file.name));
         const startResult = await startBatchCompression({
             files: files.map((item) => item.file),
             imageOutputFormat: advancedFormat.value,
@@ -724,8 +750,6 @@ compressButton.addEventListener("click", async () => {
             targetSizeKb: targetSize ? (targetSize.value || null) : null,
             stripMetadata: stripMetadata ? stripMetadata.checked : true,
         });
-        console.log("Batch compression started:", startResult);
-
         activeJobId = startResult.job_id;
         cancelCompressionButton.disabled = false;
         cancelCompressionButton.textContent = "Cancel";
@@ -763,10 +787,32 @@ compressButton.addEventListener("click", async () => {
         downloadButton.href = job.download_url;
         downloadButton.textContent = "Download all";
 
+        const clampedSavings = Math.max(0, Math.min(100, savings));
+        const reductionValue = document.querySelector("#reduction-value");
+        const reductionLabel = document.querySelector("#reduction-label");
+        const summaryMessage = document.querySelector("#compression-summary-message");
+        if (reductionValue) reductionValue.style.width = `${clampedSavings}%`;
+        if (reductionLabel) reductionLabel.textContent = `${clampedSavings.toFixed(1)}%`;
+        if (summaryMessage) {
+            if (savings <= 0) {
+                summaryMessage.textContent = "Your files were already well optimized — only a little space could be saved.";
+            } else if (failedCount > 0) {
+                summaryMessage.textContent = `Compressed ${job.completed_files} file(s) and saved ${savings.toFixed(1)}%. ${failedCount} file(s) failed and are listed below.`;
+            } else {
+                summaryMessage.textContent = `Your ${job.completed_files} file(s) were compressed, saving ${savings.toFixed(1)}% overall.`;
+            }
+        }
+
+        renderFailedFiles(job);
+
         hide(processing);
         show(result);
         const badge = document.querySelector("#compression-success-badge");
-        if (badge) showElement(badge);
+        if (badge) {
+            showElement(badge);
+            badge.textContent = failedCount > 0 ? "Partial" : "Done";
+            badge.classList.toggle("partial", failedCount > 0);
+        }
         
         result.style.animation = "none";
         result.offsetHeight;
@@ -782,12 +828,16 @@ compressButton.addEventListener("click", async () => {
         hide(processing);
         show(workspace);
         show(errorMessage);
+        errorMessage.classList.toggle("is-info", userCancelled);
         errorMessage.textContent =
-            error.message || "Compression failed.";
+            userCancelled
+                ? "Compression was cancelled. No files were changed."
+                : (error.message || "Compression failed.");
     } finally {
         abortController.abort();
         activeJobId = null;
         cancelling = false;
+        userCancelled = false;
         compressButton.disabled = false;
         cancelCompressionButton.disabled = false;
         cancelCompressionButton.textContent = "Cancel";
@@ -799,6 +849,7 @@ cancelCompressionButton.addEventListener("click", async () => {
         return;
     }
     cancelling = true;
+    userCancelled = true;
     cancelCompressionButton.disabled = true;
     cancelCompressionButton.textContent = "Cancelling...";
 
@@ -815,7 +866,10 @@ compressAnotherButton.addEventListener("click", () => {
     clearFiles();
     hide(result);
     hide(errorMessage);
+    errorMessage.classList.remove("is-info");
     const badge = document.querySelector("#compression-success-badge");
     if (badge) hideElement(badge);
+    const failedFilesContainer = document.querySelector("#compression-failed-files");
+    if (failedFilesContainer) hideElement(failedFilesContainer);
     show(dropZone);
 });
