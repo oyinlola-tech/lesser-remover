@@ -1,4 +1,4 @@
-import { startBatchCompression, cancelJob, getJob } from "./api.js";
+import { startImageCompression, cancelJob, getJob } from "./api.js";
 import { hideElement, showElement, formatBytes } from "./utils.js";
 import { registerUse } from "./support-popup.js";
 
@@ -14,8 +14,10 @@ const result = document.querySelector("#compression-result");
 const errorMessage = document.querySelector("#compression-error");
 const compressButton = document.querySelector("#compress-button");
 const clearFilesButton = document.querySelector("#clear-files");
-const qualityOptions = document.querySelectorAll(".quality-option");
+const qualitySlider = document.querySelector("#quality-slider");
+const qualityValue = document.querySelector("#quality-value");
 const targetSize = document.querySelector("#target-size");
+const targetSizePresets = document.querySelector("#target-size-presets");
 const stripMetadata = document.querySelector("#strip-metadata");
 const advancedFormat = document.querySelector("#advanced-format");
 const maxDimension = document.querySelector("#max-dimension");
@@ -32,25 +34,20 @@ const resultMeta = document.querySelector("#compression-result-meta");
 const completedFiles = document.querySelector("#completed-files");
 
 let files = [];
-let selectedPreset = "balanced";
+let selectedQuality = 80;
 let activeJobId = null;
 let cancelling = false;
 let userCancelled = false;
+let selectedTargetSize = null;
 
 // use formatBytes, showElement, hideElement from utils
 
 function isSupportedFile(file) {
-    const isImage = file.type.startsWith("image/");
-    const isPdf =
-        file.type === "application/pdf" ||
-        file.name.toLowerCase().endsWith(".pdf");
-    return isImage || isPdf;
-}
-
-function isPdf(file) {
     return (
-        file.type === "application/pdf" ||
-        file.name.toLowerCase().endsWith(".pdf")
+        file.type.startsWith("image/") &&
+        [".jpg", ".jpeg", ".png", ".webp"].includes(
+            "." + file.name.split(".").pop().toLowerCase()
+        )
     );
 }
 
@@ -102,9 +99,7 @@ async function addFiles(newFiles) {
 
         let previewUrl = null;
 
-        if (file.type.startsWith("image/")) {
-            previewUrl = URL.createObjectURL(file);
-        }
+        previewUrl = URL.createObjectURL(file);
 
         const dimensions = await getImageDimensions(file);
 
@@ -169,15 +164,13 @@ function renderQueue() {
 
         element.className = "file-queue-item";
 
-        const pdf = isPdf(item.file);
-
-        const statusClass = `status-${item.status}`;
+         const statusClass = `status-${item.status}`;
 
         const preview = document.createElement("div");
 
         preview.className = "file-preview";
 
-        if (!pdf && item.previewUrl) {
+        if (item.previewUrl) {
             const image = document.createElement("img");
 
             image.src = item.previewUrl;
@@ -186,13 +179,13 @@ function renderQueue() {
 
             preview.appendChild(image);
         } else {
-            const pdfLabel = document.createElement("span");
+            const genericLabel = document.createElement("span");
 
-            pdfLabel.className = "file-preview-pdf";
+            genericLabel.className = "file-preview-pdf";
 
-            pdfLabel.textContent = "PDF";
+            genericLabel.textContent = "IMG";
 
-            preview.appendChild(pdfLabel);
+            preview.appendChild(genericLabel);
         }
 
         const main = document.createElement("div");
@@ -624,15 +617,36 @@ function showComparisonModal(originalUrl, compressedUrl, filename) {
     } catch (e) {}
 }
 
-qualityOptions.forEach((option) => {
-    option.addEventListener("click", () => {
-        qualityOptions.forEach((btn) => {
-            btn.classList.remove("active");
-        });
-        option.classList.add("active");
-        selectedPreset = option.dataset.preset || "balanced";
+if (qualitySlider) {
+    qualitySlider.addEventListener("input", () => {
+        selectedQuality = Number(qualitySlider.value);
+        if (qualityValue) {
+            qualityValue.textContent = String(selectedQuality);
+        }
     });
-});
+}
+
+if (targetSizePresets) {
+    const presetButtons = targetSizePresets.querySelectorAll(".target-size-option");
+    presetButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            presetButtons.forEach((btn) => {
+                btn.classList.remove("active");
+            });
+            button.classList.add("active");
+            const size = button.dataset.size;
+            if (size === "custom") {
+                selectedTargetSize = null;
+                if (targetSize) targetSize.value = "";
+                show(document.querySelector("#target-size-custom"));
+            } else {
+                selectedTargetSize = Number(size);
+                if (targetSize) targetSize.value = String(selectedTargetSize);
+                hide(document.querySelector("#target-size-custom"));
+            }
+        });
+    });
+}
 
 fileInput.addEventListener("change", () => {
     addFiles(Array.from(fileInput.files || []));
@@ -742,13 +756,14 @@ compressButton.addEventListener("click", async () => {
     const abortController = new AbortController();
 
     try {
-        const startResult = await startBatchCompression({
+        const startResult = await startImageCompression({
             files: files.map((item) => item.file),
-            imageOutputFormat: advancedFormat ? advancedFormat.value : "webp",
-            compressionPreset: selectedPreset,
+            outputFormat: advancedFormat ? advancedFormat.value : "auto",
+            quality: selectedQuality,
+            compressionPreset: "balanced",
             maxDimension: maxDimension ? (maxDimension.value || null) : null,
-            targetSizeKb: targetSize ? (targetSize.value || null) : null,
-            stripMetadata: stripMetadata ? stripMetadata.checked : true,
+            targetSize: selectedTargetSize !== null ? selectedTargetSize : (targetSize ? (targetSize.value || null) : null),
+            removeMetadata: stripMetadata ? stripMetadata.checked : true,
         });
         activeJobId = startResult.job_id;
         cancelCompressionButton.disabled = false;
