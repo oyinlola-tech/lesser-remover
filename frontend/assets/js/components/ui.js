@@ -159,6 +159,7 @@ export class ProcessingPanel {
         this.host = host;
         this.title = options.title || "Processing your file";
         this.render();
+        this.hide();
     }
 
     render() {
