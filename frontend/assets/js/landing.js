@@ -27,6 +27,10 @@ function renderToolCard(tool) {
 
     const card = document.createElement("div");
     card.className = "tool-card tool-card-planned";
+    const actionLabel =
+        tool.status === "planned"
+            ? "Coming soon"
+            : "Unavailable in this environment";
     card.innerHTML = `
         <div class="tool-card-top">
             <span class="tool-card-icon" aria-hidden="true">${toolIconHtml(tool.id)}</span>
@@ -36,7 +40,7 @@ function renderToolCard(tool) {
             <h3>${tool.name}</h3>
             <p>${tool.description}</p>
         </div>
-        <span class="tool-card-action">Coming soon</span>`;
+        <span class="tool-card-action">${actionLabel}</span>`;
     return card;
 }
 
