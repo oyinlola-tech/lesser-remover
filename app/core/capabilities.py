@@ -107,6 +107,7 @@ class CapabilityRegistry:
                 max_upload_mb=50,
                 max_files=20,
                 notes="Pure-Python compression via PyMuPDF.",
+                requires_module="pymupdf",
                 featured=True,
             ),
             Tool(
@@ -240,6 +241,7 @@ class CapabilityRegistry:
                 environments=(LOCAL_DRIVER, VERCEL_DRIVER),
                 max_upload_mb=50,
                 notes="Rendered with PyMuPDF, no external binaries.",
+                requires_module="pymupdf",
             ),
             Tool(
                 id="image-to-pdf",
