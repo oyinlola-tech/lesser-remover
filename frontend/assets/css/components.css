@@ -7,7 +7,7 @@
 
   border-bottom: 1px solid var(--color-border);
 
-  background: rgba(247, 247, 242, 0.94);
+  background: rgba(247, 247, 242, 0.92);
 
   backdrop-filter: blur(16px);
 }
@@ -21,7 +21,7 @@
 
   justify-content: space-between;
 
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .brand {
@@ -305,7 +305,7 @@
 
   align-items: center;
 
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .header-nav a {
@@ -326,7 +326,7 @@
 .header-actions {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2);
 }
 
 .header-star-button {
