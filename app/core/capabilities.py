@@ -13,7 +13,7 @@ No secrets are ever part of the capability payload.
 
 import importlib.util
 import shutil
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from app.core.config import settings
 

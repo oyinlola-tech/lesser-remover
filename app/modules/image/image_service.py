@@ -1,7 +1,6 @@
 from io import BytesIO
-from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageDraw, ImageFont
 
 from app.core.config import settings
 from app.infrastructure.compression.pillow_adapter import (
@@ -64,7 +63,7 @@ def _validate_dimensions(
         )
     if max_dimension is not None and max_dimension > max(max_w, max_h):
         raise ValueError(
-            f"Maximum dimension exceeds the allowed limit."
+            "Maximum dimension exceeds the allowed limit."
         )
 
     if width is not None and height is not None:
@@ -225,7 +224,14 @@ class ImageService:
     def _is_animated(image: Image.Image) -> bool:
         n_frames = getattr(image, "n_frames", 1)
         duration = image.info.get("duration")
-        return n_frames > 1 or (duration is not None and isinstance(duration, list) and len(duration) > 1)
+        return (
+            n_frames > 1
+            or (
+                duration is not None
+                and isinstance(duration, list)
+                and len(duration) > 1
+            )
+        )
 
     @staticmethod
     def _has_transparency(image: Image.Image) -> bool:

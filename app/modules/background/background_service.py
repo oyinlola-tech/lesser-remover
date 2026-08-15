@@ -1,10 +1,6 @@
 from io import BytesIO
-from pathlib import Path
+
 from PIL import Image, ImageFilter
-from app.modules.background.background_repository import (
-    background_repository,
-)
-from app.modules.image.image_service import image_service
 
 
 def _get_rembg_adapter():

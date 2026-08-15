@@ -18,24 +18,28 @@ from app.modules.capabilities.capability_route import (
     router as capability_router,
 )
 from app.modules.compression.compression_route import (
-    router as compression_router,
     image_router,
+)
+from app.modules.compression.compression_route import (
+    router as compression_router,
+)
+from app.modules.devtools.dev_tools_route import (
+    router as dev_tools_router,
+)
+from app.modules.file_tools.file_tool_route import (
+    router as file_tool_router,
+)
+from app.modules.image.image_tools_route import (
+    images_router,
+)
+from app.modules.image.image_tools_route import (
+    router as image_tools_router,
 )
 from app.modules.jobs.job_cleanup_service import (
     job_cleanup_service,
 )
 from app.modules.jobs.job_route import router as job_router
-from app.modules.image.image_tools_route import (
-    router as image_tools_router,
-    images_router,
-)
 from app.modules.pdf.pdf_route import router as pdf_router
-from app.modules.file_tools.file_tool_route import (
-    router as file_tool_router,
-)
-from app.modules.devtools.dev_tools_route import (
-    router as dev_tools_router,
-)
 
 setup_logging()
 
@@ -54,6 +58,7 @@ app = FastAPI(
     version=settings.app_version,
 )
 from app.core.exceptions import register_exception_handlers
+
 register_exception_handlers(app)
 
 app.add_middleware(

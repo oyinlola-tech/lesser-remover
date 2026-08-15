@@ -8,14 +8,13 @@ from app.core.config import settings
 from app.modules.image.image_repository import image_repository
 from app.modules.image.image_schema import (
     ConvertBatchResult,
-    ImageToolListResult,
     ImageToolResult,
     ResizeBatchResult,
 )
+from app.modules.image.image_service import SUPPORTED_CONVERSION_FORMATS
 from app.modules.image.image_tools_controller import (
     image_tools_controller,
 )
-from app.modules.image.image_service import SUPPORTED_CONVERSION_FORMATS
 from app.shared.utils.file_util import is_safe_filename
 
 logger = logging.getLogger(__name__)
@@ -110,8 +109,9 @@ async def resize_image(
     cover: bool = Form(False),
 ):
     logger.info(
-        "resize_image: file=%s width=%s height=%s percent=%s max_dimension=%s format=%s cover=%s",
-        file.filename, width, height, percent, max_dimension, output_format, cover,
+        "resize_image: file=%s w=%s h=%s pct=%s max=%s fmt=%s cover=%s",
+        file.filename, width, height, percent,
+        max_dimension, output_format, cover,
     )
     return await image_tools_controller.resize(
         file,
@@ -300,25 +300,41 @@ async def resize_images(
     if width is not None and width > settings.max_image_width:
         raise HTTPException(
             status_code=400,
-            detail=f"Width exceeds the maximum of {settings.max_image_width} pixels.",
+            detail=(
+                f"Width exceeds the maximum of "
+                f"{settings.max_image_width} pixels."
+            ),
         )
     if height is not None and height > settings.max_image_height:
         raise HTTPException(
             status_code=400,
-            detail=f"Height exceeds the maximum of {settings.max_image_height} pixels.",
+            detail=(
+                f"Height exceeds the maximum of "
+                f"{settings.max_image_height} pixels."
+            ),
         )
     if max_width is not None and max_width > settings.max_image_width:
         raise HTTPException(
             status_code=400,
-            detail=f"Maximum width exceeds the maximum of {settings.max_image_width} pixels.",
+            detail=(
+                f"Maximum width exceeds the maximum of "
+                f"{settings.max_image_width} pixels."
+            ),
         )
     if max_height is not None and max_height > settings.max_image_height:
         raise HTTPException(
             status_code=400,
-            detail=f"Maximum height exceeds the maximum of {settings.max_image_height} pixels.",
+            detail=(
+                f"Maximum height exceeds the maximum of "
+                f"{settings.max_image_height} pixels."
+            ),
         )
 
-    if output_format != "auto" and output_format.lower() not in {"jpg", "jpeg", "png", "webp"}:
+    if (
+        output_format != "auto"
+        and output_format.lower()
+        not in {"jpg", "jpeg", "png", "webp"}
+    ):
         raise HTTPException(
             status_code=400,
             detail="Output format must be auto, jpg, png, webp, or avif.",

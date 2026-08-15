@@ -1,6 +1,5 @@
 from fastapi import HTTPException, UploadFile
 
-from app.core.config import settings
 from app.modules.image.image_repository import image_repository
 from app.modules.image.image_schema import (
     ConvertBatchResult,

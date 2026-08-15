@@ -1,4 +1,5 @@
 from PIL import Image
+
 from app.infrastructure.compression.pillow_adapter import (
     pillow_adapter,
 )
