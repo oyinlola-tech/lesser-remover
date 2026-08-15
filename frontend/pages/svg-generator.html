@@ -71,12 +71,13 @@
 
               <div class="option-row">
                 <div class="option-field">
-                  <label>Background</label>
-                  <div class="format-grid" id="background-selector" role="radiogroup">
-                    <button type="button" class="format-option active" data-color="white">White</button>
-                    <button type="button" class="format-option" data-color="black">Black</button>
-                    <button type="button" class="format-option" data-color="transparent">Transparent</button>
-                  </div>
+                  <label for="background-selector">Background</label>
+                  <select id="background-selector" class="select-input">
+                    <option value="white" selected>White</option>
+                    <option value="black">Black</option>
+                    <option value="transparent">Transparent</option>
+                    <option value="custom">Custom color…</option>
+                  </select>
                 </div>
               </div>
 
@@ -90,12 +91,13 @@
 
               <div class="option-row">
                 <div class="option-field">
-                  <label for="foreground-color">Foreground (path)</label>
-                  <div class="format-grid" id="foreground-selector" role="radiogroup">
-                    <button type="button" class="format-option active" data-color="black">Black</button>
-                    <button type="button" class="format-option" data-color="white">White</button>
-                    <button type="button" class="format-option" data-color="#3b82f6">Blue</button>
-                  </div>
+                  <label for="foreground-selector">Foreground (path)</label>
+                  <select id="foreground-selector" class="select-input">
+                    <option value="black" selected>Black</option>
+                    <option value="white">White</option>
+                    <option value="#3b82f6">Blue</option>
+                    <option value="custom">Custom color…</option>
+                  </select>
                 </div>
               </div>
 

@@ -28,37 +28,33 @@ if (!kit.available) {
     let customBg = "";
     let customFg = "";
 
-    document.querySelectorAll("#background-selector .format-option").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            document.querySelectorAll("#background-selector .format-option")
-                .forEach((b) => b.classList.remove("active"));
-            btn.classList.add("active");
-            selectedBg = btn.dataset.color;
-            if (selectedBg === "transparent") {
-                customBg = "transparent";
-            }
-            toggleCustomFields();
-        });
-    });
-
-    document.querySelectorAll("#foreground-selector .format-option").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            document.querySelectorAll("#foreground-selector .format-option")
-                .forEach((b) => b.classList.remove("active"));
-            btn.classList.add("active");
-            selectedFg = btn.dataset.color;
-            toggleCustomFields();
-        });
-    });
+    const bgSelect = document.getElementById("background-selector");
+    const fgSelect = document.getElementById("foreground-selector");
 
     function toggleCustomFields() {
-        const bgField = document.getElementById("field-custom-bg");
-        const fgField = document.getElementById("field-custom-fg");
-        const isCustomBg = ["white", "black", "transparent"].includes(selectedBg) === false;
-        const isCustomFg = ["black", "white"].includes(selectedFg) === false;
-        bgField.classList.toggle("hidden", !isCustomBg);
-        fgField.classList.toggle("hidden", !isCustomFg);
+        const isCustomBg = bgSelect.value === "custom";
+        const isCustomFg = fgSelect.value === "custom";
+        document.getElementById("field-custom-bg").classList.toggle("hidden", !isCustomBg);
+        document.getElementById("field-custom-fg").classList.toggle("hidden", !isCustomFg);
     }
+
+    bgSelect.addEventListener("change", () => {
+        if (bgSelect.value === "custom") {
+            if (customBg) selectedBg = customBg;
+        } else {
+            selectedBg = bgSelect.value;
+        }
+        toggleCustomFields();
+    });
+
+    fgSelect.addEventListener("change", () => {
+        if (fgSelect.value === "custom") {
+            if (customFg) selectedFg = customFg;
+        } else {
+            selectedFg = fgSelect.value;
+        }
+        toggleCustomFields();
+    });
 
     document.getElementById("background-color").addEventListener("input", (e) => {
         customBg = e.target.value.trim();
