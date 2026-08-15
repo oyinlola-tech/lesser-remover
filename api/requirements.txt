@@ -23,7 +23,6 @@ pikepdf==10.11.0
 PyMuPDF==1.28.2
 qrcode==8.2
 python-barcode==0.16.1
-onnxruntime==1.28.0
+numpy==2.4.6
 potracer==0.0.4
-rembg==2.0.78
 requests==2.34.2
