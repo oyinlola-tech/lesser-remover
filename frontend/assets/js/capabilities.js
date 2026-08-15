@@ -66,7 +66,7 @@ export const CATEGORY_META = {
     },
     developer: {
         title: "Developer tools",
-        description: "Favicons, SVG optimization, Base64, QR codes and barcodes.",
+        description: "Favicons, SVG optimization, SVG generation, Base64, QR codes and barcodes.",
     },
     utility: {
         title: "Utility tools",

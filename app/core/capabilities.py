@@ -342,6 +342,19 @@ class CapabilityRegistry:
                 max_upload_mb=10,
             ),
             Tool(
+                id="svg-generator",
+                name="SVG Generator",
+                category=CATEGORY_DEVELOPER,
+                description=(
+                    "Convert raster images (PNG, JPG, WebP) into "
+                    "scalable SVG path graphics with threshold control."
+                ),
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
+                max_upload_mb=10,
+                requires_module="potrace",
+            ),
+            Tool(
                 id="image-to-base64",
                 name="Image to Base64",
                 category=CATEGORY_DEVELOPER,

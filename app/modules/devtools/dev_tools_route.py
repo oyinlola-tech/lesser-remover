@@ -65,6 +65,28 @@ async def optimize_svg(
     )
 
 
+@router.post("/svg-generate")
+async def generate_svg(
+    image: UploadFile = File(...),
+    threshold: int = Form(128),
+    background_color: str = Form("white"),
+    foreground_color: str = Form("black"),
+):
+    logger.info("generate_svg: image=%s threshold=%d", image.filename, threshold)
+    data, content_type = await dev_tools_controller.svg(
+        image,
+        threshold=threshold,
+        background_color=background_color,
+        foreground_color=foreground_color,
+    )
+    headers = {"Content-Disposition": "attachment; filename=converted.svg"}
+    return Response(
+        content=data,
+        media_type=content_type,
+        headers=headers,
+    )
+
+
 @router.post("/qr")
 async def generate_qr(
     content: str = Form(...),

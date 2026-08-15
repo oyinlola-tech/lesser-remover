@@ -74,6 +74,28 @@ class DevToolsController:
             ),
         }
 
+    async def svg(
+        self,
+        image: UploadFile,
+        threshold: int = 128,
+        background_color: str = "white",
+        foreground_color: str = "black",
+    ) -> tuple[bytes, str]:
+        image_data = await self._read_upload(image, "image")
+        try:
+            svg_text = dev_tools_service.generate_svg(
+                image_data,
+                threshold=threshold,
+                background_color=background_color,
+                foreground_color=foreground_color,
+            )
+        except (OSError, ValueError, RuntimeError) as error:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Unable to generate SVG: {error}",
+            ) from error
+        return svg_text.encode("utf-8"), "image/svg+xml"
+
     async def qr(
         self,
         content: str,

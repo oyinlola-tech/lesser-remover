@@ -114,3 +114,43 @@ def test_generate_barcode_rejects_unknown_type():
         assert "Unsupported" in str(error)
     else:
         raise AssertionError("Expected ValueError")
+
+
+def test_generate_svg_from_image():
+    svg = dev_tools_service.generate_svg(_png_bytes(100))
+    assert isinstance(svg, str)
+    assert svg.startswith("<svg")
+    assert svg.endswith("</svg>")
+    assert "<path" in svg
+
+
+def test_generate_svg_preserves_dimensions():
+    svg = dev_tools_service.generate_svg(_png_bytes(64))
+    assert 'width="64"' in svg
+    assert 'height="64"' in svg
+
+
+def test_generate_svg_with_transparent_background():
+    svg = dev_tools_service.generate_svg(
+        _png_bytes(64),
+        background_color="transparent",
+    )
+    assert "rect" not in svg.split("<path")[0]
+    assert "<path" in svg
+
+
+def test_generate_svg_with_custom_colors():
+    svg = dev_tools_service.generate_svg(
+        _png_bytes(64),
+        background_color="#ff5733",
+        foreground_color="#163300",
+    )
+    assert "#ff5733" in svg
+    assert "#163300" in svg
+
+
+def test_generate_svg_custom_threshold():
+    svg_low = dev_tools_service.generate_svg(_png_bytes(100), threshold=50)
+    svg_high = dev_tools_service.generate_svg(_png_bytes(100), threshold=200)
+    assert "<svg" in svg_low
+    assert "<svg" in svg_high

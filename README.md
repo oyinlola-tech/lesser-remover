@@ -1,17 +1,17 @@
 # Utils-tool
 
-A local-first file and media utility suite: **27 tools** for images, PDFs,
+A local-first file and media utility suite: **28 tools** for images, PDFs,
 files, developer assets and everyday utilities. Includes the new Image
-Resizer and an enhanced batch Image Converter. One codebase runs locally with
-full features, or on Vercel as a serverless app. No database, no Redis, no
-accounts, no cloud uploads required.
+Resizer, enhanced batch Image Converter, and SVG Generator (image-to-SVG).
+One codebase runs locally with full features, or on Vercel as a serverless app.
+No database, no Redis, no accounts, no cloud uploads required.
 
 ## What it does
 
 - **Image tools** — image compressor (quality slider, target-size, metadata removal, JPG/PNG/WebP), background remover, converter (AVIF/JPG/PNG/WebP, batch), resizer (aspect/exact/percent/max, presets, quality, transparency), cropper, editor, metadata remover, watermark, background replacement
 - **PDF tools** — compressor, merger, splitter, rotator, page extractor, PDF→image, image→PDF
 - **File tools** — analyzer (type/size/hash/dimensions), ZIP creator, duplicate finder
-- **Developer tools** — favicon generator, SVG optimizer, image↔Base64, QR code generator, barcode generator
+- **Developer tools** — favicon generator, SVG optimizer, **SVG generator** (image-to-SVG), image↔Base64, QR code generator, barcode generator
 - **Utility tools** — social media resizer (platform presets), screenshot beautifier
 - **Batch queue** for multi-file tools with real progress tracking
 - **Secure upload pipeline** with magic-byte validation, size limits, and decompression-bomb protection
@@ -156,7 +156,7 @@ storage/                             # Local mode only
 
 ```bash
 source .venv/bin/activate
-python -m pytest tests/ -q        # 200 tests: units, API contracts, capability gating
+python -m pytest tests/ -q        # 205 tests: units, API contracts, capability gating
 ```
 
 Covers the unified error format, all 27 tools' services, the capability registry

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Convert raster images (PNG, JPG, WebP) into scalable SVG path graphics. Adjust the threshold to control detail." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://tools.oyinlola.site/tools/svg-generator" />
+    <meta property="og:title" content="SVG Generator - Utils-tool" />
+    <meta property="og:description" content="Convert raster images to SVG path graphics with threshold control." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tools.oyinlola.site/tools/svg-generator" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>SVG Generator - Utils-tool</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+    <script type="module" src="/static/assets/js/error-boundary.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/components.css" />
+    <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="tool-page">
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <span class="eyebrow">
+              <span class="eyebrow-category">Developer tool</span>
+              <span class="eyebrow-separator">·</span>
+              <span>Image to SVG</span>
+            </span>
+            <h1>Convert images to SVG.</h1>
+            <p class="hero-description">
+              Turn raster images (PNG, JPG, WebP) into clean,
+              scalable SVG path graphics. Adjust the threshold to
+              control how much detail is preserved, and pick colors
+              for the background and foreground paths.
+            </p>
+          </div>
+
+          <section class="tool-card">
+            <div id="tool-unavailable" class="hidden" role="alert"></div>
+
+            <div id="tool-upload" data-accept="image/jpeg,image/png,image/webp,image/jpg" data-multiple="false" data-max-files="1" data-hint="PNG, JPG, WebP up to 10 MB"></div>
+
+            <div class="tool-options" id="tool-options">
+              <div class="option-row">
+                <div class="option-field">
+                  <label for="threshold-input">Threshold</label>
+                  <div class="quality-control">
+                    <input id="threshold-input" type="number" min="1" max="255" value="128" class="quality-input" />
+                    <input id="threshold-slider" type="range" min="1" max="255" value="128" aria-label="Threshold" />
+                  </div>
+                  <small>Lower values treat more pixels as foreground (more detail). Default 128 is a good starting point.</small>
+                </div>
+              </div>
+
+              <div class="option-row">
+                <div class="option-field">
+                  <label>Background</label>
+                  <div class="format-grid" id="background-selector" role="radiogroup">
+                    <button type="button" class="format-option active" data-color="white">White</button>
+                    <button type="button" class="format-option" data-color="black">Black</button>
+                    <button type="button" class="format-option" data-color="transparent">Transparent</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="option-row hidden" id="field-custom-bg">
+                <div class="option-field">
+                  <label for="background-color">Custom background</label>
+                  <input id="background-color" type="text" value="" class="bg-custom" size="8" placeholder="#ffffff" />
+                  <small>Hex code (e.g. #ff5733) or color name.</small>
+                </div>
+              </div>
+
+              <div class="option-row">
+                <div class="option-field">
+                  <label for="foreground-color">Foreground (path)</label>
+                  <div class="format-grid" id="foreground-selector" role="radiogroup">
+                    <button type="button" class="format-option active" data-color="black">Black</button>
+                    <button type="button" class="format-option" data-color="white">White</button>
+                    <button type="button" class="format-option" data-color="#3b82f6">Blue</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="option-row hidden" id="field-custom-fg">
+                <div class="option-field">
+                  <label for="foreground-color-input">Custom foreground</label>
+                  <input id="foreground-color-input" type="text" value="" class="bg-custom" size="8" placeholder="#163300" />
+                  <small>Hex code (e.g. #163300) or color name.</small>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" class="primary-button tool-run" id="tool-run">Generate SVG</button>
+            <div id="tool-processing"></div>
+            <div id="tool-results"></div>
+            <div id="tool-error"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <div id="site-footer"></div>
+    <script type="module" src="/static/assets/js/pages/svg-generator.js"></script>
+    <!-- Vercel Web Analytics -->
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <!-- Vercel Speed Insights -->
+    <script>
+      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+  </body>
+</html>
