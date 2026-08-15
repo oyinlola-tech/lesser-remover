@@ -29,6 +29,9 @@ class Settings(BaseSettings):
 
     rembg_model: str = "silueta"
 
+    rate_limit_max_requests: int = 120
+    rate_limit_window_seconds: int = 60
+
     cors_origins: str = "http://127.0.0.1:8000,http://localhost:8000"
 
     model_config = SettingsConfigDict(
