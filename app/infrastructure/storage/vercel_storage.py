@@ -17,17 +17,21 @@ _LOCAL_ROOT = Path(tempfile.gettempdir()) / "vercel_storage"
 class VercelStorage(StorageInterface):
     def __init__(self) -> None:
         self._token = settings.blob_read_write_token
-        if not self._token:
-            raise ValueError(
-                "BLOB_READ_WRITE_TOKEN is required for Vercel storage."
-            )
-        self._headers = {
-            "Authorization": f"Bearer {self._token}",
-        }
+        self._headers = (
+            {"Authorization": f"Bearer {self._token}"}
+            if self._token
+            else {}
+        )
         self.upload_path = _LOCAL_ROOT / "uploads"
         self.processed_path = _LOCAL_ROOT / "processed"
         self.compressed_path = _LOCAL_ROOT / "compressed"
         self.temp_path = _LOCAL_ROOT / "temp"
+
+    def _check_token(self) -> None:
+        if not self._token:
+            raise RuntimeError(
+                "BLOB_READ_WRITE_TOKEN is required for Vercel storage."
+            )
         for directory in (
             self.upload_path,
             self.processed_path,
@@ -43,6 +47,7 @@ class VercelStorage(StorageInterface):
             return file_path.as_posix()
 
     def _put_blob(self, file_path: Path, data: bytes) -> None:
+        self._check_token()
         blob_path = self._blob_key(file_path)
         response = requests.put(
             f"{BLOB_BASE_URL}/{blob_path}",
@@ -66,6 +71,7 @@ class VercelStorage(StorageInterface):
         return destination_path
 
     def read(self, file_path: Path) -> bytes:
+        self._check_token()
         blob_path = self._blob_key(file_path)
         response = requests.get(
             f"{BLOB_BASE_URL}/{blob_path}",
@@ -88,6 +94,7 @@ class VercelStorage(StorageInterface):
         return file_path
 
     def delete(self, file_path: Path) -> None:
+        self._check_token()
         blob_path = self._blob_key(file_path)
         response = requests.delete(
             f"{BLOB_BASE_URL}/{blob_path}",
