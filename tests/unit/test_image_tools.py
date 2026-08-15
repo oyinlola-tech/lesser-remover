@@ -43,7 +43,7 @@ def test_convert_rejects_unknown_format():
 
 
 def test_resize_by_percent_keeps_aspect():
-    result = image_service.resize(_png_bytes(), percent=50)
+    result = image_service.resize(_png_bytes(), resize_mode="percent", percent=50)
     assert result["width"] == 60
     assert result["height"] == 40
 
@@ -51,36 +51,70 @@ def test_resize_by_percent_keeps_aspect():
 def test_resize_to_exact_box():
     result = image_service.resize(
         _png_bytes(),
+        resize_mode="exact",
         width=100,
         height=100,
+        maintain_aspect_ratio=False,
     )
     assert result["width"] == 100
     assert result["height"] == 100
 
 
-def test_resize_cover_crops_to_fit():
+def test_resize_aspect_width_only():
     result = image_service.resize(
-        _png_bytes((400, 100)),
+        _png_bytes((400, 200)),
+        resize_mode="aspect",
         width=100,
-        height=100,
-        cover=True,
     )
     assert result["width"] == 100
-    assert result["height"] == 100
+    assert result["height"] == 50
+
+
+def test_resize_aspect_height_only():
+    result = image_service.resize(
+        _png_bytes((400, 200)),
+        resize_mode="aspect",
+        height=50,
+    )
+    assert result["width"] == 100
+    assert result["height"] == 50
 
 
 def test_resize_max_dimension_shrinks_longer_edge():
     result = image_service.resize(
         _png_bytes((400, 200)),
+        resize_mode="max",
         max_dimension=200,
     )
     assert result["width"] == 200
     assert result["height"] == 100
 
 
+def test_resize_max_dimension_no_upscale():
+    result = image_service.resize(
+        _png_bytes((100, 100)),
+        resize_mode="max",
+        max_dimension=500,
+        allow_upscale=False,
+    )
+    assert result["width"] == 100
+    assert result["height"] == 100
+
+
+def test_resize_max_dimension_with_upscale():
+    result = image_service.resize(
+        _png_bytes((100, 100)),
+        resize_mode="max",
+        max_dimension=500,
+        allow_upscale=True,
+    )
+    assert result["width"] == 500
+    assert result["height"] == 500
+
+
 def test_resize_requires_an_option():
     try:
-        image_service.resize(_png_bytes())
+        image_service.resize(_png_bytes(), resize_mode="aspect")
     except ValueError as error:
         assert "Provide" in str(error)
     else:
