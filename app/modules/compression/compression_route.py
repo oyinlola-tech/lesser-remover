@@ -5,6 +5,7 @@ from fastapi import (
     APIRouter,
     BackgroundTasks,
     File,
+    Form,
     HTTPException,
     UploadFile,
 )
@@ -31,10 +32,16 @@ from app.shared.utils.file_util import (
     generate_filename,
 )
 from app.shared.enums.compression_enum import CompressionLevel
+from app.shared.constants.file_constants import MAX_FILES_PER_BATCH
 
 router = APIRouter(
     prefix=f"{API_PREFIX}/compression",
     tags=["Compression"],
+)
+
+image_router = APIRouter(
+    prefix=f"{API_PREFIX}/images",
+    tags=["Image Compression"],
 )
 
 
@@ -47,7 +54,72 @@ async def start_batch_compression(
     max_dimension: int | None = None,
     target_size_kb: int | None = None,
     strip_metadata: bool = True,
+    quality: int | None = None,
 ):
+    if quality is not None:
+        if quality < 10 or quality > 100:
+            raise HTTPException(
+                status_code=400,
+                detail="Quality must be between 10 and 100.",
+            )
+
+    return await _start_compression(
+        background_tasks=background_tasks,
+        files=files,
+        image_output_format=image_output_format,
+        compression_preset=compression_preset,
+        max_dimension=max_dimension,
+        target_size_kb=target_size_kb,
+        strip_metadata=strip_metadata,
+        quality=quality,
+        tool_id="pdf_compressor",
+    )
+
+
+@image_router.post("/compress")
+async def compress_images(
+    background_tasks: BackgroundTasks,
+    files: list[UploadFile] = File(...),
+    output_format: str = Form("auto"),
+    quality: int | None = Form(None),
+    compression_preset: str = Form("balanced"),
+    max_dimension: int | None = Form(None),
+    target_size: int | None = Form(None),
+    remove_metadata: bool = Form(True),
+):
+    if quality is not None:
+        if quality < 10 or quality > 100:
+            raise HTTPException(
+                status_code=400,
+                detail="Quality must be between 10 and 100.",
+            )
+
+    target_size_kb = target_size
+
+    return await _start_compression(
+        background_tasks=background_tasks,
+        files=files,
+        image_output_format=output_format,
+        compression_preset=compression_preset,
+        max_dimension=max_dimension,
+        target_size_kb=target_size_kb,
+        strip_metadata=remove_metadata,
+        quality=quality,
+        tool_id="image_compressor",
+    )
+
+
+async def _start_compression(
+    background_tasks: BackgroundTasks,
+    files: list[UploadFile],
+    image_output_format: str,
+    compression_preset: str,
+    max_dimension: int | None = None,
+    target_size_kb: int | None = None,
+    strip_metadata: bool = True,
+    quality: int | None = None,
+    tool_id: str = "unknown",
+) -> dict:
     if not files:
         logger.warning("Compression request rejected: no files uploaded")
         raise HTTPException(
@@ -55,14 +127,15 @@ async def start_batch_compression(
             detail="No files were uploaded.",
         )
 
-    if len(files) > 20:
+    if len(files) > MAX_FILES_PER_BATCH:
         logger.warning(
-            "Compression request rejected: %s files exceed limit of 20",
+            "Compression request rejected: %s files exceed limit of %s",
             len(files),
+            MAX_FILES_PER_BATCH,
         )
         raise HTTPException(
             status_code=400,
-            detail="Maximum of 20 files.",
+            detail=f"Maximum of {MAX_FILES_PER_BATCH} files.",
         )
 
     filenames = [
@@ -71,13 +144,14 @@ async def start_batch_compression(
     ]
 
     logger.info(
-        "Starting batch compression job for %s files: %s",
+        "Starting image compression job for %s files: %s",
         len(filenames),
         filenames,
     )
 
     job_id = job_service.create(
-        filenames
+        filenames,
+        tool_id=tool_id,
     )
 
     stored_files = []
@@ -165,14 +239,16 @@ async def start_batch_compression(
             max_dimension,
             target_size_kb,
             strip_metadata,
+            quality,
         )
 
         logger.info(
-            "Batch compression job created: job_id=%s, files=%s, format=%s, preset=%s",
+            "Image compression job created: job_id=%s, files=%s, format=%s, preset=%s, quality=%s",
             job_id,
             len(stored_files),
             image_output_format,
             compression_preset,
+            quality,
         )
 
     except Exception:

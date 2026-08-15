@@ -1,13 +1,28 @@
 import copy
+import logging
 from datetime import datetime, timezone
 
+from app.core.logging import get_tool_logger
 from app.infrastructure.jobs import local_job_storage
+
+
+def _fmt_size(num_bytes: int | float) -> str:
+    try:
+        num_bytes = int(num_bytes)
+    except (TypeError, ValueError):
+        return "0 B"
+    for unit in ("B", "KB", "MB", "GB"):
+        if abs(num_bytes) < 1024.0:
+            return f"{num_bytes:.0f} {unit}"
+        num_bytes /= 1024.0
+    return f"{num_bytes:.0f} TB"
 
 
 class JobService:
     def create(
         self,
         filenames: list[str],
+        tool_id: str = "unknown",
     ) -> str:
         job_id = local_job_storage.create_job()
         files = []
@@ -44,6 +59,7 @@ class JobService:
         metadata.update(
             {
                 "status": "created",
+                "tool_id": tool_id,
                 "total_files": len(files),
                 "completed_files": 0,
                 "failed_files": 0,
@@ -56,6 +72,13 @@ class JobService:
         local_job_storage.write_metadata(
             job_id,
             metadata,
+        )
+
+        tool_logger = get_tool_logger(tool_id)
+        tool_logger.info(
+            "Job created: job_id=%s, files=%d",
+            job_id,
+            len(files),
         )
         return job_id
 
@@ -102,6 +125,10 @@ class JobService:
             job_id,
             metadata,
         )
+        tool_id = metadata.get("tool_id", "unknown")
+        get_tool_logger(tool_id).info(
+            "Job %s status: %s", job_id, status
+        )
 
     def update_file_status(
         self,
@@ -126,6 +153,8 @@ class JobService:
         metadata = local_job_storage.read_metadata(
             job_id
         )
+        tool_id = metadata.get("tool_id", "unknown")
+        tool_logger = get_tool_logger(tool_id)
         for file in metadata.get("files", []):
             if file["id"] == file_id:
                 previous_status = file["status"]
@@ -147,6 +176,22 @@ class JobService:
                 file["target_size_bytes"] = target_size_bytes
                 file["target_achieved"] = target_achieved
 
+                if status == "completed":
+                    tool_logger.info(
+                        "File %s completed for job %s: %s -> %s (%s%% saved)",
+                        file.get("filename", file_id),
+                        job_id,
+                        _fmt_size(original_size),
+                        _fmt_size(compressed_size),
+                        savings_percent,
+                    )
+                if status == "failed":
+                    tool_logger.warning(
+                        "File %s failed for job %s: %s",
+                        file.get("filename", file_id),
+                        job_id,
+                        error or "no error reason",
+                    )
                 if (
                     status == "completed"
                     and previous_status != "completed"
@@ -184,6 +229,10 @@ class JobService:
             job_id,
             metadata,
         )
+        tool_id = metadata.get("tool_id", "unknown")
+        get_tool_logger(tool_id).info(
+            "Download ready for job %s", job_id
+        )
 
     def get(self, job_id: str) -> dict:
         metadata = local_job_storage.read_metadata(job_id)
@@ -205,6 +254,10 @@ class JobService:
         }:
             return
         self.update_status(job_id, "cancelled")
+        tool_id = metadata.get("tool_id", "unknown")
+        get_tool_logger(tool_id).info(
+            "Job %s cancelled", job_id
+        )
 
     def is_cancelled(self, job_id: str) -> bool:
         metadata = local_job_storage.read_metadata(
