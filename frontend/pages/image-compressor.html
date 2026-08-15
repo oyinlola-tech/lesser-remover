@@ -202,6 +202,10 @@
     <div id="site-footer"></div>
 
     <script type="module" src="/static/assets/js/pages/image-compressor.js"></script>
-    <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+    <!-- Vercel Web Analytics -->
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script> 
   </body>
 </html>

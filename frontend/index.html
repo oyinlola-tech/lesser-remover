@@ -438,6 +438,10 @@
 
     <script type="module" src="/static/assets/js/app.js"></script>
     <script type="module" src="/static/assets/js/landing.js"></script>
-    <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+    <!-- Vercel Web Analytics -->
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script> 
   </body>
 </html>
