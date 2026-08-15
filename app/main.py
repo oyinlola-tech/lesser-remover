@@ -19,6 +19,7 @@ from app.modules.capabilities.capability_route import (
 )
 from app.modules.compression.compression_route import (
     router as compression_router,
+    image_router,
 )
 from app.modules.jobs.job_cleanup_service import (
     job_cleanup_service,
@@ -72,6 +73,7 @@ app.mount(
 )
 app.include_router(background_router)
 app.include_router(compression_router)
+app.include_router(image_router)
 app.include_router(job_router)
 app.include_router(capability_router)
 app.include_router(image_tools_router)
