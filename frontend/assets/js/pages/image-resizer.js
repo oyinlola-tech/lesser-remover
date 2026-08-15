@@ -5,16 +5,6 @@ import { UploadZone } from "../components/ui.js";
 
 const kit = await initToolPage("image-resizer");
 
-const DIMENSIONS_PRESETS = [
-    { width: 1920, height: 1080, label: "1920 × 1080" },
-    { width: 1600, height: 900, label: "1600 × 900" },
-    { width: 1280, height: 720, label: "1280 × 720" },
-    { width: 1080, height: 1080, label: "1080 × 1080" },
-    { width: 1080, height: 1350, label: "1080 × 1350" },
-    { width: 1080, height: 1920, label: "1080 × 1920" },
-    { width: 1200, height: 630, label: "1200 × 630" },
-];
-
 const ASPECT_LOCKED_KEY = "aspect-locked";
 const ASPECT_UNLOCKED_KEY = "aspect-unlocked";
 
@@ -27,14 +17,11 @@ function $(id) {
 }
 
 function setupModeButtons() {
-    const buttons = document.querySelectorAll("#resize-mode button");
-    buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-            buttons.forEach((item) => item.classList.remove("active"));
-            button.classList.add("active");
-            currentMode = button.dataset.mode;
-            updateModeFields();
-        });
+    const select = $("resize-mode");
+    if (!select) return;
+    select.addEventListener("change", () => {
+        currentMode = select.value;
+        updateModeFields();
     });
 }
 
@@ -138,54 +125,55 @@ function setupDimensionInputs() {
         );
         const icon = lockButton.querySelector(".aspect-lock-icon");
         const text = lockButton.querySelector(".aspect-lock-text");
-        if (icon) icon.textContent = isAspectLocked ? "🔗" : "🔓";
+        if (icon)
+            icon.innerHTML = isAspectLocked
+                ? '<i class="fa-solid fa-link" aria-hidden="true"></i>'
+                : '<i class="fa-solid fa-link-slash" aria-hidden="true"></i>';
         if (text) text.textContent = isAspectLocked ? "Locked" : "Unlocked";
     });
 }
 
-function setupPresetButtons() {
-    const standardContainer = $("standard-presets");
-    if (standardContainer) {
-        standardContainer.innerHTML = "";
-        DIMENSIONS_PRESETS.forEach((preset) => {
-            const button = document.createElement("button");
-            button.type = "button";
-            button.className = "preset-button";
-            button.dataset.width = preset.width;
-            button.dataset.height = preset.height;
-            button.textContent = preset.label;
-            button.addEventListener("click", () => {
-                applyPreset(preset.width, preset.height);
-            });
-            standardContainer.appendChild(button);
+function setupPresetSelects() {
+    const standard = $("standard-presets");
+    if (standard) {
+        standard.addEventListener("change", () => {
+            if (!standard.value) return;
+            const [w, h] = standard.value.split("x").map(Number);
+            applyPreset(w, h);
+            standard.value = "";
+        });
+    }
+    const social = $("social-presets");
+    if (social) {
+        social.addEventListener("change", () => {
+            if (!social.value) return;
+            const [w, h] = social.value.split("x").map(Number);
+            applyPreset(w, h);
+            social.value = "";
         });
     }
 }
 
 async function loadSocialPresets() {
-    const container = $("social-presets");
-    if (!container) return;
+    const select = $("social-presets");
+    if (!select) return;
 
     try {
         const data = await apiGet("/tools/image/social-presets");
         if (data.presets && data.presets.length) {
-            container.innerHTML = "";
+            select.innerHTML = '<option value="">Select a preset…</option>';
             data.presets.forEach((preset) => {
-                const button = document.createElement("button");
-                button.type = "button";
-                button.className = "preset-button";
-                button.dataset.width = preset.width;
-                button.dataset.height = preset.height;
-                button.textContent = `${preset.name} (${preset.width} × ${preset.height})`;
-                button.title = preset.description;
-                button.addEventListener("click", () => {
-                    applyPreset(preset.width, preset.height);
-                });
-                container.appendChild(button);
+                const option = document.createElement("option");
+                option.value = `${preset.width}x${preset.height}`;
+                option.textContent = `${preset.name} (${preset.width} × ${preset.height})`;
+                option.title = preset.description;
+                select.appendChild(option);
             });
+        } else {
+            select.innerHTML = '<option value="">No presets available</option>';
         }
     } catch (error) {
-        container.innerHTML = '<span class="file-hint">Presets unavailable</span>';
+        select.innerHTML = '<option value="">Presets unavailable</option>';
     }
 }
 
@@ -193,11 +181,10 @@ function applyPreset(width, height) {
     $("width-input").value = width;
     $("height-input").value = height;
     if (currentMode !== "exact") {
-        const buttons = document.querySelectorAll("#resize-mode button");
-        buttons.forEach((item) => item.classList.remove("active"));
-        const exactButton = document.querySelector('#resize-mode button[data-mode="exact"]');
-        exactButton.classList.add("active");
-        exactButton.click();
+        const select = $("resize-mode");
+        select.value = "exact";
+        currentMode = "exact";
+        updateModeFields();
     }
 }
 
@@ -478,7 +465,7 @@ function initPage() {
     kit.banner.hide();
     setupModeButtons();
     setupDimensionInputs();
-    setupPresetButtons();
+    setupPresetSelects();
     loadSocialPresets();
     updateQualityVisibility();
 

@@ -56,12 +56,12 @@
               <div class="option-row">
                 <div class="option-field">
                   <label for="resize-mode">Resize mode</label>
-                  <div class="segmented-control" id="resize-mode" role="radiogroup">
-                    <button type="button" class="segmented-button active" data-mode="aspect">Aspect ratio</button>
-                    <button type="button" class="segmented-button" data-mode="exact">Exact</button>
-                    <button type="button" class="segmented-button" data-mode="percent">Percentage</button>
-                    <button type="button" class="segmented-button" data-mode="max">Maximum</button>
-                  </div>
+                  <select id="resize-mode" class="select-input">
+                    <option value="aspect" selected>Aspect ratio — keep proportions</option>
+                    <option value="exact">Exact — set width and height</option>
+                    <option value="percent">Percentage — scale by percent</option>
+                    <option value="max">Maximum — cap at a limit</option>
+                  </select>
                 </div>
               </div>
 
@@ -81,7 +81,7 @@
                     <span class="dimension-unit">px</span>
                   </div>
                   <button type="button" class="aspect-lock-button" id="aspect-lock" aria-label="Lock aspect ratio">
-                    <span class="aspect-lock-icon" aria-hidden="true">🔗</span>
+                    <span class="aspect-lock-icon" aria-hidden="true"><i class="fa-solid fa-link"></i></span>
                     <span class="aspect-lock-text">Locked</span>
                   </button>
                 </div>
@@ -136,7 +136,7 @@
               <div class="option-row">
                 <div class="option-field">
                   <label for="resize-format">Output format</label>
-                  <select id="resize-format">
+                  <select id="resize-format" class="select-input">
                     <option value="auto">Auto — preserve format</option>
                     <option value="jpg">JPEG</option>
                     <option value="png">PNG</option>
@@ -173,15 +173,26 @@
 
               <div class="option-row">
                 <div class="option-field">
-                  <label>Dimension presets</label>
-                  <div class="preset-grid" id="standard-presets"></div>
+                  <label for="standard-presets">Dimension presets</label>
+                  <select id="standard-presets" class="select-input">
+                    <option value="">Select a preset…</option>
+                    <option value="1920x1080">1920 × 1080</option>
+                    <option value="1600x900">1600 × 900</option>
+                    <option value="1280x720">1280 × 720</option>
+                    <option value="1080x1080">1080 × 1080</option>
+                    <option value="1080x1350">1080 × 1350</option>
+                    <option value="1080x1920">1080 × 1920</option>
+                    <option value="1200x630">1200 × 630</option>
+                  </select>
                 </div>
               </div>
 
               <div class="option-row">
                 <div class="option-field">
-                  <label>Social media presets</label>
-                  <div class="preset-grid" id="social-presets"></div>
+                  <label for="social-presets">Social media presets</label>
+                  <select id="social-presets" class="select-input">
+                    <option value="">Loading presets…</option>
+                  </select>
                 </div>
               </div>
 
