@@ -79,6 +79,7 @@ class CapabilityRegistry:
                 max_upload_mb=25,
                 notes="Powered by rembg; model is loaded lazily.",
                 requires_module="rembg",
+                featured=True,
             ),
             Tool(
                 id="image-compressor",
@@ -451,8 +452,6 @@ class CapabilityRegistry:
         advertised as usable. Implemented tools are only advertised
         when their runtime dependencies are actually present.
         """
-        driver = self.dri  when their runtime dependencies are actually present.
-        """
         driver = self.driver
         tools = []
         for tool in self.tools:
@@ -480,6 +479,7 @@ class CapabilityRegistry:
                     ),
                     "max_files": tool.max_files,
                     "notes": tool.notes if available else "",
+                    "featured": tool.featured if available else False,
                 }
             )
         return tools
