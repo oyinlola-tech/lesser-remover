@@ -31,7 +31,7 @@ export class UploadZone {
         const inputId = `file-input-${Math.random().toString(36).slice(2, 9)}`;
         this.host.innerHTML = `
             <div class="drop-zone" tabindex="0" role="button" aria-label="${this.multiple ? "Upload files" : "Upload a file"}">
-                <div class="upload-icon" aria-hidden="true">↑</div>
+                <div class="upload-icon" aria-hidden="true"><i class="fa-solid fa-cloud-arrow-up"></i></div>
                 <h2>${this.title}</h2>
                 <p>Or choose ${this.multiple ? "files" : "a file"} from your computer</p>
                 <label for="${inputId}" class="primary-button">${this.buttonLabel}</label>
