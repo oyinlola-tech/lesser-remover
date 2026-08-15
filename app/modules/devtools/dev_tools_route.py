@@ -22,6 +22,7 @@ async def generate_favicon(
     size: int = Form(64),
     add_padding: bool = Form(False),
 ):
+    logger.info("generate_favicon: image=%s size=%d padding=%s", image.filename, size, add_padding)
     result = await dev_tools_controller.favicon(
         image,
         size=size,
@@ -54,6 +55,7 @@ async def generate_favicon(
 async def optimize_svg(
     file: UploadFile = File(...),
 ):
+    logger.info("optimize_svg: file=%s", file.filename)
     result = await dev_tools_controller.optimize_svg(file)
     headers = {"Content-Disposition": "attachment; filename=optimized.svg"}
     return Response(
@@ -73,6 +75,7 @@ async def generate_qr(
     output_format: str = Form("png"),
     logo: UploadFile | None = File(None),
 ):
+    logger.info("generate_qr: content_len=%d format=%s has_logo=%s", len(content), output_format, bool(logo))
     data, content_type = await dev_tools_controller.qr(
         content,
         box_size=box_size,
@@ -95,6 +98,7 @@ async def generate_barcode(
     code_type: str = Form("code128"),
     output_format: str = Form("png"),
 ):
+    logger.info("generate_barcode: content_len=%d type=%s format=%s", len(content), code_type, output_format)
     data, content_type = await dev_tools_controller.barcode(
         content,
         code_type=code_type,
