@@ -7,15 +7,35 @@ now run in any environment.
 """
 
 import io
+from typing import TYPE_CHECKING, ClassVar
 
-import pymupdf
 from PIL import Image
+
+if TYPE_CHECKING:
+    import pymupdf
+
+
+def _get_pymupdf() -> "pymupdf":
+    """Import PyMuPDF lazily so the app boots when it is not installed.
+
+    The module is imported on first use rather than at startup so the
+    rest of the API stays available (and PDF tools report themselves as
+    unavailable) on runtimes such as Vercel that cannot install it.
+    """
+    try:
+        import pymupdf
+    except ImportError as error:
+        raise RuntimeError(
+            "PyMuPDF is required for PDF compression and "
+            "PDF-to-image conversion but is not installed."
+        ) from error
+    return pymupdf
 
 
 class GhostscriptAdapter:
     """Compress and rasterize PDFs without external binaries."""
 
-    QUALITY_SETTINGS: dict[str, int] = {
+    QUALITY_SETTINGS: ClassVar[dict[str, int]] = {
         "screen": 55,
         "ebook": 65,
         "printer": 78,
@@ -33,6 +53,7 @@ class GhostscriptAdapter:
                 f"Unsupported PDF quality: {quality}"
             )
         jpeg_quality = self.QUALITY_SETTINGS[quality]
+        pymupdf = _get_pymupdf()
         try:
             document = pymupdf.open(
                 stream=file_data,
@@ -108,6 +129,7 @@ class GhostscriptAdapter:
             raise ValueError(
                 "Image format must be png or jpeg."
             )
+        pymupdf = _get_pymupdf()
         try:
             document = pymupdf.open(
                 stream=file_data,
