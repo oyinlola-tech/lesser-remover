@@ -1,7 +1,11 @@
 :root {
+    /* ============
+       Color palette
+       ============ */
     --color-background: #f7f7f2;
     --color-surface: #ffffff;
     --color-surface-muted: #f0f0ea;
+    --color-surface-strong: #e9e9e3;
 
     --color-text: #163300;
     --color-text-secondary: #55634f;
@@ -10,14 +14,21 @@
     --color-primary: #9fe870;
     --color-primary-hover: #8ddd5e;
     --color-primary-soft: #e9f7e2;
+    --color-accent: var(--color-primary);
 
     --color-border: #deded6;
     --color-border-strong: #c8c8be;
 
     --color-success: #377d3a;
+    --color-success-soft: #e6f4e6;
     --color-warning: #9a6b00;
+    --color-warning-soft: #fdf3dc;
     --color-danger: #b3261e;
+    --color-danger-soft: #fff0f0;
 
+    /* ============
+       Typography
+       ============ */
     --font-family:
         Inter,
         ui-sans-serif,
@@ -26,14 +37,25 @@
         "Segoe UI",
         sans-serif;
 
-    --font-size-xs: 0.875rem;
-    --font-size-sm: 1rem;
-    --font-size-md: 1.125rem;
+    --font-mono:
+        ui-monospace,
+        "SFMono-Regular",
+        Menlo,
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+    --font-size-xs: 0.8125rem;
+    --font-size-sm: 0.9375rem;
+    --font-size-md: 1.0625rem;
     --font-size-lg: 1.25rem;
     --font-size-xl: 1.75rem;
     --font-size-2xl: 2.5rem;
     --font-size-3xl: 4rem;
     --font-size-4xl: 7rem;
+
+    /* Display — largest section headings */
+    --font-size-display: clamp(2.75rem, 7vw, var(--font-size-4xl));
 
     --font-weight-regular: 400;
     --font-weight-medium: 500;
@@ -41,6 +63,7 @@
     --font-weight-bold: 700;
     --font-weight-black: 900;
 
+    --line-height-tight: 1.1;
     --line-height-snug: 1.15;
     --line-height-normal: 1.5;
     --line-height-relaxed: 1.65;
@@ -49,19 +72,65 @@
     --letter-spacing-normal: 0;
     --letter-spacing-wide: 0.04em;
 
+    /* ============
+       Spacing scale (base 4)
+       ============ */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-7: 28px;
+    --space-8: 32px;
+    --space-9: 36px;
+    --space-10: 40px;
+    --space-11: 44px;
+    --space-12: 48px;
+    --space-14: 56px;
+    --space-16: 64px;
+    --space-20: 80px;
+    --space-24: 96px;
+
+    /* ============
+       Radius & borders
+       ============ */
+    --radius-xs: 6px;
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
     --radius-xl: 28px;
+    --radius-full: 999px;
 
+    --border-width-thin: 1px;
+    --border-width-thick: 2px;
+
+    /* ============
+       Shadows
+       ============ */
     --shadow-sm:
         0 2px 8px rgba(22, 51, 0, 0.05);
 
     --shadow-md:
         0 16px 45px rgba(22, 51, 0, 0.08);
 
-    --container-width: 1200px;
+    --shadow-lg:
+        0 25px 60px rgba(22, 51, 0, 0.10);
 
+    --shadow-xl:
+        0 32px 70px rgba(22, 51, 0, 0.12);
+
+    /* ============
+       Layout
+       ============ */
+    --container-width: 1200px;
+    --max-content-width: 1200px;
+    --content-max-width: 680px;
+
+    /* ============
+       Transitions
+       ============ */
     --transition-fast: 150ms ease;
     --transition-normal: 250ms ease;
+    --transition-slow: 400ms ease;
 }
