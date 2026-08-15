@@ -1,3 +1,5 @@
+import { icon } from "./icons.js";
+
 const STORAGE_KEY = "lr_usage_count";
 const SHOWN_KEY = "lr_support_popup_shown";
 const SUPPORT_IFRAME = `<iframe src="https://myhappr.com/embed/oyinlola?color=%235EB5FF&title=Support+Oluwayemi+Oyinlola" width="100%" height="600" frameborder="0" scrolling="no" style="border-radius: 12px;"></iframe>`;
@@ -55,11 +57,14 @@ function createModal(iframeHtml) {
   header.style.padding = "8px";
 
   const close = document.createElement("button");
-  close.textContent = "✕";
+  close.setAttribute("aria-label", "Close");
   close.style.border = "none";
   close.style.background = "transparent";
-  close.style.fontSize = "18px";
+  close.style.fontSize = "20px";
+  close.style.lineHeight = "1";
+  close.style.padding = "4px";
   close.style.cursor = "pointer";
+  close.appendChild(icon("xmark"));
 
   header.appendChild(close);
 
