@@ -1094,35 +1094,6 @@
   text-align: center;
   color: var(--color-text);
 }
-.target-size-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.target-size-option {
-  min-height: 40px;
-  padding: 0 14px;
-  border-radius: 999px;
-  border: 1px solid var(--color-border-strong);
-  background: var(--color-surface);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast),
-    border-color var(--transition-fast);
-}
-.target-size-option:hover {
-  border-color: var(--color-text);
-  color: var(--color-text);
-}
-.target-size-option.active {
-  background: var(--color-text);
-  color: var(--color-surface);
-  border-color: var(--color-text);
-}
 .target-size-custom .target-size-input input {
   max-width: 160px;
 }
@@ -1163,7 +1134,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  min-height: 44px;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .toggle input {
   position: absolute;
@@ -1177,7 +1151,7 @@
   flex-shrink: 0;
   border-radius: 999px;
   background: var(--color-border-strong);
-  transition: background var(--transition-fast);
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
 }
 .toggle-thumb {
   position: absolute;
@@ -1195,6 +1169,12 @@
 }
 .toggle input:checked + .toggle-track .toggle-thumb {
   transform: translateX(18px);
+}
+.toggle input:focus-visible + .toggle-track {
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+.toggle input:focus-visible:checked + .toggle-track {
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
 .toggle-label {
   color: var(--color-text-secondary);
@@ -1240,20 +1220,52 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
 }
-.select-input,
+.select-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 40px 0 14px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  outline: none;
+  background-color: var(--color-surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2315230d' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px 16px;
+  color: var(--color-text);
+  font: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.select-input:hover {
+  border-color: var(--color-text);
+}
+
+.select-input:focus {
+  border-color: var(--color-text);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.select-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .target-size-input input {
   width: 100%;
   min-height: 48px;
   padding: 0 14px;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-md);
+  border: 0;
+  border-radius: 0;
   outline: none;
   background: var(--color-surface);
   color: var(--color-text);
 }
-.select-input:focus,
+
 .target-size-input input:focus {
-  border-color: var(--color-text);
   box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
 .target-size-input {
@@ -1817,7 +1829,6 @@ summary:focus-visible,
 .option-field input[type="text"],
 .option-field input[type="number"],
 .option-field input[type="url"],
-.option-field select,
 .option-field input[type="color"] {
   padding: 10px 12px;
   border: 1px solid var(--color-border, #e5e0d8);
@@ -1994,44 +2005,6 @@ summary:focus-visible,
 
 .copy-button {
   align-self: flex-start;
-}
-
-.preset-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
-}
-
-.preset-card {
-  border: 1px solid var(--color-border, #e5e0d8);
-  border-radius: 12px;
-  padding: 12px 14px;
-  cursor: pointer;
-  text-align: left;
-  background: var(--color-background, #f7f7f2);
-  font: inherit;
-  transition: border-color 0.15s ease, transform 0.15s ease;
-}
-
-.preset-card:hover {
-  border-color: var(--color-primary, #163300);
-  transform: translateY(-1px);
-}
-
-.preset-card.selected {
-  border-color: var(--color-primary, #163300);
-  background: rgba(22, 51, 0, 0.06);
-  box-shadow: 0 0 0 2px rgba(22, 51, 0, 0.15);
-}
-
-.preset-card strong {
-  display: block;
-  margin-bottom: 2px;
-}
-
-.preset-card span {
-  font-size: 0.8rem;
-  color: var(--color-text-muted, #5b6b52);
 }
 
 .canvas-frame {

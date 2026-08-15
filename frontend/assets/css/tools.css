@@ -77,16 +77,29 @@
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+    flex-shrink: 0;
     cursor: pointer;
     transition:
         background var(--transition-fast),
         color var(--transition-fast),
-        border-color var(--transition-fast);
+        border-color var(--transition-fast),
+        transform var(--transition-fast);
 }
 
 .filter-chip:hover {
     border-color: var(--color-text);
     color: var(--color-text);
+}
+
+.filter-chip:active {
+    transform: scale(0.97);
+}
+
+.filter-chip:focus-visible {
+    outline: none;
+    border-color: var(--color-text);
+    box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
 
 .filter-chip[aria-pressed="true"] {
@@ -99,6 +112,33 @@
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
+}
+
+@media (max-width: 700px) {
+    .tools-filter {
+        position: static;
+    }
+
+    .tools-filter-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-3);
+    }
+
+    .tools-search {
+        flex: 1 1 auto;
+    }
+
+    .filter-chips {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 6px;
+        scrollbar-width: thin;
+    }
+
+    .tools-count {
+        align-self: flex-start;
+    }
 }
 
 
