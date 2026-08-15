@@ -11,7 +11,10 @@ from app.api import API_PREFIX
 from app.core.capabilities import capability_registry
 from app.core.config import settings
 from app.core.logging import setup_logging
-from app.core.middleware import RequestIDMiddleware
+from app.core.middleware import (
+    RateLimitMiddleware,
+    RequestIDMiddleware,
+)
 from app.modules.background.background_route import (
     router as background_router,
 )
@@ -64,6 +67,9 @@ register_exception_handlers(app)
 
 app.add_middleware(
     RequestIDMiddleware,
+)
+app.add_middleware(
+    RateLimitMiddleware,
 )
 app.add_middleware(
     CORSMiddleware,
@@ -129,6 +135,37 @@ async def tool_page(tool_id: str):
             detail="Tool page not found.",
         )
     return FileResponse(page_path)
+
+
+_ERROR_PAGE_NAME_PATTERN = re.compile(r"^[a-z0-9-]+(?:\.html)?$")
+
+
+@app.get("/errors/{name}")
+async def error_page(name: str):
+    """Serve the designed error pages at their canonical path.
+
+    Both ``/errors/404`` and ``/errors/404.html`` work. Numeric names
+    respond with the matching HTTP status code so browsers treat them
+    as real errors rather than plain pages.
+    """
+    if not _ERROR_PAGE_NAME_PATTERN.match(name):
+        raise HTTPException(
+            status_code=404,
+            detail="Error page not found.",
+        )
+    stem = name[:-5] if name.endswith(".html") else name
+    page_path = FRONTEND_DIR / "errors" / f"{stem}.html"
+    if not page_path.is_file():
+        raise HTTPException(
+            status_code=404,
+            detail="Error page not found.",
+        )
+    status_code = int(stem) if stem.isdigit() else 200
+    return FileResponse(
+        page_path,
+        status_code=status_code,
+        media_type="text/html",
+    )
 
 
 @app.get(f"{API_PREFIX}/health")
