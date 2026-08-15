@@ -7,7 +7,7 @@ import {
 } from "./capabilities.js";
 
 const GITHUB_URL = "https://github.com/oyinlola-tech/utils-tools";
-const SITE_URL = "https://www.oyinlola.site/";
+const SITE_URL = "https://oyinlola.site/";
 
 const STAR_ICON = '<i class="fa-brands fa-github" aria-hidden="true"></i>';
 const HEART_ICON = '<i class="fa-solid fa-heart" aria-hidden="true"></i>';
