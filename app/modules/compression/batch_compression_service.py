@@ -36,6 +36,7 @@ class BatchCompressionService:
         max_dimension: int | None = None,
         target_size_kb: int | None = None,
         strip_metadata: bool = True,
+        quality: int | None = None,
     ) -> None:
         job_service.update_status(
             job_id,
@@ -127,32 +128,63 @@ class BatchCompressionService:
                     == "image"
                 ):
 
-                    (
-                        compressed_data,
-                        content_type,
-                        actual_quality,
-                        width,
-                        height,
-                    ) = (
-                        compression_service
-                        .compress_image(
-                            file_data=file_data,
-                            preset=compression_preset,
-                            output_format=(
-                                image_output_format
-                            ),
-                            max_dimension=max_dimension,
-                            target_size_bytes=target_size_bytes,
+                    if quality is not None:
+
+                        (
+                            compressed_data,
+                            content_type,
+                            actual_quality,
+                            width,
+                            height,
+                        ) = (
+                            compression_service
+                            .compress_image_quality(
+                                file_data=file_data,
+                                quality=quality,
+                                output_format=(
+                                    image_output_format
+                                ),
+                                max_dimension=max_dimension,
+                                target_size_bytes=target_size_bytes,
+                                strip_metadata=strip_metadata,
+                            )
                         )
-                    )
+
+                    else:
+
+                        (
+                            compressed_data,
+                            content_type,
+                            actual_quality,
+                            width,
+                            height,
+                        ) = (
+                            compression_service
+                            .compress_image(
+                                file_data=file_data,
+                                preset=compression_preset,
+                                output_format=(
+                                    image_output_format
+                                ),
+                                max_dimension=max_dimension,
+                                target_size_bytes=target_size_bytes,
+                                strip_metadata=strip_metadata,
+                            )
+                        )
 
                     extension = {
                         "webp": "webp",
                         "jpeg": "jpg",
+                        "jpg": "jpg",
                         "png": "png",
-                    }[
-                        image_output_format
-                    ]
+                    }.get(
+                        image_output_format,
+                        "jpg" if inspection.extension in (".jpg", ".jpeg") else (
+                            "webp" if inspection.extension == ".webp"
+                            else "png" if inspection.extension == ".png"
+                            else "webp"
+                        ),
+                    )
 
                 elif (
                     inspection.category.value
