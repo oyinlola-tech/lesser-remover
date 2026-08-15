@@ -1,11 +1,15 @@
 from io import BytesIO
 from pathlib import Path
 from PIL import Image, ImageFilter
-from app.infrastructure.image.rembg_adapter import rembg_adapter
 from app.modules.background.background_repository import (
     background_repository,
 )
 from app.modules.image.image_service import image_service
+
+
+def _get_rembg_adapter():
+    from app.infrastructure.image.rembg_adapter import rembg_adapter
+    return rembg_adapter
 
 
 class BackgroundService:
@@ -20,7 +24,7 @@ class BackgroundService:
         image.load()
         width, height = image.size
         processed_image = (
-            rembg_adapter.remove_background(
+            _get_rembg_adapter().remove_background(
                 image,
             )
         )
@@ -43,7 +47,7 @@ class BackgroundService:
         source = Image.open(BytesIO(file_data))
         source.load()
         width, height = source.size
-        subject = rembg_adapter.remove_background(source)
+        subject = _get_rembg_adapter().remove_background(source)
 
         if image_data is not None:
             try:

@@ -3,7 +3,6 @@ from io import BytesIO
 from pathlib import Path
 
 from PIL import Image
-from rembg import new_session, remove
 
 from app.core.config import settings
 
@@ -16,12 +15,26 @@ class RemBGAdapter:
 
     def _get_session(self):
         if self._session is None:
+            try:
+                from rembg import new_session
+            except ImportError:
+                raise RuntimeError(
+                    "Background removal requires the 'rembg' package. "
+                    "It is not available in this environment."
+                )
             if (MODELS_DIR / f"{settings.rembg_model}.onnx").exists():
                 os.environ["U2NET_HOME"] = str(MODELS_DIR)
             self._session = new_session(settings.rembg_model)
         return self._session
 
     def remove_background(self, image: Image.Image) -> Image.Image:
+        try:
+            from rembg import remove
+        except ImportError:
+            raise RuntimeError(
+                "Background removal requires the 'rembg' package. "
+                "It is not available in this environment."
+            )
         output = remove(image, session=self._get_session())
         if isinstance(output, Image.Image):
             return output
