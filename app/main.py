@@ -8,6 +8,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.api import API_PREFIX
+from app.core.capabilities import capability_registry
 from app.core.config import settings
 from app.core.logging import setup_logging
 from app.core.middleware import RequestIDMiddleware
@@ -91,6 +92,7 @@ app.include_router(dev_tools_router)
 @app.on_event("startup")
 async def startup_cleanup():
     await asyncio.to_thread(job_cleanup_service.cleanup_all)
+    capability_registry.log_dependency_diagnostics()
 @app.get("/")
 async def home():
     return FileResponse(
