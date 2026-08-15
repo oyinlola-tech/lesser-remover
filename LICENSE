@@ -1,0 +1,110 @@
+MIT License
+
+Copyright (c) 2025-2026 Oluwayemi Oyinlola and the Utils-tool contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Contributing
+
+Utils-tool is an open-source project and contributions of any kind are welcome.
+You do not need to be an experienced developer — bug reports, documentation
+fixes, translations, and feature suggestions are all valued.
+
+### How to contribute
+
+1.  **Fork** the repository on GitHub.
+2.  **Clone** your fork locally:
+
+    ```bash
+    git clone https://github.com/<your-username>/utils-tools.git
+    cd utils-tools
+    ```
+
+3.  **Set up** the development environment — see [DEVELOPMENT.md](./DEVELOPMENT.md).
+4.  **Create a branch** for your change:
+
+    ```bash
+    git checkout -b feat/my-change
+    ```
+
+5.  **Make your change** following the conventions in
+    [DEVELOPMENT.md](./DEVELOPMENT.md) and [CONTRIBUTING.md](./CONTRIBUTING.md).
+6.  **Run the tests** to make sure nothing is broken:
+
+    ```bash
+    python -m pytest tests/ -q
+    ```
+
+7.  **Commit** — use a clear, descriptive commit message.  See the commit
+    style below.
+8.  **Push** to your fork and open a **Pull Request** against the `main`
+    branch of this repository.
+
+### Commit messages
+
+We follow a lightweight convention inspired by
+[Conventional Commits](https://www.conventionalcommits.org/):
+
+| Prefix        | Use for                                                   |
+| ------------- | --------------------------------------------------------- |
+| `feat:`       | A new tool or feature                                     |
+| `fix:`        | A bug fix                                                 |
+| `docs:`       | Documentation changes only                                |
+| `style:`      | Code formatting, whitespace, missing semicolons           |
+| `refactor:`   | Code change that doesn't fix a bug or add a feature       |
+| `test:`       | Adding or correcting tests                                |
+| `chore:`      | Build process or tooling changes                          |
+
+Example: `feat: add AVIF output support to image converter`
+
+### Code style
+
+-   **Python**: 3.10+, no formatter mandated — match the surrounding code.
+-   **JavaScript**: ES modules (ES2022+), no build step.  Use
+    `node --check <file>` to validate syntax.
+-   **Layer discipline**: controllers → services → adapters.  Never import
+    `PIL`, `pikepdf`, or `gs` directly in controllers.
+-   **No comments** unless they explain a non-obvious decision.
+-   All routes live under `/api/v1`.
+
+### Report an issue
+
+-   Use the [GitHub issue tracker](https://github.com/oyinlola-tech/utils-tools/issues)
+    for bug reports and feature requests.
+-   Include: the tool you were using, the error message (if any), your
+    browser/OS, and a screenshot when helpful.
+
+### Code of conduct
+
+Be respectful and constructive.  Harassment or discrimination of any kind
+towards other contributors is not tolerated.
+
+### License
+
+By contributing you agree that your contributions will be licensed under the
+MIT License — see the license header above.  You retain all copyright to your
+own code, but the project as a whole is distributed under the MIT License.
+
+### Security
+
+If you discover a security vulnerability, **do not** open a public issue.
+Please email `oyinlola.tech@icloud.com` instead.  See
+[SECURITY.md](./SECURITY.md) for more details.
