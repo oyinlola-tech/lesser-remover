@@ -16,30 +16,24 @@ if (!kit.available) {
     });
 
     async function loadPresets() {
-        const grid = document.querySelector("#preset-grid");
+        const select = document.querySelector("#preset-select");
         try {
             const data = await apiGet("/tools/image/social-presets");
             presets = data.presets || [];
-            grid.innerHTML = "";
+            select.innerHTML = '<option value="">Select a platform preset…</option>';
             for (const preset of presets) {
-                const card = document.createElement("button");
-                card.type = "button";
-                card.className = "preset-card";
-                card.innerHTML = `
-                    <strong>${preset.name}</strong>
-                    <span>${preset.width}×${preset.height}px · ${preset.description}</span>`;
-                card.addEventListener("click", () => {
-                    grid.querySelectorAll(".preset-card").forEach((item) =>
-                        item.classList.remove("selected")
-                    );
-                    card.classList.add("selected");
-                    selectedPreset = preset;
-                });
-                grid.appendChild(card);
+                const option = document.createElement("option");
+                option.value = String(presets.indexOf(preset));
+                option.textContent = `${preset.name} (${preset.width}×${preset.height})`;
+                option.title = preset.description;
+                select.appendChild(option);
             }
+            select.addEventListener("change", () => {
+                const index = Number(select.value);
+                selectedPreset = presets[index] || null;
+            });
         } catch {
-            grid.innerHTML =
-                '<p class="file-hint">Unable to load presets. Try again later.</p>';
+            select.innerHTML = '<option value="">Unable to load presets</option>';
         }
     }
     loadPresets();

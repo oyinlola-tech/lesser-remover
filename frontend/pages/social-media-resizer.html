@@ -48,16 +48,16 @@
             <div id="tool-upload" data-accept="image/*" data-multiple="false" data-max-files="1" data-hint="JPG, PNG, WebP or AVIF up to 25 MB"></div>
         
             <div class="tool-options" id="tool-options">
-<div class="option-field">
-              <label>Platform preset</label>
-              <div class="preset-grid" id="preset-grid">
-                <p class="file-hint">Loading presets...</p>
-              </div>
+            <div class="option-field">
+              <label for="preset-select">Platform preset</label>
+              <select id="preset-select" class="select-input">
+                <option value="">Loading presets…</option>
+              </select>
             </div>
             <div class="option-row">
               <div class="option-field">
                 <label for="social-format">Output format</label>
-                <select id="social-format">
+                <select id="social-format" class="select-input">
                   <option value="jpg" selected>JPG</option>
                   <option value="png">PNG</option>
                   <option value="webp">WebP</option>
