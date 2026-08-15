@@ -1,17 +1,26 @@
-import subprocess
-from pathlib import Path
-from tempfile import TemporaryDirectory
-from typing import ClassVar
+"""Pure-Python PDF toolkit built on PyMuPDF.
+
+PDF compression and PDF-to-image rendering previously depended on the
+Ghostscript binary, which serverless runtimes such as Vercel cannot
+provide. PyMuPDF ships as a self-contained wheel, so both operations
+now run in any environment.
+"""
+
+import io
+
+import pymupdf
+from PIL import Image
 
 
 class GhostscriptAdapter:
+    """Compress and rasterize PDFs without external binaries."""
 
-    QUALITY_SETTINGS: ClassVar[dict[str, str]] = {
-        "screen": "/screen",
-        "ebook": "/ebook",
-        "printer": "/printer",
-        "prepress": "/prepress",
-        "default": "/default",
+    QUALITY_SETTINGS: dict[str, int] = {
+        "screen": 55,
+        "ebook": 65,
+        "printer": 78,
+        "prepress": 88,
+        "default": 65,
     }
 
     def compress(
@@ -23,52 +32,70 @@ class GhostscriptAdapter:
             raise ValueError(
                 f"Unsupported PDF quality: {quality}"
             )
-        with TemporaryDirectory() as temp_dir:
-            temp_path = Path(temp_dir)
-            input_path = temp_path / "input.pdf"
-            output_path = temp_path / "output.pdf"
-            input_path.write_bytes(file_data)
-            command = [
-                "gs",
-                "-sDEVICE=pdfwrite",
-                "-dCompatibilityLevel=1.4",
-                "-dNOPAUSE",
-                "-dQUIET",
-                "-dBATCH",
-                (f"-dPDFSETTINGS="
-                f"{self.QUALITY_SETTINGS[quality]}"),
-                ("-sOutputFile="
-                f"{output_path}"),
-                str(input_path),
-            ]
-            try:
-                subprocess.run(
-                    command,
-                    check=True,
-                    capture_output=True,
-                    timeout=120,
-                )
-            except subprocess.TimeoutExpired as error:
-                raise RuntimeError(
-                    "PDF compression timed out."
-                ) from error
-            except subprocess.CalledProcessError as error:
-                error_message = (
-                    error.stderr.decode(
-                        errors="replace"
+        jpeg_quality = self.QUALITY_SETTINGS[quality]
+        try:
+            document = pymupdf.open(
+                stream=file_data,
+                filetype="pdf",
+            )
+        except Exception as error:
+            raise RuntimeError(
+                f"Unable to open PDF: {error}"
+            ) from error
+        try:
+            for page in document:
+                for image_info in page.get_images(full=True):
+                    xref = image_info[0]
+                    smask = image_info[1]
+                    if smask:
+                        continue
+                    try:
+                        extracted = document.extract_image(xref)
+                    except Exception:
+                        continue
+                    if extracted.get("ext") != "jpeg":
+                        continue
+                    try:
+                        image = Image.open(
+                            io.BytesIO(extracted["image"])
+                        )
+                        if image.mode not in ("RGB", "L"):
+                            image = image.convert("RGB")
+                        buffer = io.BytesIO()
+                        image.save(
+                            buffer,
+                            "JPEG",
+                            quality=jpeg_quality,
+                            optimize=True,
+                            progressive=True,
+                        )
+                    except Exception:
+                        continue
+                    recompressed = buffer.getvalue()
+                    if len(recompressed) >= len(
+                        extracted["image"]
+                    ):
+                        continue
+                    document.update_stream(
+                        xref,
+                        recompressed,
                     )
-                )
-                raise RuntimeError(
-                    "Ghostscript failed to "
-                    "compress the PDF: "
-                    f"{error_message}"
-                ) from error
-            if not output_path.exists():
-                raise RuntimeError(
-                    "Ghostscript did not produce "
-                    "an output PDF."
-                )
-            return output_path.read_bytes()
+                    document.xref_set_key(
+                        xref,
+                        "DecodeParms",
+                        "null",
+                    )
+            output = io.BytesIO()
+            document.save(
+                output,
+                garbage=4,
+                deflate=True,
+                clean=True,
+            )
+            data = output.getvalue()
+        finally:
+            document.close()
+        return data
 
     def to_images(
         self,
@@ -76,66 +103,53 @@ class GhostscriptAdapter:
         image_format: str = "png",
         dpi: int = 150,
     ) -> list[tuple[str, bytes]]:
-        """Rasterize every PDF page with Ghostscript.
-
-        Returns ``[(filename, bytes), ...]`` sorted by page number.
-        """
-        device = "png16m" if image_format == "png" else "jpeg"
-        extension = "png" if image_format == "png" else "jpg"
-        with TemporaryDirectory() as temp_dir:
-            temp_path = Path(temp_dir)
-            input_path = temp_path / "input.pdf"
-            input_path.write_bytes(file_data)
-            output_pattern = temp_path / "page-%03d." + extension
-            command = [
-                "gs",
-                f"-sDEVICE={device}",
-                "-dNOPAUSE",
-                "-dQUIET",
-                "-dBATCH",
-                f"-r{dpi}",
-                f"-sOutputFile={output_pattern}",
-                str(input_path),
-            ]
-            try:
-                subprocess.run(
-                    command,
-                    check=True,
-                    capture_output=True,
-                    timeout=180,
+        image_format = image_format.lower()
+        if image_format not in {"png", "jpeg"}:
+            raise ValueError(
+                "Image format must be png or jpeg."
+            )
+        try:
+            document = pymupdf.open(
+                stream=file_data,
+                filetype="pdf",
+            )
+        except Exception as error:
+            raise RuntimeError(
+                f"Unable to open PDF: {error}"
+            ) from error
+        try:
+            pages: list[tuple[str, bytes]] = []
+            for index, page in enumerate(
+                document,
+                start=1,
+            ):
+                pixmap = page.get_pixmap(
+                    dpi=dpi,
+                    colorspace=pymupdf.csRGB,
+                    alpha=False,
                 )
-            except subprocess.TimeoutExpired as error:
-                raise RuntimeError(
-                    "PDF to image conversion timed out."
-                ) from error
-            except subprocess.CalledProcessError as error:
-                error_message = (
-                    error.stderr.decode(
-                        errors="replace"
+                if image_format == "png":
+                    data = pixmap.tobytes("png")
+                    extension = "png"
+                else:
+                    data = pixmap.tobytes(
+                        "jpeg",
+                        jpg_quality=90,
+                    )
+                    extension = "jpg"
+                pages.append(
+                    (
+                        f"page-{index:03d}.{extension}",
+                        data,
                     )
                 )
-                raise RuntimeError(
-                    "Ghostscript failed to convert "
-                    "the PDF: "
-                    f"{error_message}"
-                ) from error
-            pages = sorted(
-                temp_path.glob(
-                    f"page-*.{extension}"
-                )
+        finally:
+            document.close()
+        if not pages:
+            raise RuntimeError(
+                "PDF to image conversion produced no pages."
             )
-            if not pages:
-                raise RuntimeError(
-                    "Ghostscript did not produce "
-                    "any page images."
-                )
-            return [
-                (
-                    page.name,
-                    page.read_bytes(),
-                )
-                for page in pages
-            ]
+        return pages
 
 
 ghostscript_adapter = GhostscriptAdapter()
