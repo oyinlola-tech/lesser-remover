@@ -33,3 +33,58 @@ class ImageToolListResult(BaseModel):
 
 class MetadataRemovalResult(ImageToolResult):
     removed_metadata: list[str] = []
+
+
+class ResizeResult(BaseModel):
+    success: bool
+    original_filename: str
+    output_filename: str
+    input_format: str
+    output_format: str
+    original_width: int
+    original_height: int
+    width: int
+    height: int
+    original_size_bytes: int
+    size_bytes: int
+    download_url: str
+    details: dict = {}
+
+
+class ResizeFailure(BaseModel):
+    filename: str
+    error: str
+
+
+class ResizeBatchResult(BaseModel):
+    success: bool
+    total_files: int
+    successful_files: int
+    failed_files: int
+    results: list[ResizeResult]
+    failures: list[ResizeFailure] = []
+
+
+class ConvertResult(BaseModel):
+    success: bool
+    original_filename: str
+    output_filename: str
+    input_format: str
+    output_format: str
+    original_width: int
+    original_height: int
+    width: int
+    height: int
+    original_size_bytes: int
+    size_bytes: int
+    download_url: str
+    details: dict = {}
+
+
+class ConvertBatchResult(BaseModel):
+    success: bool
+    total_files: int
+    successful_files: int
+    failed_files: int
+    results: list[ConvertResult]
+    failures: list[ResizeFailure] = []
