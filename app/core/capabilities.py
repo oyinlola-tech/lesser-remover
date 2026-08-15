@@ -45,6 +45,8 @@ class Tool:
     # runtime dependency that must exist for the tool to work
     requires_binary: str | None = None
     requires_module: str | None = None
+    # whether the tool is surfaced on the landing page as a featured entry
+    featured: bool = False
 
 
 def _module_available(module_name: str) -> bool:
@@ -105,6 +107,7 @@ class CapabilityRegistry:
                 max_files=20,
                 notes="Requires Ghostscript on the host.",
                 requires_binary="gs",
+                featured=True,
             ),
             Tool(
                 id="image-converter",
@@ -117,6 +120,7 @@ class CapabilityRegistry:
                 status="available",
                 environments=(LOCAL_DRIVER, VERCEL_DRIVER),
                 max_upload_mb=25,
+                featured=True,
             ),
             Tool(
                 id="image-resizer",
@@ -207,6 +211,7 @@ class CapabilityRegistry:
                 environments=(LOCAL_DRIVER, VERCEL_DRIVER),
                 max_upload_mb=50,
                 max_files=10,
+                featured=True,
             ),
             Tool(
                 id="pdf-splitter",
@@ -283,6 +288,7 @@ class CapabilityRegistry:
                 status="available",
                 environments=(LOCAL_DRIVER, VERCEL_DRIVER),
                 max_files=20,
+                featured=True,
             ),
             Tool(
                 id="zip-creator",
@@ -444,6 +450,8 @@ class CapabilityRegistry:
         frontend can show them as coming soon, but they are never
         advertised as usable. Implemented tools are only advertised
         when their runtime dependencies are actually present.
+        """
+        driver = self.dri  when their runtime dependencies are actually present.
         """
         driver = self.driver
         tools = []
