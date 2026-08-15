@@ -45,9 +45,12 @@ if (!kit.available) {
                 URL.revokeObjectURL(previewUrl);
             }
             previewUrl = URL.createObjectURL(blob);
+            const viewer = document.createElement("div");
+            viewer.className = "result-viewer";
             const img = document.createElement("img");
             img.src = previewUrl;
             img.alt = "QR code preview";
+            viewer.appendChild(img);
             const name = document.createElement("div");
             name.className = "result-name";
             name.textContent = filename;
@@ -65,7 +68,7 @@ if (!kit.available) {
             again.textContent = "Generate again";
             again.addEventListener("click", run);
             actions.appendChild(again);
-            preview.appendChild(img);
+            preview.appendChild(viewer);
             preview.appendChild(name);
             preview.appendChild(actions);
             host.appendChild(preview);
