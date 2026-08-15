@@ -155,7 +155,7 @@ class PdfService:
         file_data: bytes,
         image_format: str = "png",
         dpi: int = 150,
-    ) -> tuple[bytes, list[str]]:
+    ) -> list[tuple[str, bytes]]:
         image_format = image_format.lower()
         if image_format not in {"png", "jpeg"}:
             raise ValueError(
@@ -165,14 +165,11 @@ class PdfService:
             raise ValueError(
                 "DPI must be between 50 and 600."
             )
-        pages = ghostscript_adapter.to_images(
+        return ghostscript_adapter.to_images(
             file_data,
             image_format=image_format,
             dpi=dpi,
         )
-        return zip_adapter.create_archive(pages), [
-            name for name, _ in pages
-        ]
 
     def from_images(
         self,

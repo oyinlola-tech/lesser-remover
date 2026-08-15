@@ -6,7 +6,11 @@ from fastapi.responses import FileResponse
 from app.api import API_PREFIX
 from app.modules.pdf.pdf_controller import pdf_controller
 from app.modules.pdf.pdf_repository import pdf_repository
-from app.modules.pdf.pdf_schema import PdfInfoResponse, PdfToolResponse
+from app.modules.pdf.pdf_schema import (
+    PdfImagesResponse,
+    PdfInfoResponse,
+    PdfToolResponse,
+)
 from app.shared.utils.file_util import is_safe_filename
 
 logger = logging.getLogger(__name__)
@@ -59,17 +63,25 @@ async def extract_pdf_pages(
     )
 
 
-@router.post("/to-images", response_model=PdfToolResponse)
+@router.post("/to-images", response_model=PdfImagesResponse)
 async def pdf_to_images(
     file: UploadFile = File(...),
     image_format: str = Form("png"),
     dpi: int = Form(150),
+    as_zip: bool = Form(False),
 ):
-    logger.info("pdf_to_images: file=%s format=%s dpi=%d", file.filename, image_format, dpi)
+    logger.info(
+        "pdf_to_images: file=%s format=%s dpi=%d as_zip=%s",
+        file.filename,
+        image_format,
+        dpi,
+        as_zip,
+    )
     return await pdf_controller.to_images(
         file,
         image_format=image_format,
         dpi=dpi,
+        as_zip=as_zip,
     )
 
 
@@ -107,6 +119,9 @@ async def download_output_file(
     content_types = {
         ".pdf": "application/pdf",
         ".zip": "application/zip",
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
     }
     media_type = content_types.get(
         file_path.suffix.lower(),
