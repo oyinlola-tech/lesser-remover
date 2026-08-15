@@ -1,5 +1,10 @@
 import { formatBytes, showElement, hideElement } from "../utils.js";
 
+const MIME_EXTENSION_MAP = {
+    "image/": [".jpg", ".jpeg", ".png", ".gif", ".webp", ".avif", ".bmp", ".svg", ".ico", ".tiff", ".tif"],
+    "application/pdf": [".pdf"],
+};
+
 /**
  * Reusable upload zone with click + drag-and-drop support.
  *
@@ -112,22 +117,37 @@ export class UploadZone {
 
     validate(file) {
         if (this.acceptList.length) {
-            const allowedExtension = this.acceptList.some((entry) => {
+            const allowedExt = [];
+            const allowedMime = [];
+            for (const entry of this.acceptList) {
                 if (entry.startsWith(".")) {
-                    return file.name.toLowerCase().endsWith(entry.toLowerCase());
+                    allowedExt.push(entry.toLowerCase());
+                } else if (entry.includes("/")) {
+                    allowedMime.push(entry);
                 }
-                return false;
-            });
-            const allowedMime = this.acceptList.some((entry) => {
-                if (!entry.includes("/")) {
-                    return false;
-                }
+            }
+            const fileName = file.name.toLowerCase();
+            const matchesExtension = allowedExt.some((ext) =>
+                fileName.endsWith(ext)
+            );
+            const matchesMime = allowedMime.some((entry) => {
                 if (entry.endsWith("/*")) {
                     return file.type.startsWith(entry.slice(0, -1));
                 }
                 return file.type === entry;
             });
-            if (!allowedExtension && !allowedMime) {
+            let matchesExtensionFallback = false;
+            if (!file.type && !matchesExtension) {
+                matchesExtensionFallback = allowedMime.some((entry) => {
+                    const prefix = entry.endsWith("/*") ? entry.slice(0, -1) : entry;
+                    const exts = MIME_EXTENSION_MAP[prefix];
+                    if (exts) {
+                        return exts.some((ext) => fileName.endsWith(ext));
+                    }
+                    return false;
+                });
+            }
+            if (!matchesExtension && !matchesMime && !matchesExtensionFallback) {
                 return "This file type is not supported.";
             }
         }
