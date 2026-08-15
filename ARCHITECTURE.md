@@ -52,6 +52,7 @@ route → controller → service → repository
 |---|---|---|
 | `background` | `/api/v1/background` | remove, replace |
 | `compression` | `/api/v1/compression` | image/pdf compressor + batch |
+| `compression` | `/api/v1/images` | image compressor (quality-slider API) |
 | `image` | `/api/v1/tools/image` | converter, resizer, metadata remover, watermark, social presets |
 | `pdf` | `/api/v1/tools/pdf` | merger, splitter, rotator, extractor, PDF↔image, page count |
 | `file_tools` | `/api/v1/tools/file` | analyzer, ZIP creator, duplicate finder |
