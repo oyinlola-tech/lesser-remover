@@ -201,6 +201,7 @@ button {
   box-shadow: var(--shadow-sm);
 }
 
+.footer-star-button .fa,
 .footer-star-button svg {
   display: block;
   flex-shrink: 0;
