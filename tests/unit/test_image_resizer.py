@@ -513,3 +513,164 @@ def test_api_resize_metadata_removed_by_default():
         data={"resize_mode": "aspect", "width": "50", "remove_metadata": "true"},
     )
     assert response.status_code == 200
+
+
+# ─── Image Cropper API tests ───────────────────────────────────
+
+
+def test_api_crop_basic():
+    response = client.post(
+        "/api/v1/tools/image/crop",
+        files=[("file", ("photo.png", _png_bytes((200, 100)), "image/png"))],
+        data={
+            "crop_x": "10",
+            "crop_y": "10",
+            "crop_width": "100",
+            "crop_height": "50",
+        },
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["width"] == 100
+    assert body["height"] == 50
+
+
+def test_api_crop_with_rotation():
+    response = client.post(
+        "/api/v1/tools/image/crop",
+        files=[("file", ("photo.png", _png_bytes((100, 200)), "image/png"))],
+        data={
+            "crop_x": "0",
+            "crop_y": "0",
+            "crop_width": "50",
+            "crop_height": "50",
+            "rotation": "90",
+        },
+    )
+    assert response.status_code == 200
+
+
+def test_api_crop_with_flip():
+    response = client.post(
+        "/api/v1/tools/image/crop",
+        files=[("file", ("photo.png", _png_bytes((100, 100)), "image/png"))],
+        data={
+            "crop_x": "0",
+            "crop_y": "0",
+            "crop_width": "50",
+            "crop_height": "100",
+            "flip_horizontal": "true",
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()["width"] == 50
+
+
+def test_api_crop_preserves_transparency_png():
+    response = client.post(
+        "/api/v1/tools/image/crop",
+        files=[("file", ("photo.png", _png_bytes((100, 100)), "image/png"))],
+        data={
+            "crop_x": "0",
+            "crop_y": "0",
+            "crop_width": "50",
+            "crop_height": "50",
+            "output_format": "png",
+        },
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["format"] == "png"
+    assert body["details"]["has_alpha"] is True
+
+
+def test_api_crop_jpeg_flattens_transparency():
+    response = client.post(
+        "/api/v1/tools/image/crop",
+        files=[("file", ("photo.png", _png_bytes((100, 100)), "image/png"))],
+        data={
+            "crop_x": "0",
+            "crop_y": "0",
+            "crop_width": "50",
+            "crop_height": "50",
+            "output_format": "jpg",
+            "background_color": "#ffffff",
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()["format"] == "jpg"
+
+
+def test_api_crop_rejects_negative_coords():
+    response = client.post(
+        "/api/v1/tools/image/crop",
+        files=[("file", ("photo.png", _png_bytes(), "image/png"))],
+        data={
+            "crop_x": "-5",
+            "crop_y": "0",
+            "crop_width": "50",
+            "crop_height": "50",
+        },
+    )
+    assert response.status_code == 400
+
+
+def test_api_crop_rejects_invalid_rotation():
+    response = client.post(
+        "/api/v1/tools/image/crop",
+        files=[("file", ("photo.png", _png_bytes(), "image/png"))],
+        data={
+            "crop_x": "0",
+            "crop_y": "0",
+            "crop_width": "50",
+            "crop_height": "50",
+            "rotation": "45",
+        },
+    )
+    assert response.status_code == 400
+
+
+def test_api_crop_rejects_invalid_format():
+    response = client.post(
+        "/api/v1/tools/image/crop",
+        files=[("file", ("photo.png", _png_bytes(), "image/png"))],
+        data={
+            "crop_x": "0",
+            "crop_y": "0",
+            "crop_width": "50",
+            "crop_height": "50",
+            "output_format": "tiff",
+        },
+    )
+    assert response.status_code == 400
+
+
+def test_api_crop_rejects_non_image():
+    response = client.post(
+        "/api/v1/tools/image/crop",
+        files=[("file", ("doc.txt", b"hello", "text/plain"))],
+        data={
+            "crop_x": "0",
+            "crop_y": "0",
+            "crop_width": "50",
+            "crop_height": "50",
+        },
+    )
+    assert response.status_code == 415
+
+
+def test_api_crop_auto_format_preserves_png():
+    response = client.post(
+        "/api/v1/tools/image/crop",
+        files=[("file", ("photo.png", _png_bytes(), "image/png"))],
+        data={
+            "crop_x": "0",
+            "crop_y": "0",
+            "crop_width": "60",
+            "crop_height": "40",
+            "output_format": "auto",
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()["format"] == "png"

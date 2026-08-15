@@ -28,3 +28,4 @@ Thumbs.db
 # Logs
 logs/
 .env.vercel
+.freebuff

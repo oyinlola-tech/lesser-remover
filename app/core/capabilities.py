@@ -142,13 +142,14 @@ class CapabilityRegistry:
                 name="Image Cropper",
                 category=CATEGORY_IMAGE,
                 description=(
-                    "Crop images with free-form or preset ratios, "
-                    "rotate and flip."
+                    "Crop, rotate and flip images with precise "
+                    "coordinate mapping and export in JPG, PNG or WebP."
                 ),
                 status="available",
                 environments=(LOCAL_DRIVER, VERCEL_DRIVER),
                 max_upload_mb=25,
-                notes="Runs entirely in the browser.",
+                notes="Runs in the browser with backend validation.",
+                featured=True,
             ),
             Tool(
                 id="image-editor",

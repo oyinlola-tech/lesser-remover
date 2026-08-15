@@ -2,7 +2,7 @@
 
 from io import BytesIO
 
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 
 from app.modules.background.background_service import background_service
 from app.modules.image.image_service import image_service
@@ -196,3 +196,207 @@ def test_background_replacement_rejects_bad_image():
         assert "not valid" in str(error)
     else:
         raise AssertionError("Expected ValueError")
+
+
+def test_crop_basic():
+    result = image_service.crop(
+        _png_bytes(),
+        crop_x=10,
+        crop_y=10,
+        crop_width=50,
+        crop_height=50,
+    )
+    assert result["width"] == 50
+    assert result["height"] == 50
+    assert result["extension"] == "png"
+
+
+def test_crop_top_left():
+    result = image_service.crop(
+        _png_bytes(size=(100, 100)),
+        crop_x=0,
+        crop_y=0,
+        crop_width=20,
+        crop_height=20,
+    )
+    assert result["width"] == 20
+    assert result["height"] == 20
+
+
+def test_crop_center_4_3_ratio():
+    result = image_service.crop(
+        _png_bytes(size=(400, 300)),
+        crop_x=50,
+        crop_y=25,
+        crop_width=300,
+        crop_height=225,
+    )
+    assert result["width"] == 300
+    assert result["height"] == 225
+
+
+def test_crop_rotation_90():
+    result = image_service.crop(
+        _png_bytes(size=(100, 200)),
+        crop_x=10,
+        crop_y=10,
+        crop_width=50,
+        crop_height=50,
+        rotation=90,
+    )
+    assert result["width"] == 50
+    assert result["height"] == 50
+
+
+def test_crop_flip_horizontal():
+    result = image_service.crop(
+        _png_bytes(size=(100, 100)),
+        crop_x=0,
+        crop_y=0,
+        crop_width=50,
+        crop_height=100,
+        flip_horizontal=True,
+    )
+    assert result["width"] == 50
+    assert result["height"] == 100
+
+
+def test_crop_flip_vertical():
+    result = image_service.crop(
+        _png_bytes(size=(100, 100)),
+        crop_x=0,
+        crop_y=0,
+        crop_width=50,
+        crop_height=100,
+        flip_vertical=True,
+    )
+    assert result["width"] == 50
+    assert result["height"] == 100
+
+
+def test_crop_rotation_and_flip():
+    result = image_service.crop(
+        _png_bytes(size=(100, 200)),
+        crop_x=10,
+        crop_y=10,
+        crop_width=50,
+        crop_height=50,
+        rotation=180,
+        flip_horizontal=True,
+    )
+    assert result["width"] == 50
+    assert result["height"] == 50
+
+
+def test_crop_preserves_transparency():
+    result = image_service.crop(
+        _png_bytes(),
+        crop_x=0,
+        crop_y=0,
+        crop_width=60,
+        crop_height=40,
+        output_format="png",
+    )
+    assert result["has_alpha"] is True
+    assert result["flattened"] is False
+
+
+def test_crop_jpeg_flattens_transparency():
+    result = image_service.crop(
+        _png_bytes(),
+        crop_x=0,
+        crop_y=0,
+        crop_width=60,
+        crop_height=40,
+        output_format="jpg",
+        background_color="#ffffff",
+    )
+    assert result["extension"] == "jpg"
+    assert result["flattened"] is True
+
+
+def test_crop_removes_metadata():
+    original = _png_bytes(size=(100, 100), color=(255, 0, 0, 255))
+    result = image_service.crop(
+        original,
+        crop_x=0,
+        crop_y=0,
+        crop_width=50,
+        crop_height=50,
+        strip_metadata=True,
+    )
+    assert "exif" not in Image.open(BytesIO(result["data"])).info
+
+
+def test_crop_invalid_format():
+    try:
+        image_service.crop(
+            _png_bytes(),
+            crop_x=0,
+            crop_y=0,
+            crop_width=10,
+            crop_height=10,
+            output_format="tiff",
+        )
+    except ValueError as error:
+        assert "Unsupported" in str(error)
+    else:
+        raise AssertionError("Expected ValueError")
+
+
+def test_crop_out_of_bounds():
+    try:
+        image_service.crop(
+            _png_bytes(size=(100, 100)),
+            crop_x=50,
+            crop_y=50,
+            crop_width=200,
+            crop_height=200,
+        )
+    except ValueError as error:
+        assert "extends beyond" in str(error)
+    else:
+        raise AssertionError("Expected ValueError")
+
+
+def test_crop_negative_coordinates():
+    try:
+        image_service.crop(
+            _png_bytes(),
+            crop_x=-1,
+            crop_y=0,
+            crop_width=10,
+            crop_height=10,
+        )
+    except ValueError as error:
+        assert "non-negative" in str(error)
+    else:
+        raise AssertionError("Expected ValueError")
+
+
+def test_crop_corrupted_image():
+    try:
+        image_service.crop(
+            b"not an image",
+            crop_x=0,
+            crop_y=0,
+            crop_width=10,
+            crop_height=10,
+        )
+    except (OSError, ValueError, UnidentifiedImageError):
+        pass
+    else:
+        raise AssertionError("Expected error for corrupted image")
+
+
+def test_crop_rotation_180_dimensions_swap():
+    result = image_service.crop(
+        _png_bytes(size=(200, 100)),
+        crop_x=0,
+        crop_y=0,
+        crop_width=50,
+        crop_height=50,
+        rotation=180,
+    )
+    assert result["width"] == 50
+    assert result["height"] == 50

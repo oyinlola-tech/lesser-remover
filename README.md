@@ -1,14 +1,14 @@
 # Utils-tool
 
-A local-first file and media utility suite: **28 tools** for images, PDFs,
+A local-first file and media utility suite: **29 tools** for images, PDFs,
 files, developer assets and everyday utilities. Includes the new Image
-Resizer, enhanced batch Image Converter, and SVG Generator (image-to-SVG).
-One codebase runs locally with full features, or on Vercel as a serverless app.
-No database, no Redis, no accounts, no cloud uploads required.
+Resizer, enhanced batch Image Converter, Image Cropper, and SVG Generator
+(image-to-SVG). One codebase runs locally with full features, or on Vercel
+as a serverless app. No database, no Redis, no accounts, no cloud uploads.
 
 ## What it does
 
-- **Image tools** — image compressor (quality slider, target-size, metadata removal, JPG/PNG/WebP), background remover, converter (AVIF/JPG/PNG/WebP, batch), resizer (aspect/exact/percent/max, presets, quality, transparency), cropper, editor, metadata remover, watermark, background replacement
+- **Image tools** — image compressor (quality slider, target-size, metadata removal, JPG/PNG/WebP), background remover, converter (AVIF/JPG/PNG/WebP, batch), resizer (aspect/exact/percent/max, presets, quality, transparency), **cropper** (rotate, flip, aspect ratios, precision crop), editor, metadata remover, watermark, background replacement
 - **PDF tools** — compressor, merger, splitter, rotator, page extractor, PDF→image, image→PDF
 - **File tools** — analyzer (type/size/hash/dimensions), ZIP creator, duplicate finder
 - **Developer tools** — favicon generator, SVG optimizer, **SVG generator** (image-to-SVG), image↔Base64, QR code generator, barcode generator
@@ -101,10 +101,10 @@ app/
 ├── modules/
 │   ├── background/                  # Background removal + replacement
 │   ├── compression/                 # Image + PDF compression
-│   ├── image/                       # Converter, resizer, metadata, watermark
+│   ├── image/                       # Converter, resizer, cropper, metadata, watermark
 │   ├── pdf/                         # Merge, split, rotate, extract, PDF<->image
 │   ├── file_tools/                  # Analyzer, ZIP, duplicate finder
-│   ├── devtools/                    # Favicon, SVG optimizer, QR, barcode
+│   ├── devtools/                    # Favicon, SVG optimizer, SVG generator, QR, barcode
 │   └── jobs/                        # Job system (metadata + cleanup)
 ├── infrastructure/
 │   ├── storage/                     # Storage abstraction (local + Vercel Blob)
@@ -156,10 +156,10 @@ storage/                             # Local mode only
 
 ```bash
 source .venv/bin/activate
-python -m pytest tests/ -q        # 205 tests: units, API contracts, capability gating
+python -m pytest tests/ -q        # 230 tests: units, API contracts, capability gating
 ```
 
-Covers the unified error format, all 27 tools' services, the capability registry
+Covers the unified error format, all 29 tools' services, the capability registry
 (including Vercel gating), and every frontend page + page script serving correctly.
 
 ## Environment variables
