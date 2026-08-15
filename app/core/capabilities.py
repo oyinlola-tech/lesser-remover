@@ -134,6 +134,8 @@ class CapabilityRegistry:
                 status="available",
                 environments=(LOCAL_DRIVER, VERCEL_DRIVER),
                 max_upload_mb=25,
+                max_files=50,
+                featured=True,
             ),
             Tool(
                 id="image-cropper",
