@@ -103,11 +103,10 @@ class CapabilityRegistry:
                     "or high-quality modes."
                 ),
                 status="available",
-                environments=(LOCAL_DRIVER,),
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
                 max_upload_mb=50,
                 max_files=20,
-                notes="Requires Ghostscript on the host.",
-                requires_binary="gs",
+                notes="Pure-Python compression via PyMuPDF.",
                 featured=True,
             ),
             Tool(
@@ -238,10 +237,9 @@ class CapabilityRegistry:
                     "and DPI options."
                 ),
                 status="available",
-                environments=(LOCAL_DRIVER,),
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
                 max_upload_mb=50,
-                notes="Requires Ghostscript on the host.",
-                requires_binary="gs",
+                notes="Rendered with PyMuPDF, no external binaries.",
             ),
             Tool(
                 id="image-to-pdf",
@@ -439,7 +437,7 @@ class CapabilityRegistry:
 
     def system_capabilities(self) -> dict:
         """Runtime capabilities of the host, not user-facing tool claims."""
-        pdf_compression = _binary_available("gs")
+        pdf_compression = _module_available("pymupdf")
         background_removal = _module_available("rembg")
         return {
             "local_processing": True,
