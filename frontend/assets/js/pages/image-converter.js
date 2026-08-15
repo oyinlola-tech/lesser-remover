@@ -33,32 +33,29 @@ function updateFormatVisibility() {
 }
 
 function setupFormatSelector() {
-    const container = $("format-selector");
-    if (!container) return;
+    const selector = $("format-selector");
+    if (!selector) return;
 
-    container.addEventListener("click", (event) => {
-        const button = event.target.closest(".format-option");
-        if (!button) return;
-
-        container.querySelectorAll(".format-option").forEach((el) => {
-            el.classList.remove("active");
-        });
-        button.classList.add("active");
-        selectedFormat = button.dataset.format;
+    selector.addEventListener("change", () => {
+        selectedFormat = selector.value;
         updateFormatVisibility();
     });
 }
 
 function setupBackgroundPresets() {
-    const container = $("background-color").parentElement;
-    container.addEventListener("click", (event) => {
-        const preset = event.target.closest(".bg-preset");
-        if (!preset) return;
-        container.querySelectorAll(".bg-preset").forEach((el) => {
-            el.classList.remove("active");
-        });
-        preset.classList.add("active");
-        $("background-color").value = preset.dataset.color;
+    const presetSelect = $("background-preset");
+    const colorInput = $("background-color");
+    if (!presetSelect || !colorInput) return;
+
+    presetSelect.addEventListener("change", () => {
+        if (presetSelect.value === "custom") {
+            colorInput.focus();
+        } else {
+            colorInput.value = presetSelect.value;
+        }
+    });
+    colorInput.addEventListener("input", () => {
+        presetSelect.value = "custom";
     });
 }
 

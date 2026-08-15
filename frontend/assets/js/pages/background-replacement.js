@@ -15,23 +15,19 @@ if (!kit.available) {
     });
 
     let backgroundType = "color";
-    const typeButtons = document.querySelectorAll("#background-type button");
-    typeButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            typeButtons.forEach((item) => item.classList.remove("active"));
-            button.classList.add("active");
-            backgroundType = button.dataset.type;
-            hideElement(document.querySelector("#background-color-field"));
-            hideElement(document.querySelector("#background-image-field"));
-            hideElement(document.querySelector("#background-blur-field"));
-            if (backgroundType === "color") {
-                showElement(document.querySelector("#background-color-field"));
-            } else if (backgroundType === "image") {
-                showElement(document.querySelector("#background-image-field"));
-            } else {
-                showElement(document.querySelector("#background-blur-field"));
-            }
-        });
+    const typeSelect = document.querySelector("#background-type");
+    typeSelect.addEventListener("change", () => {
+        backgroundType = typeSelect.value;
+        hideElement(document.querySelector("#background-color-field"));
+        hideElement(document.querySelector("#background-image-field"));
+        hideElement(document.querySelector("#background-blur-field"));
+        if (backgroundType === "color") {
+            showElement(document.querySelector("#background-color-field"));
+        } else if (backgroundType === "image") {
+            showElement(document.querySelector("#background-image-field"));
+        } else {
+            showElement(document.querySelector("#background-blur-field"));
+        }
     });
 
     document

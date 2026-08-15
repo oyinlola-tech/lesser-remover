@@ -15,20 +15,16 @@ if (!kit.available) {
     });
 
     let watermarkType = "text";
-    const typeButtons = document.querySelectorAll("#watermark-type button");
-    typeButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            typeButtons.forEach((item) => item.classList.remove("active"));
-            button.classList.add("active");
-            watermarkType = button.dataset.type;
-            if (watermarkType === "text") {
-                showElement(document.querySelector("#watermark-text-field"));
-                hideElement(document.querySelector("#watermark-logo-field"));
-            } else {
-                hideElement(document.querySelector("#watermark-text-field"));
-                showElement(document.querySelector("#watermark-logo-field"));
-            }
-        });
+    const typeSelect = document.querySelector("#watermark-type");
+    typeSelect.addEventListener("change", () => {
+        watermarkType = typeSelect.value;
+        if (watermarkType === "text") {
+            showElement(document.querySelector("#watermark-text-field"));
+            hideElement(document.querySelector("#watermark-logo-field"));
+        } else {
+            hideElement(document.querySelector("#watermark-text-field"));
+            showElement(document.querySelector("#watermark-logo-field"));
+        }
     });
 
     document

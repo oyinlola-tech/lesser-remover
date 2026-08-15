@@ -49,12 +49,12 @@
         
             <div class="tool-options" id="tool-options">
 <div class="option-field">
-              <label>Background type</label>
-              <div class="segmented" id="background-type">
-                <button type="button" data-type="color" class="active">Solid color</button>
-                <button type="button" data-type="image">Image</button>
-                <button type="button" data-type="blur">Blur</button>
-              </div>
+              <label for="background-type">Background type</label>
+              <select id="background-type" class="select-input">
+                <option value="color" selected>Solid color</option>
+                <option value="image">Image</option>
+                <option value="blur">Blur</option>
+              </select>
             </div>
             <div class="option-row">
               <div class="option-field" id="background-color-field">
@@ -67,7 +67,7 @@
               </div>
               <div class="option-field">
                 <label for="background-format">Output format</label>
-                <select id="background-format">
+                <select id="background-format" class="select-input">
                   <option value="png" selected>PNG</option>
                   <option value="webp">WebP</option>
                 </select>

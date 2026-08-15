@@ -47,11 +47,11 @@
             <div id="tool-upload" class="hidden"></div>
             <div class="tool-options" id="tool-options">
 <div class="option-field">
-              <label>Output type</label>
-              <div class="segmented" id="base64-type">
-                <button type="button" data-type="data-uri" class="active">Data URI</button>
-                <button type="button" data-type="raw">Raw Base64</button>
-              </div>
+              <label for="base64-type">Output type</label>
+              <select id="base64-type" class="select-input">
+                <option value="data-uri" selected>Data URI — includes prefix</option>
+                <option value="raw">Raw Base64 — no prefix</option>
+              </select>
             </div>
             <div class="option-field">
               <label for="base64-output">Output</label>

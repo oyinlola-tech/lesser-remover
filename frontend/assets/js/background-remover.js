@@ -15,32 +15,27 @@ const comparisonSlider = document.querySelector("#comparison-slider");
 const resultMeta = document.querySelector("#bg-result-meta");
 const variantGrid = document.querySelector("#bg-variant-grid");
 const newImageButton = document.querySelector("#bg-new-image-button");
-const outputOptions = document.querySelectorAll(".output-option");
+const outputSelect = document.querySelector("#bg-output-format");
 const processingMessage = document.querySelector("#bg-processing-message");
 const processingProgress = document.querySelector("#bg-processing-progress");
 const processingCount = document.querySelector("#bg-processing-count");
 
 let originalObjectUrl = null;
-let selectedOutputFormat = "webp";
+let selectedOutputFormat = outputSelect ? outputSelect.value : "webp";
 let originalFileSize = 0;
 let originalFileName = "";
 
 function setOutputOptionsDisabled(disabled) {
-    outputOptions.forEach((option) => {
-        option.disabled = disabled;
-    });
+    if (outputSelect) {
+        outputSelect.disabled = disabled;
+    }
 }
 
-outputOptions.forEach((option) => {
-    option.addEventListener("click", () => {
-        if (option.disabled) return;
-        outputOptions.forEach((other) => {
-            other.classList.remove("active");
-        });
-        option.classList.add("active");
-        selectedOutputFormat = option.dataset.format || "webp";
+if (outputSelect) {
+    outputSelect.addEventListener("change", () => {
+        selectedOutputFormat = outputSelect.value || "webp";
     });
-});
+}
 
 function resetUI() {
     hideElement(processing);

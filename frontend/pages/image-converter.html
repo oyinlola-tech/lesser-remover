@@ -59,21 +59,12 @@
             <div class="tool-options" id="tool-options">
               <div class="option-row">
                 <div class="option-field">
-                  <label>Convert to</label>
-                  <div class="format-grid" id="format-selector" role="radiogroup">
-                    <button type="button" class="format-option active" data-format="png">
-                      <span class="format-name">PNG</span>
-                      <span class="format-desc">Transparency and lossless graphics</span>
-                    </button>
-                    <button type="button" class="format-option" data-format="jpg">
-                      <span class="format-name">JPEG</span>
-                      <span class="format-desc">Photographs, smaller files</span>
-                    </button>
-                    <button type="button" class="format-option" data-format="webp">
-                      <span class="format-name">WebP</span>
-                      <span class="format-desc">Modern format, strong compression</span>
-                    </button>
-                  </div>
+                  <label for="format-selector">Convert to</label>
+                  <select id="format-selector" class="select-input">
+                    <option value="png" selected>PNG — transparency and lossless graphics</option>
+                    <option value="jpg">JPEG — photographs, smaller files</option>
+                    <option value="webp">WebP — modern format, strong compression</option>
+                  </select>
                 </div>
               </div>
 
@@ -104,10 +95,13 @@
                 <div class="option-field">
                   <label for="background-color">Background color</label>
                   <div class="background-presets">
-                    <button type="button" class="bg-preset active" data-color="#ffffff">White</button>
-                    <button type="button" class="bg-preset" data-color="#000000">Black</button>
-                    <button type="button" class="bg-preset" data-color="#0000ff">Blue</button>
-                    <input id="background-color" type="text" value="#ffffff" class="bg-custom" size="8" />
+                    <select id="background-preset" class="select-input">
+                      <option value="#ffffff" selected>White</option>
+                      <option value="#000000">Black</option>
+                      <option value="#0000ff">Blue</option>
+                      <option value="custom">Custom…</option>
+                    </select>
+                    <input id="background-color" type="text" value="#ffffff" class="bg-custom" size="8" aria-label="Custom background color" />
                   </div>
                   <small>Used when converting transparent images to JPEG.</small>
                 </div>

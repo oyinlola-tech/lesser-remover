@@ -22,7 +22,7 @@ if (!kit.available) {
     });
 
     function outputType() {
-        return document.querySelector("#base64-type .active").dataset.type;
+        return document.querySelector("#base64-type").value;
     }
 
     function renderOutput() {
@@ -37,15 +37,9 @@ if (!kit.available) {
         }
     }
 
-    document.querySelectorAll("#base64-type button").forEach((button) => {
-        button.addEventListener("click", () => {
-            document
-                .querySelectorAll("#base64-type button")
-                .forEach((item) => item.classList.remove("active"));
-            button.classList.add("active");
-            renderOutput();
-        });
-    });
+    document
+        .querySelector("#base64-type")
+        .addEventListener("change", renderOutput);
 
     document.querySelector("#base64-copy").addEventListener("click", async () => {
         const textarea = document.querySelector("#base64-output");

@@ -53,20 +53,17 @@
                 <span class="eyebrow">Output</span>
                 <h2>Choose your format.</h2>
               </div>
-              <div class="output-options">
-                <button type="button" class="output-option active" data-format="webp">
-                  <strong>WebP</strong>
-                  <span>Smaller with transparency</span>
-                </button>
-                <button type="button" class="output-option" data-format="png">
-                  <strong>PNG</strong>
-                  <span>Lossless transparency</span>
-                </button>
-              </div>
+              <label class="setting-group" for="bg-output-format">
+                <span>Output format</span>
+                <select id="bg-output-format" class="select-input">
+                  <option value="webp" selected>WebP — smaller with transparency</option>
+                  <option value="png">PNG — lossless transparency</option>
+                </select>
+              </label>
             </div>
 
             <div class="drop-zone" id="bg-drop-zone">
-              <div class="upload-icon">↑</div>
+              <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i></div>
               <h2>Drop an image here</h2>
               <p>Or choose an image from your computer</p>
               <label for="bg-file-input" class="primary-button">Choose image</label>
@@ -107,7 +104,7 @@
                   <img id="processed-preview" alt="Background removed image" />
                 </div>
                 <div class="comparison-divider" id="comparison-divider">
-                  <span class="comparison-handle">↔</span>
+                  <span class="comparison-handle"><i class="fa-solid fa-arrows-left-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="comparison-label comparison-label-original">Original</div>
                 <div class="comparison-label comparison-label-processed">Removed background</div>

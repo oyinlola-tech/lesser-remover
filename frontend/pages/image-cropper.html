@@ -49,15 +49,15 @@
         
             <div class="tool-options" id="tool-options">
 <div class="option-field">
-              <label>Aspect ratio</label>
-              <div class="segmented" id="crop-ratio">
-                <button type="button" data-ratio="free" class="active">Free</button>
-                <button type="button" data-ratio="1:1">1:1</button>
-                <button type="button" data-ratio="4:5">4:5</button>
-                <button type="button" data-ratio="16:9">16:9</button>
-                <button type="button" data-ratio="9:16">9:16</button>
-                <button type="button" data-ratio="3:2">3:2</button>
-              </div>
+              <label for="crop-ratio">Aspect ratio</label>
+              <select id="crop-ratio" class="select-input">
+                <option value="free" selected>Free</option>
+                <option value="1:1">1:1</option>
+                <option value="4:5">4:5</option>
+                <option value="16:9">16:9</option>
+                <option value="9:16">9:16</option>
+                <option value="3:2">3:2</option>
+              </select>
             </div>
             <div class="rotate-flip-actions">
               <button type="button" id="rotate-left">Rotate left</button>

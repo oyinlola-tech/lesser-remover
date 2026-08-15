@@ -49,11 +49,11 @@
         
             <div class="tool-options" id="tool-options">
 <div class="option-field">
-              <label>Watermark type</label>
-              <div class="segmented" id="watermark-type">
-                <button type="button" data-type="text" class="active">Text</button>
-                <button type="button" data-type="logo">Logo image</button>
-              </div>
+              <label for="watermark-type">Watermark type</label>
+              <select id="watermark-type" class="select-input">
+                <option value="text" selected>Text</option>
+                <option value="logo">Logo image</option>
+              </select>
             </div>
             <div class="option-row">
               <div class="option-field" id="watermark-text-field">
@@ -66,7 +66,7 @@
               </div>
               <div class="option-field">
                 <label for="watermark-position">Position</label>
-                <select id="watermark-position">
+                <select id="watermark-position" class="select-input">
                   <option value="bottom-right" selected>Bottom right</option>
                   <option value="bottom-left">Bottom left</option>
                   <option value="top-right">Top right</option>

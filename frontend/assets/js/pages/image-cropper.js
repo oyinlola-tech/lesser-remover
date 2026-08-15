@@ -184,13 +184,10 @@ if (!kit.available) {
         dragging = null;
     });
 
-    document.querySelectorAll("#crop-ratio button").forEach((button) => {
-        button.addEventListener("click", () => {
-            document
-                .querySelectorAll("#crop-ratio button")
-                .forEach((item) => item.classList.remove("active"));
-            button.classList.add("active");
-            const value = button.dataset.ratio;
+    const ratioSelect = document.querySelector("#crop-ratio");
+    if (ratioSelect) {
+        ratioSelect.addEventListener("change", () => {
+            const value = ratioSelect.value;
             if (value === "free") {
                 ratio = 0;
             } else {
@@ -202,7 +199,7 @@ if (!kit.available) {
                 drawCropOverlay();
             }
         });
-    });
+    }
 
     function reflow() {
         initCrop();

@@ -50,7 +50,7 @@
 
           <section class="compressor-card">
             <div class="compressor-drop-zone" id="compressor-drop-zone">
-              <div class="upload-icon">↑</div>
+              <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i></div>
               <h2>Drop your PDFs here</h2>
               <p>Or choose files from your computer</p>
               <label for="compressor-file-input" class="primary-button">Choose file</label>
@@ -70,21 +70,12 @@
 
               <div class="compression-settings">
                 <div class="setting-group">
-                  <label>Compression</label>
-                  <div class="quality-options">
-                    <button type="button" class="quality-option" data-preset="best_quality">
-                      <strong>High quality</strong>
-                      <span>Keep maximum detail</span>
-                    </button>
-                    <button type="button" class="quality-option active" data-preset="balanced">
-                      <strong>Balanced</strong>
-                      <span>A strong balance of quality and size</span>
-                    </button>
-                    <button type="button" class="quality-option" data-preset="smallest">
-                      <strong>Maximum compression</strong>
-                      <span>Smallest practical file size</span>
-                    </button>
-                  </div>
+                  <label for="quality-preset">Compression</label>
+                  <select id="quality-preset" class="select-input">
+                    <option value="best_quality">High quality — keep maximum detail</option>
+                    <option value="balanced" selected>Balanced — quality and size</option>
+                    <option value="smallest">Maximum compression — smallest size</option>
+                  </select>
                 </div>
               </div>
 
@@ -122,7 +113,7 @@
                   <span>Original</span>
                   <strong id="original-size">0 MB</strong>
                 </div>
-                <div class="size-arrow">→</div>
+                <div class="size-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
                 <div class="size-block">
                   <span>Compressed</span>
                   <strong id="compressed-size">0 MB</strong>
