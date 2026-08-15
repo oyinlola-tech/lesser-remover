@@ -39,14 +39,17 @@ function renderToolCard(tool) {
     return card;
 }
 
-function renderCategory(category) {
+function renderCategory(category, featuredOnly = false) {
     const meta = CATEGORY_META[category];
     if (!meta) {
         return "";
     }
-    const tools = toolsByCategory(category);
-    if (!tools.length) {
-        return "";
+    let tools = toolsByCategory(category);
+    if (featuredOnly) {
+        tools = tools.filter((tool) => tool.featured);
+        if (!tools.length) {
+            return "";
+        }
     }
     const section = document.createElement("section");
     section.className = "catalog-category";
@@ -68,25 +71,61 @@ function renderCategory(category) {
     return section;
 }
 
-async function renderCatalog() {
+function renderCatalog() {
     const host = document.querySelector("#tool-catalog");
     if (!host) {
         return;
     }
-    try {
-        await loadCapabilities();
-    } catch (error) {
-        host.innerHTML = `<p class="catalog-error" role="alert">
-            Could not load the tool list. Start the local server and try again.
-        </p>`;
-        return;
-    }
     for (const category of CATEGORY_ORDER) {
-        const section = renderCategory(category);
+        const section = renderCategory(category, false);
         if (section) {
             host.appendChild(section);
         }
     }
 }
 
-renderCatalog();
+function renderFeaturedTools() {
+    const host = document.querySelector("#featured-tools");
+    if (!host) {
+        return;
+    }
+    host.innerHTML = "";
+    const available = [];
+    for (const category of CATEGORY_ORDER) {
+        const tools = toolsByCategory(category).filter(
+            (tool) => tool.featured && tool.status === "available"
+        );
+        for (const tool of tools) {
+            available.push(tool);
+        }
+    }
+    if (!available.length) {
+        host.innerHTML = `<p class="catalog-loading">No featured tools available.</p>`;
+        return;
+    }
+    for (const tool of available) {
+        host.appendChild(renderToolCard(tool));
+    }
+}
+
+async function initLanding() {
+    const featuredHost = document.querySelector("#featured-tools");
+    const catalogHost = document.querySelector("#tool-catalog");
+
+    try {
+        await loadCapabilities();
+    } catch (error) {
+        const targets = [featuredHost, catalogHost].filter(Boolean);
+        for (const host of targets) {
+            host.innerHTML = `<p class="catalog-error" role="alert">
+                Could not load the tool list. Start the local server and try again.
+            </p>`;
+        }
+        return;
+    }
+
+    renderFeaturedTools();
+    renderCatalog();
+}
+
+initLanding();
