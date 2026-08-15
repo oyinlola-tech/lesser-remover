@@ -352,6 +352,7 @@
   box-shadow: var(--shadow-sm);
 }
 
+.header-star-button .fa,
 .header-star-button svg {
   display: block;
   flex-shrink: 0;
@@ -480,6 +481,11 @@
   background: var(--color-surface);
   color: var(--color-text);
   font-weight: var(--font-weight-semibold);
+  gap: 7px;
+}
+.github-button .fa {
+  font-size: 1.1em;
+  flex-shrink: 0;
 }
 .file-hint {
   margin-top: 18px !important;
@@ -888,8 +894,14 @@
 }
 
 .success-badge::before {
-  content: "✓";
-  font-weight: var(--font-weight-black);
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 0.85em;
+  line-height: 1;
+  display: inline-block;
+  margin-right: 4px;
+  content: "\f00c";
+  vertical-align: middle;
 }
 
 .saved-space {
@@ -1888,6 +1900,8 @@ summary:focus-visible,
   border: 1px solid var(--color-border, #e5e0d8);
   border-radius: 14px;
   background: var(--color-background, #f7f7f2);
+  max-height: 55vh;
+  overflow: auto;
 }
 
 .result-preview img,
@@ -1895,6 +1909,19 @@ summary:focus-visible,
   max-width: 100%;
   height: auto;
   border-radius: 8px;
+  background: repeating-conic-gradient(#ffffff 0% 25%, #e9e9e9 0% 50%) 0 0 / 16px 16px;
+  display: block;
+}
+
+.result-viewer {
+  max-height: 40vh;
+  overflow: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.result-viewer img,
+.result-viewer canvas {
   background: repeating-conic-gradient(#ffffff 0% 25%, #e9e9e9 0% 50%) 0 0 / 16px 16px;
 }
 
