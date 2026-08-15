@@ -41,15 +41,15 @@ def test_available_tools_are_honest_in_local():
     }
 
 
-def test_pdf_compressor_is_not_advertised_on_vercel(monkeypatch):
+def test_pdf_compressor_is_advertised_on_vercel(monkeypatch):
     monkeypatch.setattr(capability_registry, "driver", VERCEL_DRIVER)
     tools = {
         tool["id"]: tool
         for tool in capability_registry.effective_tools()
     }
-    # Ghostscript-only tools are unavailable on Vercel.
-    assert tools["pdf-compressor"]["status"] == "unavailable"
-    assert tools["pdf-to-image"]["status"] == "unavailable"
+    # All tools, including PDF tools, are available on Vercel.
+    assert tools["pdf-compressor"]["status"] == "available"
+    assert tools["pdf-to-image"]["status"] == "available"
     assert tools["background-remover"]["status"] == "available"
     assert tools["image-compressor"]["status"] == "available"
     assert tools["qr-generator"]["status"] == "available"
@@ -62,7 +62,7 @@ def test_is_available_reflects_driver(monkeypatch):
 
     monkeypatch.setattr(capability_registry, "driver", VERCEL_DRIVER)
     assert capability_registry.is_available("background-remover")
-    assert not capability_registry.is_available("pdf-compressor")
+    assert capability_registry.is_available("pdf-compressor")
     assert capability_registry.is_available("qr-generator")
 
 
