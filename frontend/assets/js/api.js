@@ -77,6 +77,7 @@ export async function startBatchCompression({
     maxDimension = null,
     targetSizeKb = null,
     stripMetadata = true,
+    quality = null,
 }) {
     const formData = new FormData();
     for (const file of files) {
@@ -86,6 +87,10 @@ export async function startBatchCompression({
     const params = new URLSearchParams();
     params.set("image_output_format", imageOutputFormat);
     params.set("compression_preset", compressionPreset);
+
+    if (quality !== null && quality !== "") {
+        params.set("quality", String(quality));
+    }
 
     if (maxDimension !== null && maxDimension !== "") {
         params.set("max_dimension", String(maxDimension));
@@ -108,6 +113,50 @@ export async function startBatchCompression({
     const data = await parseJsonResponse(response);
     if (!response.ok) {
         throw new Error(extractErrorMessage(data, "Unable to compress files."));
+    }
+    return data;
+}
+
+export async function startImageCompression({
+    files,
+    outputFormat = "auto",
+    quality = null,
+    compressionPreset = "balanced",
+    maxDimension = null,
+    targetSize = null,
+    removeMetadata = true,
+}) {
+    const formData = new FormData();
+    for (const file of files) {
+        formData.append("files", file);
+    }
+
+    if (quality !== null && quality !== "") {
+        formData.append("quality", String(quality));
+    }
+    formData.append("output_format", outputFormat);
+    formData.append("compression_preset", compressionPreset);
+    formData.append("remove_metadata", String(removeMetadata));
+
+    if (maxDimension !== null && maxDimension !== "") {
+        formData.append("max_dimension", String(maxDimension));
+    }
+
+    if (targetSize !== null && targetSize !== "") {
+        formData.append("target_size", String(targetSize));
+    }
+
+    const response = await safeFetch(
+        `${API_BASE_URL}/images/compress`,
+        {
+            method: "POST",
+            body: formData,
+        }
+    );
+
+    const data = await parseJsonResponse(response);
+    if (!response.ok) {
+        throw new Error(extractErrorMessage(data, "Unable to compress images."));
     }
     return data;
 }
