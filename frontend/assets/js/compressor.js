@@ -40,7 +40,7 @@ let cancelling = false;
 let userCancelled = false;
 let selectedTargetSize = null;
 
-// use formatBytes, showElement, hideElement from utils
+
 
 function isSupportedFile(file) {
     return (
@@ -424,13 +424,13 @@ function renderCompletedFiles(job) {
         const details = document.createElement("div");
         details.className = "completed-file-details";
 
-        // format
+        
         const formatSpan = document.createElement("span");
         formatSpan.className = "completed-file-detail";
         formatSpan.textContent = file.output_format ? String(file.output_format).toUpperCase() : "";
         details.appendChild(formatSpan);
 
-        // dimensions
+        
         if (file.width && file.height) {
             const dimensions = document.createElement("span");
             dimensions.className = "completed-file-detail";
@@ -438,7 +438,7 @@ function renderCompletedFiles(job) {
             details.appendChild(dimensions);
         }
 
-        // preset label
+        
         function getPresetLabel(preset) {
             if (preset === "best_quality") return "Best quality";
             if (preset === "smallest") return "Smallest practical size";
@@ -452,7 +452,7 @@ function renderCompletedFiles(job) {
             details.appendChild(preset);
         }
 
-        // target info
+        
         if (file.target_size_bytes) {
             const target = document.createElement("span");
             target.className = "completed-file-detail";
@@ -483,7 +483,7 @@ function renderCompletedFiles(job) {
 
         element.appendChild(info);
 
-        // thumbnail (click to open comparison modal)
+        
         const thumb = document.createElement("div");
         thumb.className = "completed-file-thumb";
         if (files) {
@@ -567,14 +567,14 @@ function showComparisonModal(originalUrl, compressedUrl, filename) {
 
     slider.addEventListener("input", (e) => update(e.target.value));
 
-    // focus management / trap
+    
     const focusable = [close, slider];
     let lastFocusedIndex = 0;
 
     function keyHandler(e) {
         if (e.key === "Tab") {
             e.preventDefault();
-            // forward/backward
+            
             if (e.shiftKey) {
                 lastFocusedIndex = (lastFocusedIndex - 1 + focusable.length) % focusable.length;
             } else {
@@ -608,10 +608,10 @@ function showComparisonModal(originalUrl, compressedUrl, filename) {
     document.addEventListener("keydown", keyHandler);
     overlay.addEventListener("click", clickOutside);
 
-    // initial focus
+    
     close.focus();
 
-    // expose for tests
+    
     try {
         window.__showComparisonModalForTest = showComparisonModal;
     } catch (e) {}
@@ -833,11 +833,11 @@ compressButton.addEventListener("click", async () => {
         result.offsetHeight;
         result.style.animation = "fadeIn 400ms ease-out";
         
-        // Register a successful use for the support popup
+        
         try {
             registerUse();
         } catch (e) {
-            // ignore popup errors
+            
         }
     } catch (error) {
         hide(processing);

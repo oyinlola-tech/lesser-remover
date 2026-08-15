@@ -1,5 +1,4 @@
 @media (max-width: 900px) {
-
     .tool-grid {
         grid-template-columns: 1fr;
     }
@@ -9,8 +8,7 @@
     }
 
     .compression-summary {
-        grid-template-columns:
-            1fr 1fr;
+        grid-template-columns: 1fr 1fr;
     }
 
     .size-arrow {
@@ -19,22 +17,11 @@
 
     .saving-block {
         padding-left: 0;
-
         border-left: 0;
     }
 }
 
-
 @media (max-width: 700px) {
-
-    .container {
-        width:
-            min(
-                calc(100% - 24px),
-                var(--container-width)
-            );
-    }
-
     .header-inner {
         min-height: 64px;
     }
@@ -43,27 +30,12 @@
         display: none;
     }
 
-    .header-actions {
-        gap: 8px;
-    }
-
     .header-star-button span {
         display: none;
     }
 
-    .landing {
-        padding:
-            64px 0 72px;
-    }
-
-    .landing h1 {
-        font-size:
-            3rem;
-    }
-
-    .landing-description {
-        font-size:
-            var(--font-size-md);
+    .header-menu-toggle {
+        display: grid;
     }
 
     .tool-grid {
@@ -71,29 +43,24 @@
     }
 
     .tool-card {
-        min-height: 260px;
-
-        padding: 24px;
+        min-height: 240px;
+        padding: var(--space-6);
     }
 
     .hero {
-        padding:
-            64px 0 48px;
+        padding: 48px 0;
     }
 
     .hero h1 {
-        font-size:
-            2.8rem;
+        font-size: 2.8rem;
     }
 
     .hero-description {
-        font-size:
-            var(--font-size-md);
+        font-size: var(--font-size-md);
     }
 
     .drop-zone {
         min-height: 320px;
-
         padding: 24px;
     }
 
@@ -103,17 +70,14 @@
 
     .saving-block {
         padding-top: 18px;
-
-        border-top:
-            1px solid var(--color-border);
+        border-top: 1px solid var(--color-border);
     }
 
     .compression-result-actions {
         display: block;
     }
 
-    .compression-result-actions
-    .primary-button {
+    .compression-result-actions .primary-button {
         width: 100%;
     }
 
@@ -122,15 +86,11 @@
     }
 
     .queue-header {
-        align-items:
-            flex-start;
+        align-items: flex-start;
     }
 
     .file-queue-item {
-        grid-template-columns:
-            auto
-            minmax(0, 1fr)
-            auto;
+        grid-template-columns: auto minmax(0, 1fr) auto;
     }
 
     .file-queue-status {
@@ -141,9 +101,6 @@
         grid-column: 3;
         grid-row: 1;
     }
-}
-
-@media (max-width: 700px) {
 
     .image-comparison {
         min-height: 260px;
@@ -154,6 +111,11 @@
         padding: 6px 10px;
     }
 
-    .comparison-label-original { left:12px; }
-    .comparison-label-processed { right:12px; }
+    .comparison-label-original {
+        left: 12px;
+    }
+
+    .comparison-label-processed {
+        right: 12px;
+    }
 }

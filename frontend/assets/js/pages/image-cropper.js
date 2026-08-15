@@ -5,12 +5,12 @@ if (!kit.available) {
     setupUpload({ onFiles: () => {} });
 } else {
     const MAX_PREVIEW = 900;
-    let source = null; // original Image
+    let source = null; 
     let rotation = 0;
     let flipH = false;
     let flipV = false;
-    let ratio = 0; // 0 = free
-    let crop = null; // {x,y,w,h} in preview coordinates
+    let ratio = 0; 
+    let crop = null; 
     let dragging = null;
 
     const frame = document.querySelector("#crop-canvas-frame");

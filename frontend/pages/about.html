@@ -3,11 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#fbfbf7" />
     <meta name="description" content="About Utils-tool — a free, local-first collection of file utilities built for privacy and precision. No accounts, no cloud uploads, no tracking." />
     <meta name="keywords" content="about utils-tool, local-first tools, privacy focused, open source, file utilities, image tools, pdf tools" />
     <meta name="author" content="Oluwayemi Oyinlola" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://tools.oyinlola.site/about" />
+
+    <meta property="og:site_name" content="Utils-tool" />
     <meta property="og:title" content="About — Utils-tool" />
     <meta property="og:description" content="Free, local-first file tools built for privacy. Compress, convert, edit, and process files without uploads or accounts." />
     <meta property="og:url" content="https://tools.oyinlola.site/about" />
@@ -16,28 +20,71 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="About — Utils-tool" />
     <meta name="twitter:description" content="Free, local-first file tools built for privacy." />
+    <meta name="twitter:site" content="@oyinlola" />
+
     <title>About — Utils-tool</title>
+
     <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
     <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
     <script type="module" src="/static/assets/js/error-boundary.js"></script>
+
     <link rel="stylesheet" href="/static/assets/css/reset.css" />
     <link rel="stylesheet" href="/static/assets/css/variables.css" />
     <link rel="stylesheet" href="/static/assets/css/base.css" />
     <link rel="stylesheet" href="/static/assets/css/components.css" />
     <link rel="stylesheet" href="/static/assets/css/pages.css" />
     <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://tools.oyinlola.site/#website",
+          "url": "https://tools.oyinlola.site/",
+          "name": "Utils-tool",
+          "inLanguage": "en"
+        },
+        {
+          "@type": "AboutPage",
+          "@id": "https://tools.oyinlola.site/about#page",
+          "url": "https://tools.oyinlola.site/about",
+          "name": "About Utils-tool",
+          "description": "Why Utils-tool was built and the principles behind it: privacy first, calibrated output and built to last.",
+          "inLanguage": "en",
+          "isPartOf": {
+            "@id": "https://tools.oyinlola.site/#website"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Oluwayemi Oyinlola",
+            "url": "https://oyinlola.site/"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="site-header"></div>
 
-    <main>
-      <section class="page-hero">
+    <main id="main">
+      <section class="page-hero" aria-labelledby="about-title">
         <div class="container">
           <div class="section-header">
             <span class="eyebrow">About</span>
-            <h1 class="page-title">Built for the work you do, quietly and privately.</h1>
+            <h1 class="page-title" id="about-title">Built for the work you do, quietly and privately.</h1>
             <p class="hero-description">
               Utils-tool is a collection of file utilities — image compression, PDF tools,
               developer assets, and more — that run on your machine. No accounts, no cloud
@@ -55,7 +102,7 @@
               <p>
                 Every designer, developer, and content creator has the same recurring task:
                 shrink a PDF before sending it, strip a background from a product photo, resize
-                images for Instagram, or generate a favicon set from a single SVG. Each of
+                images for a social post, or generate a favicon set from a single SVG. Each of
                 these is a quick, private job — but the tools that handle them either require
                 an account, upload your files to a server, or cost more than they should.
               </p>
@@ -68,7 +115,7 @@
             </div>
             <div class="story-stats">
               <div class="stat-item">
-                <strong>23+</strong>
+                <strong>28</strong>
                 <span>Tools</span>
               </div>
               <div class="stat-item">
@@ -77,7 +124,11 @@
               </div>
               <div class="stat-item">
                 <strong>0</strong>
-                <span>Accounts or tracking</span>
+                <span>Accounts</span>
+              </div>
+              <div class="stat-item">
+                <strong>0</strong>
+                <span>Tracking</span>
               </div>
             </div>
           </div>
@@ -138,16 +189,16 @@
               <span>Python backend with type-safe APIs</span>
             </div>
             <div class="tech-item">
-              <strong>Pillow + Sharp</strong>
+              <strong>Pillow</strong>
               <span>Image processing and conversion</span>
             </div>
             <div class="tech-item">
-              <strong>rembg + onnxruntime</strong>
+              <strong>rembg</strong>
               <span>Background removal with ONNX models</span>
             </div>
             <div class="tech-item">
-              <strong>pdf-lib</strong>
-              <span>Client-side PDF manipulation</span>
+              <strong>Ghostscript</strong>
+              <span>PDF compression and conversion</span>
             </div>
             <div class="tech-item">
               <strong>Potrace</strong>
@@ -204,12 +255,10 @@
     <div id="site-footer"></div>
 
     <script type="module" src="/static/assets/js/app.js"></script>
-    <!-- Vercel Web Analytics -->
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
-    <!-- Vercel Speed Insights -->
     <script>
       window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
     </script>

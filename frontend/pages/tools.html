@@ -3,25 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#fbfbf7" />
     <meta name="description" content="Browse all Utils-tool file utilities. Image compression, PDF tools, developer tools, and more. Free, local-first, no accounts." />
     <meta name="keywords" content="file tools, image tools, pdf tools, developer tools, background remover, image compressor, pdf compressor, free online tools" />
     <meta name="author" content="Oluwayemi Oyinlola" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://tools.oyinlola.site/tools" />
+
+    <meta property="og:site_name" content="Utils-tool" />
     <meta property="og:title" content="All Tools — Utils-tool" />
-    <meta property="og:description" content="Browse all file utilities. 23+ tools for images, PDFs, files, and developers." />
+    <meta property="og:description" content="Browse all file utilities. 28 tools for images, PDFs, files, and developers." />
     <meta property="og:url" content="https://tools.oyinlola.site/tools" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://tools.oyinlola.site/static/assets/img/og-image.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="All Tools — Utils-tool" />
-    <meta name="twitter:description" content="Browse all file utilities. 23+ tools for images, PDFs, files, and developers." />
+    <meta name="twitter:description" content="Browse all file utilities. 28 tools for images, PDFs, files, and developers." />
+    <meta name="twitter:site" content="@oyinlola" />
+
     <title>All Tools — Utils-tool</title>
+
     <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
     <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
     <script type="module" src="/static/assets/js/error-boundary.js"></script>
+
     <link rel="stylesheet" href="/static/assets/css/reset.css" />
     <link rel="stylesheet" href="/static/assets/css/variables.css" />
     <link rel="stylesheet" href="/static/assets/css/base.css" />
@@ -29,25 +45,62 @@
     <link rel="stylesheet" href="/static/assets/css/pages.css" />
     <link rel="stylesheet" href="/static/assets/css/tools.css" />
     <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://tools.oyinlola.site/#website",
+          "url": "https://tools.oyinlola.site/",
+          "name": "Utils-tool",
+          "inLanguage": "en"
+        },
+        {
+          "@type": "CollectionPage",
+          "@id": "https://tools.oyinlola.site/tools#page",
+          "url": "https://tools.oyinlola.site/tools",
+          "name": "All Tools — Utils-tool",
+          "description": "All file utilities for images, PDFs, files, and developers.",
+          "inLanguage": "en",
+          "isPartOf": {
+            "@id": "https://tools.oyinlola.site/#website"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="site-header"></div>
 
-    <main>
-      <section class="page-hero">
+    <main id="main">
+      <section class="page-hero" aria-labelledby="tools-title">
         <div class="container">
           <div class="section-header">
             <span class="eyebrow">Tools</span>
-            <h1 class="page-title">Everything you need, one click away.</h1>
+            <h1 class="page-title" id="tools-title">Everything you need, one click away.</h1>
             <p class="hero-description">
-              20+ utilities for images, PDFs, files, and developer assets — all running locally
+              28 utilities for images, PDFs, files, and developer assets — all running locally
               in your browser. No accounts. No uploads. No tracking.
             </p>
           </div>
         </div>
       </section>
 
-      <section class="tool-catalog-section" id="tools">
+      <section class="tools-filter" aria-label="Filter tools">
+        <div class="container tools-filter-row">
+          <div class="tools-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <input type="search" data-tools-search placeholder="Search tools…" aria-label="Search tools" />
+          </div>
+          <div class="filter-chips" data-filter-chips role="group" aria-label="Filter by category"></div>
+          <span class="tools-count" data-tools-count></span>
+        </div>
+      </section>
+
+      <section class="tool-catalog-section" id="tools" aria-label="Tool catalog">
         <div class="container">
           <div id="tool-catalog" class="tool-catalog" aria-live="polite">
             <p class="catalog-loading">Loading tools…</p>
@@ -60,12 +113,10 @@
 
     <script type="module" src="/static/assets/js/app.js"></script>
     <script type="module" src="/static/assets/js/pages/tools.js"></script>
-    <!-- Vercel Web Analytics -->
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
-    <!-- Vercel Speed Insights -->
     <script>
       window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
     </script>

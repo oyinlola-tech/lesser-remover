@@ -5,18 +5,7 @@ const MIME_EXTENSION_MAP = {
     "application/pdf": [".pdf"],
 };
 
-/**
- * Reusable upload zone with click + drag-and-drop support.
- *
- * Usage:
- *   const uploader = new UploadZone(document.querySelector("#upload"), {
- *       accept: "image/*,.pdf",
- *       multiple: true,
- *       maxFiles: 20,
- *       maxSizeMb: 50,
- *       onFiles: (files) => { ... },
- *   });
- */
+
 export class UploadZone {
     constructor(host, options = {}) {
         this.host = host;
@@ -171,9 +160,7 @@ export class UploadZone {
     }
 }
 
-/**
- * Indeterminate processing panel with a live message.
- */
+
 export class ProcessingPanel {
     constructor(host, options = {}) {
         this.host = host;
@@ -212,9 +199,7 @@ export class ProcessingPanel {
     }
 }
 
-/**
- * Error banner.
- */
+
 export class ErrorBanner {
     constructor(host) {
         this.host = host;
@@ -233,9 +218,7 @@ export class ErrorBanner {
     }
 }
 
-/**
- * Download card for a single processed file.
- */
+
 export function createDownloadCard({
     filename,
     originalSize,

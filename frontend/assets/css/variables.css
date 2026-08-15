@@ -1,36 +1,39 @@
 :root {
-    /* ============
-       Color palette
-       ============ */
-    --color-background: #f7f7f2;
+    --color-background: #fbfbf7;
     --color-surface: #ffffff;
-    --color-surface-muted: #f0f0ea;
-    --color-surface-strong: #e9e9e3;
+    --color-surface-muted: #f1f3eb;
+    --color-surface-strong: #e8ebdd;
 
-    --color-text: #163300;
-    --color-text-secondary: #55634f;
-    --color-text-muted: #7b8476;
+    --color-text: #15230d;
+    --color-text-secondary: #4d5a47;
+    --color-text-muted: #79836f;
 
-    --color-primary: #9fe870;
-    --color-primary-hover: #8ddd5e;
-    --color-primary-soft: #e9f7e2;
+    --color-primary: #a3e872;
+    --color-primary-hover: #93d864;
+    --color-primary-soft: #ecf8e2;
     --color-accent: var(--color-primary);
 
-    --color-border: #deded6;
-    --color-border-strong: #c8c8be;
+    --color-border: #e5e6db;
+    --color-border-strong: #ccd0bd;
 
-    --color-success: #377d3a;
-    --color-success-soft: #e6f4e6;
-    --color-warning: #9a6b00;
-    --color-warning-soft: #fdf3dc;
+    --color-success: #3d7a3c;
+    --color-success-soft: #e7f4e6;
+    --color-warning: #936900;
+    --color-warning-soft: #fcf3dc;
     --color-danger: #b3261e;
     --color-danger-soft: #fff0f0;
 
-    /* ============
-       Typography
-       ============ */
+    --font-display:
+        "Space Grotesk",
+        "Inter",
+        ui-sans-serif,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
     --font-family:
-        Inter,
+        "Inter",
         ui-sans-serif,
         -apple-system,
         BlinkMacSystemFont,
@@ -54,8 +57,7 @@
     --font-size-3xl: 4rem;
     --font-size-4xl: 7rem;
 
-    /* Display — largest section headings */
-    --font-size-display: clamp(2.75rem, 7vw, var(--font-size-4xl));
+    --font-size-display: clamp(2.5rem, 6vw, 4.5rem);
 
     --font-weight-regular: 400;
     --font-weight-medium: 500;
@@ -63,7 +65,7 @@
     --font-weight-bold: 700;
     --font-weight-black: 900;
 
-    --line-height-tight: 1.1;
+    --line-height-tight: 1.05;
     --line-height-snug: 1.15;
     --line-height-normal: 1.5;
     --line-height-relaxed: 1.65;
@@ -72,9 +74,6 @@
     --letter-spacing-normal: 0;
     --letter-spacing-wide: 0.04em;
 
-    /* ============
-       Spacing scale (base 4)
-       ============ */
     --space-1: 4px;
     --space-2: 8px;
     --space-3: 12px;
@@ -92,9 +91,6 @@
     --space-20: 80px;
     --space-24: 96px;
 
-    /* ============
-       Radius & borders
-       ============ */
     --radius-xs: 6px;
     --radius-sm: 8px;
     --radius-md: 12px;
@@ -105,45 +101,32 @@
     --border-width-thin: 1px;
     --border-width-thick: 2px;
 
-    /* ============
-       Shadows
-       ============ */
     --shadow-sm:
-        0 2px 8px rgba(22, 51, 0, 0.05);
+        0 2px 8px rgba(21, 35, 13, 0.05);
 
     --shadow-md:
-        0 16px 45px rgba(22, 51, 0, 0.08);
+        0 16px 45px rgba(21, 35, 13, 0.08);
 
     --shadow-lg:
-        0 25px 60px rgba(22, 51, 0, 0.10);
+        0 25px 60px rgba(21, 35, 13, 0.1);
 
     --shadow-xl:
-        0 32px 70px rgba(22, 51, 0, 0.12);
+        0 32px 70px rgba(21, 35, 13, 0.12);
 
-    /* ============
-       Layout
-       ============ */
     --container-width: 1200px;
     --max-content-width: 1200px;
     --content-max-width: 680px;
 
-    /* ============
-       Layout tokens
-       ============ */
     --header-height: 4rem;
     --header-height-sm: 3.5rem;
-    --footer-padding-top: clamp(2.5rem, 6vw, 4rem);
-    --footer-padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
+    --footer-padding-top: clamp(2rem, 4vw, 3rem);
+    --footer-padding-bottom: clamp(1.25rem, 3vw, 2rem);
 
-    /* ============
-       Animation tokens
-       ============ */
+    --color-focus-ring: #7ecb4c;
+
     --ease-out-quad: cubic-bezier(0.645, 0.045, 0.355, 1);
     --ease-in-out-quad: cubic-bezier(0.455, 0.005, 0.55, 0.99);
 
-    /* ============
-       Transitions
-       ============ */
     --transition-fast: 150ms ease;
     --transition-normal: 250ms ease;
     --transition-slow: 400ms ease;

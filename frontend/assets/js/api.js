@@ -190,9 +190,7 @@ export async function getCapabilities() {
     return data;
 }
 
-/**
- * Generic JSON API call.
- */
+
 export async function apiGet(path) {
     const response = await safeFetch(`${API_BASE_URL}${path}`);
     const data = await parseJsonResponse(response);
@@ -219,9 +217,7 @@ function buildFormData(files = [], fields = {}) {
     return formData;
 }
 
-/**
- * Generic multipart upload that returns parsed JSON.
- */
+
 export async function apiUpload(path, { files = [], fields = {} } = {}) {
     const formData = buildFormData(files, fields);
     const response = await safeFetch(`${API_BASE_URL}${path}`, {
@@ -235,9 +231,7 @@ export async function apiUpload(path, { files = [], fields = {} } = {}) {
     return data;
 }
 
-/**
- * Generic multipart upload that returns the raw file blob.
- */
+
 export async function apiDownload(path, { files = [], fields = {} } = {}) {
     const formData = buildFormData(files, fields);
     const response = await safeFetch(`${API_BASE_URL}${path}`, {

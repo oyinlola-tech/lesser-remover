@@ -8,16 +8,7 @@ import {
 } from "../components/ui.js";
 import { showElement, hideElement, formatBytes } from "../utils.js";
 
-/**
- * Shared bootstrap for tool pages.
- *
- * Renders the site shell, loads capabilities, and gates the tool UI
- * on availability. Returns helpers used by every tool page:
- *
- *   const kit = await initToolPage("image-converter");
- *   kit.setBusy(true, "Converting your image...");
- *   kit.banner.show("Something went wrong");
- */
+
 export async function initToolPage(toolId) {
     renderShell();
 
@@ -90,10 +81,7 @@ export function showResultBox(host) {
     showElement(host);
 }
 
-/**
- * Wire the #tool-upload host to an UploadZone using its data
- * attributes (set by the page template).
- */
+
 export function setupUpload({ onFiles, extraAccept = "" }) {
     const host = document.querySelector("#tool-upload");
     const accept = (host.dataset.accept || "") + (extraAccept ? "," + extraAccept : "");
@@ -110,9 +98,7 @@ export function setupUpload({ onFiles, extraAccept = "" }) {
     });
 }
 
-/**
- * Render a single processed file (image preview + download card).
- */
+
 export function renderImageResult(host, result, { originalSize = null } = {}) {
     host.innerHTML = "";
     const grid = document.createElement("div");
@@ -170,9 +156,7 @@ export function renderImageResult(host, result, { originalSize = null } = {}) {
     return preview;
 }
 
-/**
- * Render a generic file result card (PDF, ZIP, ...).
- */
+
 export function renderFileResult(host, result, { originalSize = null } = {}) {
     host.innerHTML = "";
     const card = createDownloadCard({

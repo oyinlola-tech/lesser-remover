@@ -131,7 +131,7 @@ function showResult(data) {
     try {
         registerUse();
     } catch (e) {
-        // ignore popup errors
+        
     }
 }
 

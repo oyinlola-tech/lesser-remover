@@ -67,13 +67,18 @@
   text-transform: uppercase;
 }
 
+.hero {
+  padding: clamp(2rem, 5vw, 3.5rem) 0 var(--space-10);
+}
+
 .hero h1 {
   max-width: 760px;
   margin: 0;
-  font-size: clamp(3rem, 7vw, var(--font-size-4xl));
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 6vw, var(--font-size-3xl));
   line-height: var(--line-height-tight);
   letter-spacing: var(--letter-spacing-tight);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-bold);
 }
 
 .hero-description {
@@ -782,7 +787,7 @@
   object-fit: cover;
 }
 
-/* Comparison modal used by compressor thumbnails */
+
 .comparison-modal {
   position: fixed;
   inset: 0;
@@ -836,7 +841,7 @@
   margin-top: 12px;
 }
 
-/* Completed file details */
+
 .completed-file-details {
   display: flex;
   flex-wrap: wrap;
@@ -1673,7 +1678,7 @@
   font-size: var(--font-size-lg);
 }
 
-/* Variant savings chip */
+
 .variant-savings {
   display: inline-flex;
   margin-top: 14px;
@@ -1685,7 +1690,7 @@
   font-weight: var(--font-weight-bold);
 }
 
-/* Failed files section (compression result) */
+
 .failed-files {
    margin-top: 28px;
    padding: 20px;
@@ -1728,26 +1733,26 @@
   line-height: var(--line-height-normal);
 }
 
-/* Partial success badge */
+
 .success-badge.partial {
    background: var(--color-warning-soft);
    color: var(--color-warning);
 }
 
-/* Neutral info state for error boxes (e.g. user cancelled) */
+
 .error-message.is-info {
   background: var(--color-primary-soft);
   color: var(--color-text);
 }
 
-/* Disabled controls */
+
 .output-option:disabled,
 .quality-option:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Visible focus states */
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -1759,7 +1764,7 @@ summary:focus-visible,
   border-radius: 4px;
 }
 
-/* Respect reduced-motion preferences */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1771,9 +1776,7 @@ summary:focus-visible,
   }
 }
 
-/* ============================================================
-   Shared tool page kit
-   ============================================================ */
+
 
 .tool-card {
   background: var(--color-surface, #ffffff);
