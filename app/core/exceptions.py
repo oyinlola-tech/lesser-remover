@@ -17,13 +17,53 @@ environment variables, or internal tokens.
 
 import logging
 import uuid
+from pathlib import Path
 
 from fastapi import HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from app.api import API_PREFIX
+
 logger = logging.getLogger(__name__)
+
+ERROR_PAGES_DIR = (
+    Path(__file__).resolve().parents[2] / "frontend" / "errors"
+)
+
+
+def _wants_html(request: Request) -> bool:
+    """A browser navigation wants an HTML page; API calls want JSON."""
+    if request.url.path.startswith(API_PREFIX):
+        return False
+    accept = request.headers.get("accept", "")
+    return "text/html" in accept
+
+
+def _error_page_response(
+    request: Request,
+    status_code: int,
+    code: str,
+    message: str,
+):
+    """Return the designed error page for browsers, JSON for the API."""
+    if _wants_html(request):
+        page = ERROR_PAGES_DIR / f"{status_code}.html"
+        if page.is_file():
+            return HTMLResponse(
+                page.read_text(encoding="utf-8"),
+                status_code=status_code,
+            )
+    return JSONResponse(
+        status_code=status_code,
+        content=_error_payload(
+            request,
+            code,
+            message,
+            status_code,
+        ),
+    )
 
 
 class AppException(Exception):
@@ -129,14 +169,11 @@ def register_exception_handlers(app) -> None:
         request: Request,
         exc: AppException,
     ):
-        return JSONResponse(
-            status_code=exc.status_code,
-            content=_error_payload(
-                request,
-                exc.code,
-                exc.message,
-                exc.status_code,
-            ),
+        return _error_page_response(
+            request,
+            exc.status_code,
+            exc.code,
+            exc.message,
         )
 
     @app.exception_handler(HTTPException)
@@ -154,14 +191,11 @@ def register_exception_handlers(app) -> None:
         }
         code = code_map.get(exc.status_code, "REQUEST_ERROR")
         message = exc.detail if isinstance(exc.detail, str) else str(exc.detail)
-        return JSONResponse(
-            status_code=exc.status_code,
-            content=_error_payload(
-                request,
-                code,
-                message,
-                exc.status_code,
-            ),
+        return _error_page_response(
+            request,
+            exc.status_code,
+            code,
+            message,
         )
 
     @app.exception_handler(StarletteHTTPException)
@@ -188,14 +222,11 @@ def register_exception_handlers(app) -> None:
             )
         except (IndexError, KeyError, TypeError):
             pass
-        return JSONResponse(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            content=_error_payload(
-                request,
-                "VALIDATION_ERROR",
-                message,
-                status.HTTP_422_UNPROCESSABLE_ENTITY,
-            ),
+        return _error_page_response(
+            request,
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            "VALIDATION_ERROR",
+            message,
         )
 
     @app.exception_handler(Exception)
@@ -208,12 +239,9 @@ def register_exception_handlers(app) -> None:
             request.method,
             request.url.path,
         )
-        return JSONResponse(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            content=_error_payload(
-                request,
-                "INTERNAL_ERROR",
-                "An unexpected error occurred. Please try again.",
-                status.HTTP_500_INTERNAL_SERVER_ERROR,
-            ),
+        return _error_page_response(
+            request,
+            status.HTTP_500_INTERNAL_SERVER_ERROR,
+            "INTERNAL_ERROR",
+            "An unexpected error occurred. Please try again.",
         )
