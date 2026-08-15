@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Scale by percentage, exact dimensions or a maximum size while keeping aspect ratio under control." />
+    <meta name="description" content="Resize images to exact dimensions or proportional sizes. Maintain aspect ratio, use presets, choose output format. Local, private, no account needed." />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://www.oyinlola.site/tools/image-resizer" />
+    <link rel="canonical" href="https://tools.oyinlola.site/tools/image-resizer" />
     <meta property="og:title" content="Image Resizer - Utils-tool" />
-    <meta property="og:description" content="Scale by percentage, exact dimensions or a maximum size while keeping aspect ratio under control." />
+    <meta property="og:description" content="Resize images to exact dimensions or proportional sizes with aspect-ratio control and social media presets." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.oyinlola.site/tools/image-resizer" />
+    <meta property="og:url" content="https://tools.oyinlola.site/tools/image-resizer" />
     <meta name="twitter:card" content="summary_large_image" />
     <title>Image Resizer - Utils-tool</title>
     <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
@@ -30,53 +30,156 @@
         <div class="container">
           <div class="hero-content">
             <span class="eyebrow">Image tool</span>
-            <h1>Resize images to any size.</h1>
-            <p class="hero-description">Scale by percentage, exact dimensions or a maximum size while keeping aspect ratio under control.</p>
+            <h1>Resize images without losing control of their proportions.</h1>
+            <p class="hero-description">
+              Set exact dimensions, scale by percentage, fit within maximum
+              bounds, or pick a preset for social media. Aspect ratio, quality
+              and format controls are all yours.
+            </p>
           </div>
+
           <section class="tool-card">
             <div id="tool-unavailable" class="hidden" role="alert"></div>
-            
-            <div id="tool-upload" data-accept="image/*" data-multiple="false" data-max-files="1" data-hint="JPG, PNG, WebP or AVIF up to 25 MB"></div>
-        
+
+            <div id="tool-upload" data-accept="image/jpeg,image/png,image/webp,image/jpg" data-multiple="true" data-max-files="50" data-hint="JPG, PNG, WebP up to 25 MB"></div>
+
             <div class="tool-options" id="tool-options">
-<div class="option-field">
-              <label>Mode</label>
-              <div class="segmented" id="resize-mode">
-                <button type="button" data-mode="percent" class="active">Percentage</button>
-                <button type="button" data-mode="dimensions">Dimensions</button>
-                <button type="button" data-mode="max">Max size</button>
+              <div class="option-row">
+                <div class="option-field">
+                  <label for="resize-mode">Resize mode</label>
+                  <div class="segmented-control" id="resize-mode" role="radiogroup">
+                    <button type="button" class="segmented-button active" data-mode="aspect">Aspect ratio</button>
+                    <button type="button" class="segmented-button" data-mode="exact">Exact</button>
+                    <button type="button" class="segmented-button" data-mode="percent">Percentage</button>
+                    <button type="button" class="segmented-button" data-mode="max">Maximum</button>
+                  </div>
+                </div>
               </div>
+
+              <div class="option-row">
+                <div class="option-field" id="field-width">
+                  <label for="width-input">Width</label>
+                  <div class="dimension-input">
+                    <input id="width-input" type="number" min="1" placeholder="Auto" />
+                    <span class="dimension-unit">px</span>
+                  </div>
+                </div>
+
+                <div class="option-field" id="field-height">
+                  <label for="height-input">Height</label>
+                  <div class="dimension-input">
+                    <input id="height-input" type="number" min="1" placeholder="Auto" />
+                    <span class="dimension-unit">px</span>
+                  </div>
+                  <button type="button" class="aspect-lock-button" id="aspect-lock" aria-label="Lock aspect ratio">
+                    <span class="aspect-lock-icon" aria-hidden="true">🔗</span>
+                    <span class="aspect-lock-text">Locked</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="option-row hidden" id="field-percent">
+                <div class="option-field">
+                  <label for="percent-input">Percentage</label>
+                  <div class="dimension-input">
+                    <input id="percent-input" type="number" min="0.01" max="10000" step="0.01" value="50" />
+                    <span class="dimension-unit">%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="option-row hidden" id="field-max">
+                <div class="option-field" id="field-max-width">
+                  <label for="max-width-input">Maximum width</label>
+                  <div class="dimension-input">
+                    <input id="max-width-input" type="number" min="1" placeholder="Auto" />
+                    <span class="dimension-unit">px</span>
+                  </div>
+                </div>
+
+                <div class="option-field" id="field-max-height">
+                  <label for="max-height-input">Maximum height</label>
+                  <div class="dimension-input">
+                    <input id="max-height-input" type="number" min="1" placeholder="Auto" />
+                    <span class="dimension-unit">px</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="option-row">
+                <div class="option-field">
+                  <label>Lock aspect ratio</label>
+                  <div class="toggle-container">
+                    <label class="toggle">
+                      <input id="maintain-aspect" type="checkbox" checked />
+                      <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                      <span class="toggle-label">Maintain aspect ratio</span>
+                    </label>
+                    <label class="toggle">
+                      <input id="allow-upscale" type="checkbox" />
+                      <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                      <span class="toggle-label">Allow upscaling</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="option-row">
+                <div class="option-field">
+                  <label for="resize-format">Output format</label>
+                  <select id="resize-format">
+                    <option value="auto">Auto — preserve format</option>
+                    <option value="jpg">JPEG</option>
+                    <option value="png">PNG</option>
+                    <option value="webp">WebP</option>
+                  </select>
+                </div>
+                <div class="option-field" id="quality-field">
+                  <label for="quality-input">Quality</label>
+                  <div class="quality-control">
+                    <input id="quality-input" type="number" min="1" max="100" value="90" class="quality-input" />
+                    <input id="quality-slider" type="range" min="1" max="100" value="90" aria-label="Quality" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="option-row hidden" id="field-background">
+                <div class="option-field">
+                  <label for="background-color">Background color (for JPEG)</label>
+                  <input id="background-color" type="text" placeholder="#ffffff" value="#ffffff" />
+                  <p class="file-hint">Used when converting transparent images to JPEG.</p>
+                </div>
+              </div>
+
+              <div class="option-row">
+                <div class="option-field">
+                  <label>Metadata</label>
+                  <label class="toggle">
+                    <input id="remove-metadata" type="checkbox" checked />
+                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                    <span class="toggle-label">Remove metadata (EXIF, GPS)</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="option-row">
+                <div class="option-field">
+                  <label>Dimension presets</label>
+                  <div class="preset-grid" id="standard-presets"></div>
+                </div>
+              </div>
+
+              <div class="option-row">
+                <div class="option-field">
+                  <label>Social media presets</label>
+                  <div class="preset-grid" id="social-presets"></div>
+                </div>
+              </div>
+
+              <p class="file-hint" id="transparency-hint">For PNG/WebP output, transparency is preserved. For JPEG, transparent areas are filled with the background color.</p>
             </div>
-            <div class="option-row">
-              <div class="option-field" id="field-percent">
-                <label for="percent">Percentage</label>
-                <input type="number" id="percent" min="1" max="500" value="50" />
-              </div>
-              <div class="option-field hidden" id="field-dimensions">
-                <label for="width">Width (px)</label>
-                <input type="number" id="width" min="1" value="800" />
-              </div>
-              <div class="option-field hidden" id="field-height">
-                <label for="height">Height (px)</label>
-                <input type="number" id="height" min="1" value="600" />
-              </div>
-              <div class="option-field hidden" id="field-max">
-                <label for="max-dimension">Max dimension (px)</label>
-                <input type="number" id="max-dimension" min="16" max="8192" value="1600" />
-              </div>
-              <div class="option-field">
-                <label for="resize-format">Output format</label>
-                <select id="resize-format">
-                  <option value="png" selected>PNG</option>
-                  <option value="jpg">JPG</option>
-                  <option value="webp">WebP</option>
-                  <option value="avif">AVIF</option>
-                </select>
-              </div>
-            </div>
-        
-            </div>
-            <button type="button" class="primary-button tool-run" id="tool-run">Resize image</button>
+
+            <button type="button" class="primary-button tool-run" id="tool-run">Resize images</button>
             <div id="tool-processing"></div>
             <div id="tool-results"></div>
             <div id="tool-error"></div>
@@ -86,5 +189,6 @@
     </main>
     <div id="site-footer"></div>
     <script type="module" src="/static/assets/js/pages/image-resizer.js"></script>
+    <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
   </body>
 </html>
