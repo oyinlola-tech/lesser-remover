@@ -11,7 +11,7 @@ python-dotenv==1.2.2
 python-multipart==0.0.32
 starlette==1.6.0
 typing-extensions==4.16.0
-typing-inspection==0.4.0
+typing-inspection==0.4.4
 urllib3==2.7.0
 uvicorn==0.52.3
 pillow==12.3.0
