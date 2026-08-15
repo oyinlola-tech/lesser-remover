@@ -29,6 +29,7 @@ router = APIRouter(
 async def analyze_files(
     files: list[UploadFile] = File(...),
 ):
+    logger.info("analyze_files: files=%d", len(files))
     return await file_tools_controller.analyze(files)
 
 
@@ -36,6 +37,7 @@ async def analyze_files(
 async def create_zip(
     files: list[UploadFile] = File(...),
 ):
+    logger.info("create_zip: files=%d", len(files))
     return await file_tools_controller.create_zip(files)
 
 
@@ -43,6 +45,7 @@ async def create_zip(
 async def find_duplicates(
     files: list[UploadFile] = File(...),
 ):
+    logger.info("find_duplicates: files=%d", len(files))
     return await file_tools_controller.find_duplicates(files)
 
 
