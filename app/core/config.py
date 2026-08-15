@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     download_directory: str = "storage/downloads"
     job_ttl_minutes: int = 30
 
+    max_image_width: int = 8000
+    max_image_height: int = 8000
+    max_image_pixels: int = 89_478_485
+
     storage_driver: str = "local"
     blob_read_write_token: str = ""
 
