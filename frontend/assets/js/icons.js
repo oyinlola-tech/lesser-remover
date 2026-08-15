@@ -73,6 +73,10 @@ export function iconHtml(name) {
     return `<span class="fa-solid fa-${name}" aria-hidden="true"></span>`;
 }
 
+export function brandIconHtml(name) {
+    return `<span class="fa-brands fa-${name}" aria-hidden="true"></span>`;
+}
+
 export function toolIconHtml(id) {
     const name = TOOL_ICONS[id] || "wrench";
     return iconHtml(name);

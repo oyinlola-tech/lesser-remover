@@ -1,5 +1,5 @@
 import { openSupport } from "./support-popup.js";
-import { injectIcons, iconHtml } from "./icons.js";
+import { injectIcons, iconHtml, brandIconHtml } from "./icons.js";
 import {
     CATEGORY_ORDER,
     loadCapabilities,
@@ -8,9 +8,11 @@ import {
 
 const GITHUB_URL = "https://github.com/oyinlola-tech/utils-tools";
 const SITE_URL = "https://tools.oyinlola.site/";
+const CLONE_URL = "git clone https://github.com/oyinlola-tech/utils-tools.git";
 
-const STAR_ICON = iconHtml("github");
+const STAR_ICON = iconHtml("star");
 const HEART_ICON = iconHtml("heart");
+const CLONE_ICON = iconHtml("code");
 
 const NAV_ITEMS = [
     { href: "/tools", label: "Tools" },
@@ -40,10 +42,18 @@ function renderHeader() {
       ${links}
     </nav>
     <div class="header-actions">
-      <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="header-star-button" aria-label="View and star this project on GitHub">
+      <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="header-icon-button" aria-label="View the repository on GitHub">
+        ${brandIconHtml("github")}
+        <span>GitHub</span>
+      </a>
+      <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="header-star-button" aria-label="Star this project on GitHub">
         ${STAR_ICON}
         <span>Star</span>
       </a>
+      <button type="button" class="header-icon-button header-clone-button" data-shell-clone aria-label="Copy the git clone command">
+        ${CLONE_ICON}
+        <span>Clone</span>
+      </button>
       <button type="button" class="header-menu-toggle" data-shell-menu-toggle aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
         ${iconHtml("bars")}
       </button>
@@ -57,6 +67,14 @@ function renderHeader() {
           ${STAR_ICON}
           <span>Star on GitHub</span>
         </a>
+        <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="header-icon-button">
+          ${brandIconHtml("github")}
+          <span>GitHub</span>
+        </a>
+        <button type="button" class="header-icon-button header-clone-button" data-shell-clone>
+          ${CLONE_ICON}
+          <span>Copy clone command</span>
+        </button>
       </div>
     </div>
   </nav>
@@ -77,7 +95,7 @@ function renderFooter() {
           Private by default. Fast, calm, and precise file tools.
         </p>
         <div class="footer-actions">
-          <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="footer-star-button" aria-label="View and star this project on GitHub">
+          <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="footer-star-button" aria-label="Star this project on GitHub">
             ${STAR_ICON}
             <span>Star</span>
           </a>
@@ -148,7 +166,6 @@ function setupMobileMenu() {
     if (!toggle || !panel) {
         return;
     }
-
     const setOpen = (open) => {
         panel.hidden = !open;
         panel.classList.toggle("is-open", open);
@@ -192,6 +209,46 @@ function setupMobileMenu() {
         if (window.innerWidth > 700) {
             setOpen(false);
         }
+    });
+}
+
+function copyText(value) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(value);
+    }
+    return new Promise((resolve, reject) => {
+        const input = document.createElement("textarea");
+        input.value = value;
+        input.setAttribute("readonly", "");
+        input.style.position = "fixed";
+        input.style.opacity = "0";
+        document.body.appendChild(input);
+        input.select();
+        try {
+            document.execCommand("copy");
+            input.remove();
+            resolve();
+        } catch (error) {
+            input.remove();
+            reject(error);
+        }
+    });
+}
+
+function setupClone() {
+    document.querySelectorAll("[data-shell-clone]").forEach((button) => {
+        button.addEventListener("click", async () => {
+            const original = button.innerHTML;
+            try {
+                await copyText(CLONE_URL);
+                button.innerHTML = `${iconHtml("check")}<span>Copied</span>`;
+            } catch (error) {
+                button.innerHTML = `${iconHtml("triangle-exclamation")}<span>Copy failed</span>`;
+            }
+            window.setTimeout(() => {
+                button.innerHTML = original;
+            }, 2000);
+        });
     });
 }
 
@@ -262,6 +319,7 @@ export function renderShell() {
 
     markCurrentNav();
     setupMobileMenu();
+    setupClone();
 
     document.querySelectorAll("[data-shell-fab], [data-shell-support]").forEach((button) => {
         button.addEventListener("click", () => openSupport());
