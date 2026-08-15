@@ -2,7 +2,6 @@
 
 from app.core.capabilities import (
     VERCEL_DRIVER,
-    Tool,
     capability_registry,
 )
 

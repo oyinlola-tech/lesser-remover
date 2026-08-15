@@ -10,7 +10,6 @@ from app.modules.jobs.job_service import (
     job_service,
 )
 
-
 logger = logging.getLogger(__name__)
 
 router = APIRouter(

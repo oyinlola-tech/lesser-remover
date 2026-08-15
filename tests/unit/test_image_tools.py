@@ -179,7 +179,7 @@ def test_background_replacement_with_color():
 
 
 def test_background_replacement_with_image():
-    image, width, height = background_service.replace_background(
+    image, _width, _height = background_service.replace_background(
         _png_bytes(),
         image_data=_png_bytes((40, 40)),
     )

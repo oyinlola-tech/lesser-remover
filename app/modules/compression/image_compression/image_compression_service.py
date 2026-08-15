@@ -2,11 +2,11 @@ from io import BytesIO
 
 from PIL import Image
 
-from app.modules.compression.image_compression.image_compression_settings import (
-    PRESETS,
-)
 from app.infrastructure.compression.pillow_adapter import (
     pillow_adapter,
+)
+from app.modules.compression.image_compression.image_compression_settings import (
+    PRESETS,
 )
 
 

@@ -54,7 +54,6 @@ def _make_jpeg_with_exif(width=100, height=100) -> bytes:
     img = Image.new("RGB", (width, height), (255, 0, 0))
     buf = BytesIO()
     img.save(buf, format="JPEG", quality=95)
-    from PIL.ExifTags import Base as ExifBase
 
     return buf.getvalue()
 
@@ -103,7 +102,7 @@ class TestImageCompressionService:
         )
 
         original = _make_png(300, 200, transparent=True)
-        data, content_type, quality, width, height = (
+        data, content_type, _quality, _width, _height = (
             image_compression_service.compress(
                 file_data=original,
                 output_format="png",
@@ -123,7 +122,7 @@ class TestImageCompressionService:
         )
 
         original = _make_webp(300, 200, transparent=True)
-        data, content_type, quality, width, height = (
+        data, content_type, _quality, _width, _height = (
             image_compression_service.compress(
                 file_data=original,
                 output_format="webp",
@@ -201,7 +200,7 @@ class TestImageCompressionService:
         original = _make_jpeg(800, 600, quality=95)
         target_bytes = 2 * 1024
 
-        data, content_type, quality, width, height = (
+        data, content_type, _quality, _width, _height = (
             image_compression_service.compress_to_target(
                 file_data=original,
                 target_size_bytes=target_bytes,
@@ -356,8 +355,8 @@ class TestImageCompressEndpoint:
 
     def test_oversized_file_rejected(self):
         from app.shared.file_inspection.file_validation import (
-            validate_file_size,
             MAX_IMAGE_SIZE,
+            validate_file_size,
         )
 
         assert MAX_IMAGE_SIZE == 25 * 1024 * 1024
@@ -515,10 +514,10 @@ class TestImageCompressEndpoint:
         assert dl.headers["content-type"] == "application/zip"
 
     def test_output_format_jpeg_with_transparency_flattens(self):
-        from app.modules.compression.compression_service import compression_service
-
         # Create a PNG with transparency and noise so JPEG is smaller
         import random
+
+        from app.modules.compression.compression_service import compression_service
         random.seed(42)
         img = Image.new("RGBA", (800, 600))
         pixels = [
@@ -532,7 +531,7 @@ class TestImageCompressEndpoint:
         png_data = buf.getvalue()
 
         # Compress with quality parameter directly to JPEG
-        compressed, content_type, quality, width, height = (
+        compressed, content_type, _quality, _width, _height = (
             compression_service.compress_image_quality(
                 file_data=png_data,
                 quality=80,

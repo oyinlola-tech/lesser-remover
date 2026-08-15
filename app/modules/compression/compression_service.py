@@ -7,7 +7,6 @@ from app.modules.compression.pdf_compression.pdf_compression_service import (
     pdf_compression_service,
 )
 
-
 SUPPORTED_IMAGE_FORMATS = {"webp", "jpeg", "png"}
 
 

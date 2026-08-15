@@ -66,12 +66,11 @@ def _validate_dimensions(
             "Maximum dimension exceeds the allowed limit."
         )
 
-    if width is not None and height is not None:
-        if width * height > max_px:
-            raise ValueError(
-                f"Requested dimensions ({width}×{height}) exceed the "
-                f"maximum pixel count of {max_px:,}."
-            )
+    if width is not None and height is not None and width * height > max_px:
+        raise ValueError(
+            f"Requested dimensions ({width}x{height}) exceed the "
+            f"maximum pixel count of {max_px:,}."
+        )
 
 
 def _compute_new_size(
@@ -237,9 +236,7 @@ class ImageService:
     def _has_transparency(image: Image.Image) -> bool:
         if image.mode in ("RGBA", "LA"):
             return True
-        if image.mode == "P" and "transparency" in image.info:
-            return True
-        return False
+        return bool(image.mode == "P" and "transparency" in image.info)
 
     def _prepare_for_output(
         self,
@@ -353,9 +350,9 @@ class ImageService:
 
         Modes:
         - ``aspect``:  maintain aspect ratio (width or height given)
-        - ``exact``:   use exact width × height (aspect not guaranteed)
+        - ``exact``:   use exact width x height (aspect not guaranteed)
         - ``percent``: scale by percentage
-        - ``max``:     fit within max_dimension × max_dimension
+        - ``max``:     fit within max_dimension x max_dimension
 
         ``output_format`` of ``"auto"`` preserves the source format when
         the chosen format is JPEG/PNG/WebP; otherwise defaults to PNG.
@@ -529,7 +526,7 @@ class ImageService:
             image.size,
             (0, 0, 0, 0),
         )
-        draw = ImageDraw.Draw(layer)
+        ImageDraw.Draw(layer)
 
         if text:
             font_size = max(

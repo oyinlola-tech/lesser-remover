@@ -1,9 +1,8 @@
-from app.modules.compression.pdf_compression.pdf_compression_service import (
-    pdf_compression_service,
-)
-
 from app.infrastructure.compression.ghostscript_adapter import (
     ghostscript_adapter,
+)
+from app.modules.compression.pdf_compression.pdf_compression_service import (
+    pdf_compression_service,
 )
 
 

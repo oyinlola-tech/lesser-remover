@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, File, Form, UploadFile
 from fastapi.responses import Response
 
 from app.api import API_PREFIX
@@ -28,8 +28,8 @@ async def generate_favicon(
         size=size,
         add_padding=add_padding,
     )
-    from zipfile import ZIP_DEFLATED, ZipFile
     from io import BytesIO
+    from zipfile import ZIP_DEFLATED, ZipFile
 
     archive_buffer = BytesIO()
     with ZipFile(

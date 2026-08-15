@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 
-from app.core.config import settings
+from app.infrastructure.jobs import local_job_storage
 from app.modules.archive.archive_service import (
     archive_service,
 )
@@ -14,14 +14,12 @@ from app.modules.compression.compression_service import (
 from app.modules.jobs.job_service import (
     job_service,
 )
-from app.infrastructure.jobs import local_job_storage
 from app.shared.file_inspection.file_validation import (
     inspect_and_validate,
 )
 from app.shared.utils.file_util import (
     generate_filename,
 )
-
 
 logger = logging.getLogger(__name__)
 

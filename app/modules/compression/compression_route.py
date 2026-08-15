@@ -1,5 +1,5 @@
 import logging
-from typing import Annotated
+from pathlib import Path
 
 from fastapi import (
     APIRouter,
@@ -9,16 +9,13 @@ from fastapi import (
     HTTPException,
     UploadFile,
 )
-from pathlib import Path
 from fastapi.responses import FileResponse
 
 logger = logging.getLogger(__name__)
 from app.api import API_PREFIX
+from app.infrastructure.jobs import local_job_storage
 from app.modules.compression.batch_compression_service import (
     batch_compression_service,
-)
-from app.modules.compression.compression_controller import (
-    compression_controller,
 )
 from app.modules.compression.compression_repository import (
     compression_repository,
@@ -26,13 +23,11 @@ from app.modules.compression.compression_repository import (
 from app.modules.jobs.job_service import (
     job_service,
 )
-from app.infrastructure.jobs import local_job_storage
-from app.shared.utils.file_util import is_safe_filename
+from app.shared.constants.file_constants import MAX_FILES_PER_BATCH
 from app.shared.utils.file_util import (
     generate_filename,
+    is_safe_filename,
 )
-from app.shared.enums.compression_enum import CompressionLevel
-from app.shared.constants.file_constants import MAX_FILES_PER_BATCH
 
 router = APIRouter(
     prefix=f"{API_PREFIX}/compression",
@@ -56,12 +51,11 @@ async def start_batch_compression(
     strip_metadata: bool = True,
     quality: int | None = None,
 ):
-    if quality is not None:
-        if quality < 10 or quality > 100:
-            raise HTTPException(
-                status_code=400,
-                detail="Quality must be between 10 and 100.",
-            )
+    if quality is not None and (quality < 10 or quality > 100):
+        raise HTTPException(
+            status_code=400,
+            detail="Quality must be between 10 and 100.",
+        )
 
     return await _start_compression(
         background_tasks=background_tasks,
@@ -87,12 +81,11 @@ async def compress_images(
     target_size: int | None = Form(None),
     remove_metadata: bool = Form(True),
 ):
-    if quality is not None:
-        if quality < 10 or quality > 100:
-            raise HTTPException(
-                status_code=400,
-                detail="Quality must be between 10 and 100.",
-            )
+    if quality is not None and (quality < 10 or quality > 100):
+        raise HTTPException(
+            status_code=400,
+            detail="Quality must be between 10 and 100.",
+        )
 
     target_size_kb = target_size
 

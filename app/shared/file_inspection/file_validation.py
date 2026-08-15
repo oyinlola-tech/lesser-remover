@@ -2,8 +2,7 @@ from io import BytesIO
 from pathlib import Path
 
 from fastapi import HTTPException
-from PIL import Image
-from PIL import UnidentifiedImageError
+from PIL import Image, UnidentifiedImageError
 
 from app.shared.constants.file_constants import (
     EXPECTED_EXTENSION_BY_MIME,
@@ -49,9 +48,7 @@ def extension_matches_mime(
     actual = Path(filename).suffix.lower()
     if actual == expected:
         return True
-    if mime_type == "image/jpeg" and actual == ".jpeg":
-        return True
-    return False
+    return bool(mime_type == "image/jpeg" and actual == ".jpeg")
 
 
 def validate_filename_extension(

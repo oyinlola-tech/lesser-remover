@@ -1,11 +1,12 @@
 import subprocess
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from typing import ClassVar
 
 
 class GhostscriptAdapter:
 
-    QUALITY_SETTINGS = {
+    QUALITY_SETTINGS: ClassVar[dict[str, str]] = {
         "screen": "/screen",
         "ebook": "/ebook",
         "printer": "/printer",
@@ -34,18 +35,17 @@ class GhostscriptAdapter:
                 "-dNOPAUSE",
                 "-dQUIET",
                 "-dBATCH",
-                f"-dPDFSETTINGS="
-                f"{self.QUALITY_SETTINGS[quality]}",
-                "-sOutputFile="
-                f"{output_path}",
+                (f"-dPDFSETTINGS="
+                f"{self.QUALITY_SETTINGS[quality]}"),
+                ("-sOutputFile="
+                f"{output_path}"),
                 str(input_path),
             ]
             try:
                 subprocess.run(
                     command,
                     check=True,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
+                    capture_output=True,
                     timeout=120,
                 )
             except subprocess.TimeoutExpired as error:
@@ -101,8 +101,7 @@ class GhostscriptAdapter:
                 subprocess.run(
                     command,
                     check=True,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
+                    capture_output=True,
                     timeout=180,
                 )
             except subprocess.TimeoutExpired as error:

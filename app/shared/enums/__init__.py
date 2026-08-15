@@ -3,6 +3,6 @@ from app.shared.enums.file_type_enum import FileType
 
 __all__ = [
     "CompressionLevel",
-    "PdfCompressionLevel",
     "FileType",
+    "PdfCompressionLevel",
 ]

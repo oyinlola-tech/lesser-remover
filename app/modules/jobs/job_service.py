@@ -1,12 +1,11 @@
 import copy
-import logging
 from datetime import datetime, timezone
 
 from app.core.logging import get_tool_logger
 from app.infrastructure.jobs import local_job_storage
 
 
-def _fmt_size(num_bytes: int | float) -> str:
+def _fmt_size(num_bytes: float) -> str:
     try:
         num_bytes = int(num_bytes)
     except (TypeError, ValueError):

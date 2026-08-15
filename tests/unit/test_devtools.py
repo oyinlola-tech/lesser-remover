@@ -73,7 +73,7 @@ def test_generate_qr_svg():
 
 
 def test_generate_qr_with_logo():
-    data, content_type = dev_tools_service.generate_qr(
+    _data, content_type = dev_tools_service.generate_qr(
         "https://example.com",
         image_data=_png_bytes(16),
     )
@@ -90,7 +90,7 @@ def test_generate_qr_rejects_empty_content():
 
 
 def test_generate_barcode_png():
-    data, content_type = dev_tools_service.generate_barcode(
+    _data, content_type = dev_tools_service.generate_barcode(
         "HELLO-123",
         code_type="code128",
     )

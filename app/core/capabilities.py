@@ -440,11 +440,7 @@ class CapabilityRegistry:
             tool.requires_binary
         ):
             return False
-        if tool.requires_module and not _module_available(
-            tool.requires_module
-        ):
-            return False
-        return True
+        return not (tool.requires_module and not _module_available(tool.requires_module))
 
     def effective_tools(self) -> list[dict]:
         """Tools visible in the current environment.

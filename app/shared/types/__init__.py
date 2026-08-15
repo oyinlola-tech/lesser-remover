@@ -1,7 +1,11 @@
-from app.shared.file_inspection.file_types import FileCategory, SupportedImageType, SupportedFileType
+from app.shared.file_inspection.file_types import (
+    FileCategory,
+    SupportedFileType,
+    SupportedImageType,
+)
 
 __all__ = [
     "FileCategory",
-    "SupportedImageType",
     "SupportedFileType",
+    "SupportedImageType",
 ]

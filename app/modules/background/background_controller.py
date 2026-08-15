@@ -1,15 +1,14 @@
 from fastapi import HTTPException, UploadFile
+
+from app.modules.background.background_repository import (
+    background_repository,
+)
 from app.modules.background.background_schema import (
     BackgroundRemovalResponse,
 )
 from app.modules.background.background_service import (
     background_service,
 )
-from app.modules.background.background_repository import (
-    background_repository,
-)
-from app.modules.image.image_service import image_service
-from app.modules.image.image_schema import ImageVariant
 from app.shared.file_inspection.file_validation import (
     inspect_and_validate,
 )

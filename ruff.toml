@@ -1,0 +1,26 @@
+[lint]
+select = [
+  "E",    # pycodestyle errors
+  "F",    # pyflakes
+  "W",    # pycodestyle warnings
+  "I",    # import sorting
+  "RUF",  # ruff-specific rules
+]
+ignore = [
+  "E501",  # line too long (handled by formatter)
+]
+
+[lint.per-file-ignores]
+"app/modules/*_route.py" = ["B008", "E402"]
+"app/modules/devtools/*_route.py" = ["B008"]
+"app/modules/image/image_tools_route.py" = ["B008"]
+"app/modules/background/background_route.py" = ["B008"]
+"app/modules/compression/compression_route.py" = ["B008", "E402"]
+"app/modules/file_tools/file_tool_route.py" = ["B008"]
+"app/modules/pdf/pdf_route.py" = ["B008"]
+"app/shared/file_inspection/file_validation.py" = ["E402"]
+"app/main.py" = ["E402"]
+"tests/**/*.py" = ["S101", "S106", "B017", "BLE001"]
+
+[lint.isort]
+known-first-party = ["app"]

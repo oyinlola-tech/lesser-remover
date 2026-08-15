@@ -10,11 +10,11 @@ from app.modules.image.image_tools_route import (
 )
 
 __all__ = [
-    "image_service",
-    "image_processor",
-    "image_repository",
-    "image_tools_controller",
-    "image_tools_router",
     "ImageVariant",
     "ProcessedImageResult",
+    "image_processor",
+    "image_repository",
+    "image_service",
+    "image_tools_controller",
+    "image_tools_router",
 ]

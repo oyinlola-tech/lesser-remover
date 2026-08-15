@@ -1,7 +1,7 @@
 from io import BytesIO
 from xml.etree import ElementTree
 
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image
 
 
 def _favicon_sizes(image: Image.Image, size: int) -> Image.Image:
@@ -156,7 +156,7 @@ class DevToolsService:
             return cleaned
 
         try:
-            root = ElementTree.fromstring(svg_data)
+            ElementTree.fromstring(svg_data)
         except ElementTree.ParseError as error:
             raise ValueError(
                 f"Invalid SVG file: {error}"

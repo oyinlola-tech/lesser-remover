@@ -52,9 +52,7 @@ def is_safe_filename(filename: str) -> bool:
     path = Path(filename)
     if path.is_absolute() or path.name != filename:
         return False
-    if any(part in {"", ".", ".."} for part in path.parts):
-        return False
-    return True
+    return not any(part in {"", ".", ".."} for part in path.parts)
 
 
 def resolve_safe_path(base_directory: Path, filename: str) -> Path:

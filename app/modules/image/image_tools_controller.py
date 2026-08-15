@@ -262,7 +262,7 @@ class ImageToolsController:
             resize_mode = "percent"
             resize_kwargs = {"percent": percent}
         elif width is not None and height is not None:
-            resize_mode = "exact" if cover else "exact"
+            resize_mode = "exact"
             resize_kwargs = {
                 "width": width,
                 "height": height,
