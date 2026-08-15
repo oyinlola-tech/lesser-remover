@@ -51,18 +51,30 @@
 <div class="option-row">
               <div class="option-field">
                 <label for="image-format">Image format</label>
-                <select id="image-format">
+                <select id="image-format" class="select-input">
                   <option value="png" selected>PNG</option>
                   <option value="jpeg">JPG</option>
                 </select>
               </div>
               <div class="option-field">
                 <label for="dpi">DPI</label>
-                <select id="dpi">
+                <select id="dpi" class="select-input">
                   <option value="96">96 - screen</option>
                   <option value="150" selected>150 - balanced</option>
                   <option value="300">300 - print</option>
                 </select>
+              </div>
+            </div>
+            <div class="option-row">
+              <div class="option-field">
+                <label>Download</label>
+                <div class="toggle-container">
+                  <label class="toggle">
+                    <input id="as-zip" type="checkbox" />
+                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                    <span class="toggle-label">Download all pages as a ZIP archive</span>
+                  </label>
+                </div>
               </div>
             </div>
         
