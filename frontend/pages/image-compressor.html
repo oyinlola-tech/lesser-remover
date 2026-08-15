@@ -50,7 +50,7 @@
 
           <section class="compressor-card">
             <div class="compressor-drop-zone" id="compressor-drop-zone">
-              <div class="upload-icon">↑</div>
+              <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i></div>
               <h2>Drop your files here</h2>
               <p>Or choose files from your computer</p>
               <label for="compressor-file-input" class="primary-button">Choose file</label>
@@ -104,23 +104,24 @@
                    <span class="advanced-settings-chevron">+</span>
                  </summary>
                  <div class="advanced-settings-content">
-                   <div class="setting-group">
-                     <label for="target-size">Target file size</label>
-                     <div class="target-size-presets" id="target-size-presets">
-                       <button type="button" class="target-size-option" data-size="100">100&nbsp;KB</button>
-                       <button type="button" class="target-size-option" data-size="250">250&nbsp;KB</button>
-                       <button type="button" class="target-size-option" data-size="500">500&nbsp;KB</button>
-                       <button type="button" class="target-size-option" data-size="1000">1&nbsp;MB</button>
-                       <button type="button" class="target-size-option" data-size="custom">Custom</button>
-                     </div>
-                     <div class="target-size-custom hidden" id="target-size-custom">
-                       <div class="target-size-input">
-                         <input id="target-size" type="number" min="10" placeholder="KB" />
-                         <span>KB</span>
-                       </div>
-                     </div>
-                     <small>The compressor will try to find the highest quality below this size.</small>
-                   </div>
+                    <div class="setting-group">
+                      <label for="target-size-preset">Target file size</label>
+                      <select id="target-size-preset" class="select-input">
+                        <option value="">No target — optimize only</option>
+                        <option value="100">100 KB</option>
+                        <option value="250">250 KB</option>
+                        <option value="500">500 KB</option>
+                        <option value="1000">1 MB</option>
+                        <option value="custom">Custom…</option>
+                      </select>
+                      <div class="target-size-custom hidden" id="target-size-custom">
+                        <div class="target-size-input">
+                          <input id="target-size" type="number" min="10" placeholder="KB" />
+                          <span>KB</span>
+                        </div>
+                      </div>
+                      <small>The compressor will try to find the highest quality below this size.</small>
+                    </div>
                    <div class="setting-group">
                      <label>Metadata</label>
                      <label class="toggle">
@@ -175,7 +176,7 @@
                   <span>Original</span>
                   <strong id="original-size">0 MB</strong>
                 </div>
-                <div class="size-arrow">→</div>
+                <div class="size-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
                 <div class="size-block">
                   <span>Compressed</span>
                   <strong id="compressed-size">0 MB</strong>

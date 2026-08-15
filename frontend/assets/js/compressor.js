@@ -17,7 +17,7 @@ const clearFilesButton = document.querySelector("#clear-files");
 const qualitySlider = document.querySelector("#quality-slider");
 const qualityValue = document.querySelector("#quality-value");
 const targetSize = document.querySelector("#target-size");
-const targetSizePresets = document.querySelector("#target-size-presets");
+const targetSizePreset = document.querySelector("#target-size-preset");
 const stripMetadata = document.querySelector("#strip-metadata");
 const advancedFormat = document.querySelector("#advanced-format");
 const maxDimension = document.querySelector("#max-dimension");
@@ -626,25 +626,22 @@ if (qualitySlider) {
     });
 }
 
-if (targetSizePresets) {
-    const presetButtons = targetSizePresets.querySelectorAll(".target-size-option");
-    presetButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            presetButtons.forEach((btn) => {
-                btn.classList.remove("active");
-            });
-            button.classList.add("active");
-            const size = button.dataset.size;
-            if (size === "custom") {
-                selectedTargetSize = null;
-                if (targetSize) targetSize.value = "";
-                show(document.querySelector("#target-size-custom"));
-            } else {
-                selectedTargetSize = Number(size);
-                if (targetSize) targetSize.value = String(selectedTargetSize);
-                hide(document.querySelector("#target-size-custom"));
-            }
-        });
+if (targetSizePreset) {
+    targetSizePreset.addEventListener("change", () => {
+        const size = targetSizePreset.value;
+        if (size === "custom") {
+            selectedTargetSize = null;
+            if (targetSize) targetSize.value = "";
+            show(document.querySelector("#target-size-custom"));
+        } else if (size === "") {
+            selectedTargetSize = null;
+            if (targetSize) targetSize.value = "";
+            hide(document.querySelector("#target-size-custom"));
+        } else {
+            selectedTargetSize = Number(size);
+            if (targetSize) targetSize.value = String(selectedTargetSize);
+            hide(document.querySelector("#target-size-custom"));
+        }
     });
 }
 
@@ -760,7 +757,7 @@ compressButton.addEventListener("click", async () => {
             files: files.map((item) => item.file),
             outputFormat: advancedFormat ? advancedFormat.value : "auto",
             quality: selectedQuality,
-            compressionPreset: "balanced",
+            compressionPreset: (document.querySelector("#quality-preset") || {}).value || "balanced",
             maxDimension: maxDimension ? (maxDimension.value || null) : null,
             targetSize: selectedTargetSize !== null ? selectedTargetSize : (targetSize ? (targetSize.value || null) : null),
             removeMetadata: stripMetadata ? stripMetadata.checked : true,
