@@ -1,13 +1,14 @@
 # Utils-tool
 
 A local-first file and media utility suite: **27 tools** for images, PDFs,
-files, developer assets and everyday utilities. One codebase runs locally with
+files, developer assets and everyday utilities. Includes the new Image
+Resizer and an enhanced batch Image Converter. One codebase runs locally with
 full features, or on Vercel as a serverless app. No database, no Redis, no
 accounts, no cloud uploads required.
 
 ## What it does
 
-- **Image tools** — image compressor (quality slider, target-size, metadata removal, JPG/PNG/WebP), background remover, converter (AVIF/JPG/PNG/WebP), resizer, cropper, editor, metadata remover, watermark, background replacement
+- **Image tools** — image compressor (quality slider, target-size, metadata removal, JPG/PNG/WebP), background remover, converter (AVIF/JPG/PNG/WebP, batch), resizer (aspect/exact/percent/max, presets, quality, transparency), cropper, editor, metadata remover, watermark, background replacement
 - **PDF tools** — compressor, merger, splitter, rotator, page extractor, PDF→image, image→PDF
 - **File tools** — analyzer (type/size/hash/dimensions), ZIP creator, duplicate finder
 - **Developer tools** — favicon generator, SVG optimizer, image↔Base64, QR code generator, barcode generator
@@ -21,13 +22,13 @@ accounts, no cloud uploads required.
 ## Architecture
 
 ```mermaid
-flowchart TD
+flowchart LR
     subgraph Browser["Browser / Frontend"]
-        UI["Static UI\n(HTML + CSS + JS)\npages/*.html + shared tool-kit.js"]
+        UI["Static UI<br/>HTML + CSS + JS<br/>pages/*.html + tool-kit.js"]
     end
 
     subgraph FastAPI["FastAPI Backend"]
-        Routes["Routes\n/api/v1/..."]
+        Routes["Routes<br/>api/v1/*"]
         Controllers["Controllers"]
         Services["Services"]
         Repositories["Repositories"]
@@ -49,6 +50,8 @@ flowchart TD
     UI -->|/api/v1/tools/dev/*| Routes
     UI -->|/api/v1/background/*| Routes
     UI -->|/api/v1/images/compress| Routes
+    UI -->|/api/v1/images/convert| Routes
+    UI -->|/api/v1/images/resize| Routes
     UI -->|/api/v1/compression/*| Routes
     UI -->|/api/v1/capabilities| Routes
 
@@ -73,13 +76,13 @@ Every tool follows the same layered flow:
 
 ```mermaid
 flowchart LR
-    Page["Tool page\npages/{tool}.html"] -->|api.js| Route["/api/v1/tools/{group}/{action}"]
-    Route --> Controller["Controller\n(validation + HTTP")]
-    Controller --> Service["Service\n(business logic)"]
-    Service --> Adapter["Infrastructure adapter\n(Pillow / pikepdf / gs / zip / qrcode)"]
-    Service --> Repository["Repository\n(byte I/O)"]
+    Page["Tool page<br/>pages/[tool].html"] -->|api.js| Route["/api/v1/tools/[group]/[action]"]
+    Route --> Controller["Controller<br/>validation + HTTP"]
+    Controller --> Service["Service<br/>business logic"]
+    Service --> Adapter["Infrastructure adapter<br/>Pillow / pikepdf / gs / zip / qrcode"]
+    Service --> Repository["Repository<br/>byte I/O"]
     Repository --> Storage["Local disk or Vercel Blob"]
-    Service --> Response["Result JSON + /download/{file}"]
+    Service --> Response["Result JSON + /download/[file]"]
 ```
 
 ## Project structure
@@ -126,7 +129,8 @@ frontend/
         └── ...
 
 api/
-└── index.py                         # Vercel serverless entry point (Mangum)
+├── index.py                         # Vercel serverless entry point (Mangum)
+└── requirements.txt                 # Lightweight deps for Vercel (excludes rembg)
 
 storage/                             # Local mode only
 ├── uploads/         # Temporary uploads
@@ -152,7 +156,7 @@ storage/                             # Local mode only
 
 ```bash
 source .venv/bin/activate
-python -m pytest tests/ -q        # 110 tests: units, API contracts, capability gating
+python -m pytest tests/ -q        # 200 tests: units, API contracts, capability gating
 ```
 
 Covers the unified error format, all 27 tools' services, the capability registry
