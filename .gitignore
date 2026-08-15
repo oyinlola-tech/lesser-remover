@@ -27,3 +27,4 @@ storage/downloads/*
 Thumbs.db
 # Logs
 logs/
+.env.vercel
