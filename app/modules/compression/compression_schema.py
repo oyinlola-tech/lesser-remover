@@ -11,6 +11,10 @@ class CompressionResult(BaseModel):
     savings_percent: float
     content_type: str
     download_url: str
+    output_format: str | None = None
+    width: int | None = None
+    height: int | None = None
+    quality: int | None = None
 
 
 class BatchCompressionResult(BaseModel):
