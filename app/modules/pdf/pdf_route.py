@@ -21,6 +21,7 @@ router = APIRouter(
 async def merge_pdfs(
     files: list[UploadFile] = File(...),
 ):
+    logger.info("merge_pdfs: files=%d", len(files))
     return await pdf_controller.merge(files)
 
 
@@ -28,6 +29,7 @@ async def merge_pdfs(
 async def split_pdf(
     file: UploadFile = File(...),
 ):
+    logger.info("split_pdf: file=%s", file.filename)
     return await pdf_controller.split(file)
 
 
@@ -37,6 +39,7 @@ async def rotate_pdf(
     angle: int = Form(90),
     pages: str = Form("all"),
 ):
+    logger.info("rotate_pdf: file=%s angle=%d pages=%s", file.filename, angle, pages)
     return await pdf_controller.rotate(
         file,
         angle=angle,
@@ -49,6 +52,7 @@ async def extract_pdf_pages(
     file: UploadFile = File(...),
     pages: str = Form(...),
 ):
+    logger.info("extract_pdf_pages: file=%s pages=%s", file.filename, pages)
     return await pdf_controller.extract_pages(
         file,
         pages_spec=pages,
@@ -61,6 +65,7 @@ async def pdf_to_images(
     image_format: str = Form("png"),
     dpi: int = Form(150),
 ):
+    logger.info("pdf_to_images: file=%s format=%s dpi=%d", file.filename, image_format, dpi)
     return await pdf_controller.to_images(
         file,
         image_format=image_format,
@@ -72,6 +77,7 @@ async def pdf_to_images(
 async def images_to_pdf(
     files: list[UploadFile] = File(...),
 ):
+    logger.info("images_to_pdf: files=%d", len(files))
     return await pdf_controller.from_images(files)
 
 
@@ -79,6 +85,7 @@ async def images_to_pdf(
 async def pdf_info(
     file: UploadFile = File(...),
 ):
+    logger.info("pdf_info: file=%s", file.filename)
     return await pdf_controller.info(file)
 
 
