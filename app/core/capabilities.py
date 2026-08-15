@@ -12,10 +12,13 @@ No secrets are ever part of the capability payload.
 """
 
 import importlib.util
+import logging
 import shutil
 from dataclasses import dataclass
 
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 LOCAL_DRIVER = "local"
 VERCEL_DRIVER = "vercel"
@@ -510,6 +513,40 @@ class CapabilityRegistry:
             tool.status == "available"
             and self.driver in tool.environments
         )
+
+    def log_dependency_diagnostics(self) -> None:
+        """Log tools made unavailable by missing runtime dependencies.
+
+        Serverless runtimes such as Vercel install a subset of the
+        project dependencies, so some tools are reported as unavailable
+        without any indication of why. This method emits one WARNING per
+        missing dependency, naming the module or binary and every tool it
+        affects, so the cause is visible in the deployment logs.
+        """
+        missing: dict[str, list[str]] = {}
+        for tool in self.tools:
+            if (
+                tool.requires_module
+                and not _module_available(tool.requires_module)
+            ):
+                key = f"module '{tool.requires_module}'"
+                missing.setdefault(key, []).append(tool.id)
+            if (
+                tool.requires_binary
+                and not _binary_available(tool.requires_binary)
+            ):
+                key = f"binary '{tool.requires_binary}'"
+                missing.setdefault(key, []).append(tool.id)
+        if not missing:
+            logger.info("All optional tool dependencies are present.")
+            return
+        for dependency, tool_ids in missing.items():
+            logger.warning(
+                "Tool unavailable - missing %s (affects: %s). "
+                "Install the dependency to enable it.",
+                dependency,
+                ", ".join(tool_ids),
+            )
 
 
 capability_registry = CapabilityRegistry()
