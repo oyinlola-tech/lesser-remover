@@ -11,6 +11,10 @@ CATEGORY_PREFIXES: dict[str, tuple[str, ...]] = {
     "activities": ("app.modules.jobs",),
     "background_remover": ("app.modules.background",),
     "compression": ("app.modules.compression",),
+    "image_tools": ("app.modules.image",),
+    "pdf_tools": ("app.modules.pdf",),
+    "file_tools": ("app.modules.file_tools",),
+    "devtools": ("app.modules.devtools",),
 }
 
 SPECIFIC_PREFIXES = tuple(
