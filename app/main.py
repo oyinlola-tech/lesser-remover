@@ -27,6 +27,7 @@ from app.modules.jobs.job_cleanup_service import (
 from app.modules.jobs.job_route import router as job_router
 from app.modules.image.image_tools_route import (
     router as image_tools_router,
+    images_router,
 )
 from app.modules.pdf.pdf_route import router as pdf_router
 from app.modules.file_tools.file_tool_route import (
@@ -77,6 +78,7 @@ app.include_router(image_router)
 app.include_router(job_router)
 app.include_router(capability_router)
 app.include_router(image_tools_router)
+app.include_router(images_router)
 app.include_router(pdf_router)
 app.include_router(file_tool_router)
 app.include_router(dev_tools_router)
