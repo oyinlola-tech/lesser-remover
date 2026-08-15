@@ -4,6 +4,31 @@ from PIL import Image
 from PIL.PngImagePlugin import PngInfo
 
 
+def _parse_color(color) -> tuple[int, int, int] | str:
+    """Parse a hex color string or PIL-compatible color into a usable value.
+
+    Accepts ``"#ffffff"``, ``"ffffff"``, and plain PIL color names.
+    """
+    if color is None:
+        return "white"
+    if isinstance(color, str):
+        cleaned = color.lstrip("#").lower()
+        if len(cleaned) == 6:
+            try:
+                return (
+                    int(cleaned[0:2], 16),
+                    int(cleaned[2:4], 16),
+                    int(cleaned[4:6], 16),
+                )
+            except ValueError:
+                pass
+        if cleaned in {"fff", "white"}:
+            return (255, 255, 255)
+        if cleaned in {"000", "black"}:
+            return (0, 0, 0)
+    return color
+
+
 class PillowAdapter:
     def _filter_metadata(
         self,
@@ -70,6 +95,7 @@ class PillowAdapter:
         image: Image.Image,
         quality: int = 95,
         strip_metadata: bool = True,
+        lossless: bool = False,
     ) -> bytes:
         output = BytesIO()
         try:
@@ -77,13 +103,21 @@ class PillowAdapter:
                 image,
                 strip=strip_metadata,
             )
-            image.save(
-                output,
-                format="WEBP",
-                quality=quality,
-                method=6,
-                **save_kwargs,
-            )
+            if lossless:
+                image.save(
+                    output,
+                    format="WEBP",
+                    lossless=True,
+                    **save_kwargs,
+                )
+            else:
+                image.save(
+                    output,
+                    format="WEBP",
+                    quality=quality,
+                    method=6,
+                    **save_kwargs,
+                )
             return output.getvalue()
         finally:
             output.close()
@@ -93,12 +127,14 @@ class PillowAdapter:
         image: Image.Image,
         quality: int = 95,
         strip_metadata: bool = True,
+        background_color: str | None = None,
     ) -> bytes:
         if image.mode in ("RGBA", "LA", "P"):
+            bg = _parse_color(background_color)
             background = Image.new(
                 "RGB",
                 image.size,
-                "white",
+                bg,
             )
             if image.mode == "P":
                 image = image.convert("RGBA")
@@ -157,6 +193,8 @@ class PillowAdapter:
         output_format: str,
         quality: int = 92,
         strip_metadata: bool = True,
+        lossless: bool = False,
+        background_color: str | None = None,
     ) -> tuple[bytes, str]:
         output_format = output_format.lower()
         if output_format in {"jpg", "jpeg"}:
@@ -165,6 +203,7 @@ class PillowAdapter:
                     image,
                     quality=quality,
                     strip_metadata=strip_metadata,
+                    background_color=background_color,
                 ),
                 "image/jpeg",
             )
@@ -182,6 +221,7 @@ class PillowAdapter:
                     image,
                     quality=quality,
                     strip_metadata=strip_metadata,
+                    lossless=lossless,
                 ),
                 "image/webp",
             )
