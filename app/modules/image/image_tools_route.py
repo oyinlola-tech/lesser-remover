@@ -27,6 +27,7 @@ async def convert_image(
     file: UploadFile = File(...),
     output_format: str = Form("png"),
 ):
+    logger.info("convert_image: file=%s format=%s", file.filename, output_format)
     return await image_tools_controller.convert(
         file,
         output_format,
@@ -43,6 +44,10 @@ async def resize_image(
     output_format: str = Form("png"),
     cover: bool = Form(False),
 ):
+    logger.info(
+        "resize_image: file=%s width=%s height=%s percent=%s max_dimension=%s format=%s cover=%s",
+        file.filename, width, height, percent, max_dimension, output_format, cover,
+    )
     return await image_tools_controller.resize(
         file,
         width=width,
@@ -68,6 +73,7 @@ async def social_presets():
 async def remove_metadata(
     file: UploadFile = File(...),
 ):
+    logger.info("remove_metadata: file=%s", file.filename)
     return await image_tools_controller.remove_metadata(file)
 
 
@@ -81,6 +87,10 @@ async def add_watermark(
     size_ratio: float = Form(0.1),
     rotation: int = Form(0),
 ):
+    logger.info(
+        "add_watermark: file=%s position=%s opacity=%s size_ratio=%s rotation=%s",
+        file.filename, position, opacity, size_ratio, rotation,
+    )
     return await image_tools_controller.add_watermark(
         file,
         text=text,
