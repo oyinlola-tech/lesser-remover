@@ -16,6 +16,7 @@ class ImageCompressionService:
         self,
         file_data: bytes,
         max_dimension: int | None = None,
+        strip_metadata: bool = True,
     ) -> Image.Image:
 
         image = Image.open(
@@ -40,6 +41,7 @@ class ImageCompressionService:
         image: Image.Image,
         output_format: str,
         quality: int,
+        strip_metadata: bool = True,
     ) -> tuple[bytes, str]:
 
         output_format = (
@@ -51,6 +53,7 @@ class ImageCompressionService:
                 pillow_adapter.encode_webp(
                     image,
                     quality=quality,
+                    strip_metadata=strip_metadata,
                 ),
                 "image/webp",
             )
@@ -60,6 +63,7 @@ class ImageCompressionService:
                 pillow_adapter.encode_jpeg(
                     image,
                     quality=quality,
+                    strip_metadata=strip_metadata,
                 ),
                 "image/jpeg",
             )
@@ -67,7 +71,8 @@ class ImageCompressionService:
         if output_format == "png":
             return (
                 pillow_adapter.encode_png(
-                    image
+                    image,
+                    strip_metadata=strip_metadata,
                 ),
                 "image/png",
             )
@@ -83,20 +88,23 @@ class ImageCompressionService:
         output_format: str = "webp",
         quality: int = 85,
         max_dimension: int | None = None,
-    ) -> tuple[bytes, str, int, int]:
+        strip_metadata: bool = True,
+    ) -> tuple[bytes, str, int, int, int]:
 
         image = self._prepare_image(
             file_data,
             max_dimension,
+            strip_metadata,
         )
 
         data, content_type = self._encode(
             image,
             output_format,
             quality,
+            strip_metadata=strip_metadata,
         )
 
-        return data, content_type, image.width, image.height
+        return data, content_type, quality, image.width, image.height
 
     def _compress_with_preset_details(
         self,
@@ -104,6 +112,7 @@ class ImageCompressionService:
         preset: str = "balanced",
         output_format: str = "webp",
         max_dimension: int | None = None,
+        strip_metadata: bool = True,
     ) -> tuple[bytes, str, int, int, int]:
 
         settings = PRESETS.get(
@@ -119,6 +128,7 @@ class ImageCompressionService:
         image = self._prepare_image(
             file_data,
             max_dimension,
+            strip_metadata,
         )
 
         best_data: bytes | None = None
@@ -132,6 +142,7 @@ class ImageCompressionService:
                     image,
                     output_format,
                     quality,
+                    strip_metadata=strip_metadata,
                 )
             )
 
@@ -165,6 +176,7 @@ class ImageCompressionService:
         preset: str = "balanced",
         output_format: str = "webp",
         max_dimension: int | None = None,
+        strip_metadata: bool = True,
     ) -> tuple[bytes, str, int, int, int]:
 
         best_data, best_content_type, best_quality, width, height = (
@@ -173,6 +185,7 @@ class ImageCompressionService:
                 preset=preset,
                 output_format=output_format,
                 max_dimension=max_dimension,
+                strip_metadata=strip_metadata,
             )
         )
 
@@ -190,6 +203,7 @@ class ImageCompressionService:
         target_size_bytes: int,
         output_format: str = "webp",
         max_dimension: int | None = None,
+        strip_metadata: bool = True,
     ) -> tuple[bytes, str, int, int, int]:
 
         if output_format == "png":
@@ -202,6 +216,7 @@ class ImageCompressionService:
         image = self._prepare_image(
             file_data,
             max_dimension,
+            strip_metadata,
         )
 
         low = 20
@@ -222,6 +237,7 @@ class ImageCompressionService:
                     image,
                     output_format,
                     quality,
+                    strip_metadata=strip_metadata,
                 )
             )
 
@@ -246,6 +262,7 @@ class ImageCompressionService:
                     image,
                     output_format,
                     20,
+                    strip_metadata=strip_metadata,
                 )
             )
 
@@ -271,6 +288,7 @@ class ImageCompressionService:
         target_size_bytes: int,
         output_format: str = "webp",
         max_dimension: int | None = None,
+        strip_metadata: bool = True,
     ) -> tuple[bytes, str, int, int, int]:
 
         best_data, best_content_type, best_quality, width, height = (
@@ -279,6 +297,7 @@ class ImageCompressionService:
                 target_size_bytes=target_size_bytes,
                 output_format=output_format,
                 max_dimension=max_dimension,
+                strip_metadata=strip_metadata,
             )
         )
 
