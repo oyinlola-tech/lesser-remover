@@ -153,8 +153,17 @@
   box-shadow: var(--shadow-sm);
 }
 .category-showcase-icon {
-  font-size: 32px;
+  display: flex;
+  width: 64px;
+  height: 64px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary-soft);
+  color: var(--color-text);
+  font-size: 2rem;
   line-height: 1;
+  flex-shrink: 0;
 }
 .category-showcase-item h3 {
   margin: 0;
@@ -293,8 +302,17 @@
   background: var(--color-surface);
 }
 .quality-item-icon {
-  font-size: 28px;
-  margin-bottom: var(--space-3);
+  display: flex;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto var(--space-3);
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary-soft);
+  color: var(--color-text);
+  font-size: 1.75rem;
+  line-height: 1;
 }
 .quality-item h3 {
   margin: 0 0 8px;
