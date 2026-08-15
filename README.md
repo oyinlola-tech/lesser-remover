@@ -7,7 +7,7 @@ accounts, no cloud uploads required.
 
 ## What it does
 
-- **Image tools** — background remover, image compressor, converter (JPG/PNG/WebP/AVIF), resizer, cropper, editor, metadata remover, watermark, background replacement
+- **Image tools** — image compressor (quality slider, target-size, metadata removal, JPG/PNG/WebP), background remover, converter (AVIF/JPG/PNG/WebP), resizer, cropper, editor, metadata remover, watermark, background replacement
 - **PDF tools** — compressor, merger, splitter, rotator, page extractor, PDF→image, image→PDF
 - **File tools** — analyzer (type/size/hash/dimensions), ZIP creator, duplicate finder
 - **Developer tools** — favicon generator, SVG optimizer, image↔Base64, QR code generator, barcode generator
@@ -48,6 +48,7 @@ flowchart TD
     UI -->|/api/v1/tools/file/*| Routes
     UI -->|/api/v1/tools/dev/*| Routes
     UI -->|/api/v1/background/*| Routes
+    UI -->|/api/v1/images/compress| Routes
     UI -->|/api/v1/compression/*| Routes
     UI -->|/api/v1/capabilities| Routes
 
@@ -305,4 +306,10 @@ uvicorn app.main:app --reload --port 8001
 
 ## License
 
-Private / Local use. No cloud services involved.
+This project is open-source software licensed under the
+[MIT License](./LICENSE).  You are free to use, modify, and distribute it
+commercially or privately.  See [CONTRIBUTING.md](./CONTRIBUTING.md) for
+how to submit bug reports, feature requests, and pull requests.
+
+> All processing runs locally in the browser or on your own server — no cloud
+> uploads, no accounts, no tracking.
