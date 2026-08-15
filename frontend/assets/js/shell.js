@@ -1,4 +1,5 @@
 import { openSupport } from "./support-popup.js";
+import { injectIcons } from "./icons.js";
 import {
     CATEGORY_META,
     CATEGORY_ORDER,
@@ -8,23 +9,14 @@ import {
 const GITHUB_URL = "https://github.com/oyinlola-tech/utils-tools";
 const SITE_URL = "https://www.oyinlola.site/";
 
-const STAR_ICON = `
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
-  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"></polygon>
-</svg>`;
-
-const HEART_ICON = `
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-</svg>`;
+const STAR_ICON = '<i class="fa-brands fa-github" aria-hidden="true"></i>';
+const HEART_ICON = '<i class="fa-solid fa-heart" aria-hidden="true"></i>';
 
 function renderHeader() {
-    const toolId = document.body.dataset.toolId;
-    const homeHref = toolId ? "/" : "/";
     return `
 <header class="site-header" data-shell-header>
   <div class="container header-inner">
-    <a href="${homeHref}" class="brand" aria-label="Utils-tool home">
+    <a href="/" class="brand" aria-label="Utils-tool home">
       <img src="/static/assets/brand/logo.svg" alt="" width="32" height="32" style="display:block;" />
       <span>Utils-tool</span>
     </a>
@@ -35,7 +27,7 @@ function renderHeader() {
       <a href="/#faq">FAQ</a>
     </nav>
     <div class="header-actions">
-      <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="header-star-button" aria-label="Star this project on GitHub">
+      <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="header-star-button" aria-label="View and star this project on GitHub">
         ${STAR_ICON}
         <span>Star</span>
       </a>
@@ -58,7 +50,7 @@ function renderFooter() {
           Private by default. Fast, calm, and precise file tools that run in your browser.
         </p>
         <div class="footer-actions">
-          <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="footer-star-button" aria-label="Star this project on GitHub">
+          <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="footer-star-button" aria-label="View and star this project on GitHub">
             ${STAR_ICON}
             Star
           </a>
@@ -93,6 +85,8 @@ function renderFooter() {
 }
 
 export function renderShell() {
+    injectIcons();
+
     const headerHost = document.querySelector("#site-header");
     const footerHost = document.querySelector("#site-footer");
 
