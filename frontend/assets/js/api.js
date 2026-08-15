@@ -22,6 +22,12 @@ function extractErrorMessage(data, fallback) {
     return fallback;
 }
 
+function apiError(response, data, fallback) {
+    const error = new Error(extractErrorMessage(data, fallback));
+    error.status = response.status;
+    return error;
+}
+
 async function safeFetch(url, options = {}) {
     const controller = new AbortController();
     const timeout = options.timeout || 0;
@@ -65,7 +71,7 @@ export async function startBackgroundRemoval(file, outputFormat = "webp") {
 
     const data = await parseJsonResponse(response);
     if (!response.ok) {
-        throw new Error(extractErrorMessage(data, "Unable to process image."));
+        throw apiError(response, data, "Unable to process image.");
     }
     return data;
 }
@@ -112,7 +118,7 @@ export async function startBatchCompression({
 
     const data = await parseJsonResponse(response);
     if (!response.ok) {
-        throw new Error(extractErrorMessage(data, "Unable to compress files."));
+        throw apiError(response, data, "Unable to compress files.");
     }
     return data;
 }
@@ -156,7 +162,7 @@ export async function startImageCompression({
 
     const data = await parseJsonResponse(response);
     if (!response.ok) {
-        throw new Error(extractErrorMessage(data, "Unable to compress images."));
+        throw apiError(response, data, "Unable to compress images.");
     }
     return data;
 }
@@ -167,7 +173,7 @@ export async function cancelJob(jobId) {
     });
     const data = await parseJsonResponse(response);
     if (!response.ok) {
-        throw new Error(extractErrorMessage(data, "Unable to cancel job."));
+        throw apiError(response, data, "Unable to cancel job.");
     }
     return data;
 }
@@ -176,7 +182,7 @@ export async function getJob(jobId) {
     const response = await safeFetch(`${API_BASE_URL}/jobs/${jobId}`);
     const data = await parseJsonResponse(response);
     if (!response.ok) {
-        throw new Error(extractErrorMessage(data, "Unable to load job."));
+        throw apiError(response, data, "Unable to load job.");
     }
     return data;
 }
@@ -185,7 +191,7 @@ export async function getCapabilities() {
     const response = await safeFetch(`${API_BASE_URL}/capabilities`);
     const data = await parseJsonResponse(response);
     if (!response.ok) {
-        throw new Error(extractErrorMessage(data, "Unable to load capabilities."));
+        throw apiError(response, data, "Unable to load capabilities.");
     }
     return data;
 }
@@ -195,7 +201,7 @@ export async function apiGet(path) {
     const response = await safeFetch(`${API_BASE_URL}${path}`);
     const data = await parseJsonResponse(response);
     if (!response.ok) {
-        throw new Error(extractErrorMessage(data, "Request failed."));
+        throw apiError(response, data, "Request failed.");
     }
     return data;
 }
@@ -226,7 +232,7 @@ export async function apiUpload(path, { files = [], fields = {} } = {}) {
     });
     const data = await parseJsonResponse(response);
     if (!response.ok) {
-        throw new Error(extractErrorMessage(data, "Request failed."));
+        throw apiError(response, data, "Request failed.");
     }
     return data;
 }
@@ -240,7 +246,7 @@ export async function apiDownload(path, { files = [], fields = {} } = {}) {
     });
     if (!response.ok) {
         const data = await parseJsonResponse(response);
-        throw new Error(extractErrorMessage(data, "Request failed."));
+        throw apiError(response, data, "Request failed.");
     }
     const blob = await response.blob();
     let filename = "download";
