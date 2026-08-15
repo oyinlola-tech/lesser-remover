@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#fbfbf7" />
+    <meta name="robots" content="noindex" />
+    <meta name="description" content="Something went wrong on the Utils-tool server." />
+    <title>500 · Server error - Utils-tool</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/errors.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="error-page">
+      <div class="container error-page-inner">
+        <p class="error-status" aria-hidden="true"><span class="error-status-dot"></span>status: 500 · internal_server_error</p>
+        <div class="error-code" aria-hidden="true">5<span class="error-code-accent">0</span>0</div>
+        <h1 class="error-title">Something went wrong on our side.</h1>
+        <p class="error-lead">
+          The server hit an unexpected error while handling the request.
+          It's not your file or your settings — try again in a moment.
+        </p>
+        <div class="error-actions">
+          <a href="javascript:location.reload()" class="primary-button">Try again</a>
+          <a href="/tools" class="secondary-button">Browse tools</a>
+        </div>
+        <div id="error-detail" class="error-detail"></div>
+        <div class="error-fix">
+          <h2 class="error-fix-title">What to do next</h2>
+          <ul class="error-fix-list">
+            <li>Refresh the page and run the action again.</li>
+            <li>If it keeps happening, come back in a few minutes.</li>
+            <li>If the problem persists, report it on GitHub.</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+    <div id="site-footer"></div>
+    <script type="module" src="/static/assets/js/pages/error-page.js"></script>
+  </body>
+</html>

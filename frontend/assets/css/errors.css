@@ -1,0 +1,206 @@
+/* Error pages — status-report styling.
+   Loaded after variables.css / base.css. Uses the shared tokens. */
+
+.error-page {
+    display: flex;
+    align-items: center;
+    min-height: calc(100vh - var(--header-height));
+    padding: var(--space-16) 0 var(--space-24);
+}
+
+.error-page-inner {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.error-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: lowercase;
+    color: var(--color-text-muted);
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: var(--space-2) var(--space-4);
+    margin-bottom: var(--space-8);
+}
+
+.error-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-danger);
+    flex: none;
+}
+
+.error-code {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-bold);
+    font-size: clamp(5.5rem, 18vw, 11rem);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    color: var(--color-text);
+    margin-bottom: var(--space-6);
+    user-select: none;
+}
+
+.error-code-accent {
+    background: var(--color-primary);
+    color: var(--color-text);
+    border-radius: 0.12em;
+    padding: 0 0.06em;
+}
+
+.error-title {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-bold);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
+    color: var(--color-text);
+    margin: 0 0 var(--space-4);
+}
+
+.error-lead {
+    max-width: 46ch;
+    margin: 0 auto var(--space-8);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-normal);
+}
+
+.error-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-12);
+}
+
+.error-fix {
+    max-width: 560px;
+    margin: 0 auto;
+    text-align: left;
+    background: var(--color-surface);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6) var(--space-7);
+    box-shadow: var(--shadow-sm);
+}
+
+.error-fix-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-4);
+}
+
+.error-fix-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+}
+
+.error-fix-list li {
+    position: relative;
+    padding-left: var(--space-6);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-snug);
+}
+
+.error-fix-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.3em;
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+    background: var(--color-primary);
+    flex: none;
+}
+
+.error-detail {
+    display: none;
+    margin-top: var(--space-5);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-muted);
+    word-break: break-word;
+    text-align: left;
+    background: var(--color-surface-muted);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+}
+
+.error-page a:focus-visible,
+.error-page button:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+    .error-page {
+        min-height: calc(100vh - var(--header-height-sm));
+        padding: var(--space-10) 0 var(--space-16);
+    }
+
+    .error-actions .primary-button,
+    .error-actions .secondary-button {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .error-status,
+    .error-code,
+    .error-title,
+    .error-lead,
+    .error-fix {
+        animation: error-rise 0.45s var(--ease-out-quad) both;
+    }
+
+    .error-code {
+        animation-delay: 0.04s;
+    }
+
+    .error-title {
+        animation-delay: 0.08s;
+    }
+
+    .error-lead {
+        animation-delay: 0.12s;
+    }
+
+    .error-fix {
+        animation-delay: 0.16s;
+    }
+
+    @keyframes error-rise {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#fbfbf7" />
+    <meta name="robots" content="noindex" />
+    <meta name="description" content="Utils-tool couldn't read the request you sent." />
+    <title>400 · Bad request - Utils-tool</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/errors.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="error-page">
+      <div class="container error-page-inner">
+        <p class="error-status" aria-hidden="true"><span class="error-status-dot"></span>status: 400 · bad_request</p>
+        <div class="error-code" aria-hidden="true">4<span class="error-code-accent">0</span>0</div>
+        <h1 class="error-title">We couldn't read that request.</h1>
+        <p class="error-lead">
+          The request was missing something or was malformed. Go back,
+          check your input, and try again.
+        </p>
+        <div class="error-actions">
+          <a href="javascript:history.back()" class="primary-button">Go back</a>
+          <a href="/tools" class="secondary-button">Browse tools</a>
+        </div>
+        <div class="error-fix">
+          <h2 class="error-fix-title">What to do next</h2>
+          <ul class="error-fix-list">
+            <li>Go back to the previous page and review the form.</li>
+            <li>Make sure every required field is filled in.</li>
+            <li>Run the action again.</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+    <div id="site-footer"></div>
+    <script type="module" src="/static/assets/js/pages/error-page.js"></script>
+  </body>
+</html>

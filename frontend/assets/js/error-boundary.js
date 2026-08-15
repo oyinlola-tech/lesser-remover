@@ -27,6 +27,7 @@ const ERROR_STATE = {
                  <p style="color:#55634f;margin:0 0 24px;">The app hit an unexpected error. You can try refreshing the page.</p>
                  <div style="background:#fff;border:1px solid #deded6;border-radius:12px;padding:16px;text-align:left;font-family:monospace;font-size:13px;word-break:break-word;">${this.escape(message)}${fileInfo}</div>
                  <button onclick="location.reload()" style="margin-top:24px;padding:12px 24px;border-radius:999px;background:#9fe870;color:#163300;font-weight:800;border:0;cursor:pointer;">Refresh page</button>
+                 <div style="margin-top:14px;"><a href="/errors/500.html" style="color:#55634f;font-size:14px;">Open the error page instead</a></div>
              </div>
          `;
         this.boundary.style.display = "block";
