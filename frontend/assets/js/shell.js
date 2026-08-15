@@ -19,16 +19,20 @@ const HEART_ICON = `
 </svg>`;
 
 function renderHeader() {
+    const toolId = document.body.dataset.toolId;
+    const homeHref = toolId ? "/" : "/";
     return `
-<header class="site-header">
+<header class="site-header" data-shell-header>
   <div class="container header-inner">
-    <a href="/" class="brand" aria-label="Utils-tool home">
+    <a href="${homeHref}" class="brand" aria-label="Utils-tool home">
       <img src="/static/assets/brand/logo.svg" alt="" width="32" height="32" style="display:block;" />
       <span>Utils-tool</span>
     </a>
     <nav class="header-nav" aria-label="Main navigation">
-      <a href="/#tools">Tools</a>
+      <a href="/#featured">Tools</a>
       <a href="/#categories">Categories</a>
+      <a href="/#how-it-works">How it works</a>
+      <a href="/#faq">FAQ</a>
     </nav>
     <div class="header-actions">
       <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="header-star-button" aria-label="Star this project on GitHub">
@@ -42,7 +46,7 @@ function renderHeader() {
 
 function renderFooter() {
     return `
-<footer class="site-footer">
+<footer class="site-footer" data-shell-footer>
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand-section">
@@ -64,8 +68,10 @@ function renderFooter() {
       <div class="footer-links" data-footer-categories>
         <div class="footer-column">
           <h4 class="footer-heading">Product</h4>
-          <a href="/#tools">All tools</a>
+          <a href="/#featured">All tools</a>
           <a href="/#categories">Categories</a>
+          <a href="/#how-it-works">How it works</a>
+          <a href="/#faq">FAQ</a>
         </div>
         <div class="footer-column">
           <h4 class="footer-heading">Connect</h4>
@@ -105,20 +111,6 @@ export function renderShell() {
     document.querySelectorAll("[data-shell-fab], [data-shell-support]").forEach((button) => {
         button.addEventListener("click", () => openSupport());
     });
-
-    const activeLink = footerHost
-        ? footerHost.querySelector(".footer-star-button")
-        : null;
-    if (activeLink) {
-        const toolId = document.body.dataset.toolId;
-        const headerNav = headerHost ? headerHost.querySelector(".header-nav") : null;
-        if (toolId && headerNav) {
-            const toolsLink = headerNav.querySelector('a[href="/#tools"]');
-            if (toolsLink) {
-                toolsLink.setAttribute("href", "/tools");
-            }
-        }
-    }
 }
 
 async function renderFooterCategories(footerHost) {

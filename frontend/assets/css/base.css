@@ -65,20 +65,20 @@ button {
 
 .site-footer {
   border-top: 1px solid var(--color-border);
-  padding: 48px 0 24px;
+  padding: var(--space-12) 0 var(--space-6);
   background: var(--color-surface);
 }
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 28px;
+  grid-template-columns: 1.2fr 2.4fr;
+  gap: var(--space-7);
 }
 
 .footer-brand-section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .footer-brand {
@@ -109,14 +109,14 @@ button {
 
 .footer-links {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-6) var(--space-7);
 }
 
 .footer-column {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-2);
 }
 
 .footer-heading {
@@ -144,8 +144,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 28px;
-  padding-top: 16px;
+  margin-top: var(--space-7);
+  padding-top: var(--space-4);
   border-top: 1px solid var(--color-border);
   color: var(--color-text-muted);
   font-size: var(--font-size-xs);
@@ -153,7 +153,7 @@ button {
 }
 
 .footer-divider {
-  margin: 0 8px;
+  margin: 0 var(--space-2);
   color: var(--color-border-strong);
 }
 
@@ -162,7 +162,7 @@ button {
   align-items: center;
   justify-content: center;
   padding: 10px 18px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   border: 1px solid var(--color-border-strong);
   background: var(--color-surface);
   color: var(--color-text);
@@ -183,7 +183,7 @@ button {
   align-items: center;
   gap: 7px;
   padding: 10px 18px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   border: 1px solid var(--color-border-strong);
   background: var(--color-surface);
   color: var(--color-text);
@@ -208,8 +208,8 @@ button {
 
 .fab-support {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: var(--space-5);
+  bottom: var(--space-5);
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -218,7 +218,7 @@ button {
   color: var(--color-text);
   font-weight: 900;
   font-size: 20px;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   cursor: pointer;
   z-index: 100;
   display: grid;
@@ -234,19 +234,19 @@ button {
 @media (max-width: 700px) {
   .footer-grid {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: var(--space-9);
   }
 
   .footer-inner {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: var(--space-3);
   }
 
   .footer-bottom {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: var(--space-2);
   }
 
   .footer-divider {
@@ -256,7 +256,7 @@ button {
   .fab-support {
     width: 50px;
     height: 50px;
-    right: 16px;
-    bottom: 16px;
+    right: var(--space-4);
+    bottom: var(--space-4);
   }
 }

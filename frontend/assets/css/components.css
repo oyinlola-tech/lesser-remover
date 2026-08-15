@@ -676,13 +676,13 @@
   border-color: var(--color-text);
 }
 .error-message {
-  margin-top: 18px;
-  padding: 14px 16px;
-  border-radius: var(--radius-md);
-  background: #fff0f0;
-  color: var(--color-danger);
-  font-size: var(--font-size-lg);
-  font-weight: 600;
+   margin-top: 18px;
+   padding: 14px 16px;
+   border-radius: var(--radius-md);
+   background: var(--color-danger-soft);
+   color: var(--color-danger);
+   font-size: var(--font-size-lg);
+   font-weight: 600;
 }
 .cancel-button {
   margin-top: 20px;
@@ -1071,39 +1071,54 @@
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
 }
-.quality-options {
+.quality-slider-container {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
 }
-.quality-option {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 14px 16px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  color: var(--color-text);
-  text-align: left;
-  transition:
-    border-color var(--transition-fast),
-    background var(--transition-fast);
+#quality-slider {
+  flex: 1;
+  accent-color: var(--color-text);
+  height: 6px;
 }
-.quality-option:hover {
-  border-color: var(--color-border-strong);
-}
-.quality-option.active {
-  border-color: var(--color-text);
-  background: var(--color-primary-soft);
-}
-.quality-option strong {
+.quality-value {
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-lg);
+  min-width: 32px;
+  text-align: center;
+  color: var(--color-text);
 }
-.quality-option span {
-  margin-top: 4px;
+.target-size-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.target-size-option {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+.target-size-option:hover {
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+.target-size-option.active {
+  background: var(--color-text);
+  color: var(--color-surface);
+  border-color: var(--color-text);
+}
+.target-size-custom .target-size-input input {
+  max-width: 160px;
 }
 .advanced-settings {
   margin-top: 20px;
@@ -1671,11 +1686,11 @@
 
 /* Failed files section (compression result) */
 .failed-files {
-  margin-top: 28px;
-  padding: 20px;
-  border: 1px solid #f2c4c0;
-  border-radius: var(--radius-lg);
-  background: #fff7f6;
+   margin-top: 28px;
+   padding: 20px;
+   border: 1px solid var(--color-danger-soft);
+   border-radius: var(--radius-lg);
+   background: var(--color-danger-soft);
 }
 
 .failed-files-heading {
@@ -1687,11 +1702,11 @@
 }
 
 .failed-file {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 12px 0;
-  border-top: 1px solid #f2c4c0;
+   display: flex;
+   flex-direction: column;
+   gap: 4px;
+   padding: 12px 0;
+   border-top: 1px solid var(--color-danger-soft);
 }
 
 .failed-file:first-of-type {
@@ -1714,8 +1729,8 @@
 
 /* Partial success badge */
 .success-badge.partial {
-  background: #fdf3dc;
-  color: var(--color-warning);
+   background: var(--color-warning-soft);
+   color: var(--color-warning);
 }
 
 /* Neutral info state for error boxes (e.g. user cancelled) */
