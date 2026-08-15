@@ -101,6 +101,16 @@ async def home():
 _TOOL_ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 
 
+@app.get("/about")
+async def about_page():
+    return FileResponse(FRONTEND_DIR / "pages" / "about.html")
+
+
+@app.get("/tools")
+async def tools_page():
+    return FileResponse(FRONTEND_DIR / "pages" / "tools.html")
+
+
 @app.get("/tools/{tool_id}")
 async def tool_page(tool_id: str):
     if not _TOOL_ID_PATTERN.match(tool_id):

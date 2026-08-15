@@ -8,20 +8,31 @@
     <meta name="author" content="Oluwayemi Oyinlola" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://tools.oyinlola.site/" />
+
     <meta property="og:title" content="Utils-tool - Simple tools for better files" />
     <meta property="og:description" content="Compress, convert, edit, remove backgrounds, process PDFs and analyze files. Private by default." />
     <meta property="og:url" content="https://tools.oyinlola.site/" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://tools.oyinlola.site/static/assets/img/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Utils-tool - Simple tools for better files" />
     <meta name="twitter:description" content="Compress, convert, edit, remove backgrounds, process PDFs and analyze files. Private by default." />
+
     <title>Utils-tool - Simple tools for better files</title>
+
     <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
     <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+
     <script type="module" src="/static/assets/js/error-boundary.js"></script>
+
+    <link rel="preconnect" href="https://kit.fontawesome.com" />
+    <link rel="preconnect" href="https://www.google.com" />
+    <link rel="dns-prefetch" href="https://kit.fontawesome.com" />
+    <link rel="dns-prefetch" href="https://www.google.com" />
 
     <link rel="stylesheet" href="/static/assets/css/reset.css" />
     <link rel="stylesheet" href="/static/assets/css/variables.css" />
@@ -29,411 +40,367 @@
     <link rel="stylesheet" href="/static/assets/css/components.css" />
     <link rel="stylesheet" href="/static/assets/css/landing.css" />
     <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Utils-tool",
+      "description": "Free, local-first file utilities for images, PDFs, files and developers.",
+      "applicationCategory": "Utilities",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Image compression",
+        "Image conversion",
+        "Background removal",
+        "PDF compression",
+        "PDF merge and split",
+        "QR code generation",
+        "SVG optimization"
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="site-header"></div>
 
-    <!-- ==================== HERO ==================== -->
-    <section class="hero-section">
-      <div class="container">
-        <div class="hero-grid">
-          <div class="hero-text">
-            <span class="eyebrow">Private by default</span>
-            <h1 class="hero-title">Simple tools for your files.</h1>
-            <p class="hero-description">
-              Compress, convert, edit, remove backgrounds, process PDFs and
-              analyze files — all in one calm, fast tool. No accounts. No cloud
-              uploads. Your files stay yours.
+    <main>
+      <section class="hero-section" id="hero">
+        <div class="container">
+          <div class="hero-grid">
+            <div class="hero-text">
+              <span class="eyebrow" aria-label="Private by default">Private by default</span>
+              <h1 class="hero-title">Simple tools for your files.</h1>
+              <p class="hero-description">
+                Compress, convert, edit, remove backgrounds, process PDFs and
+                analyze files — all in one calm, fast tool. No accounts. No cloud
+                uploads. Your files stay yours.
+              </p>
+              <div class="hero-actions">
+                <a href="/tools" class="primary-button">Explore all tools</a>
+                <a href="/about" class="secondary-button">How it works</a>
+                <a href="https://github.com/oyinlola-tech/utils-tools" target="_blank" rel="noopener noreferrer" class="secondary-button github-button">
+                  <i class="fa-brands fa-github" aria-hidden="true"></i>
+                  Star on GitHub
+                </a>
+              </div>
+            </div>
+            <div class="hero-visual" aria-hidden="true">
+              <div class="hero-card">
+                <div class="hero-card-header">
+                  <span class="hero-card-title">Compress image</span>
+                </div>
+                <div class="hero-card-body">
+                  <div class="hero-file-row">
+                    <span class="hero-file-name">sunset-landscape.jpg</span>
+                    <span class="hero-file-size">4.8 MB → 1.2 MB</span>
+                  </div>
+                  <div class="hero-progress">
+                    <div class="hero-progress-bar" style="width: 74%"></div>
+                  </div>
+                  <div class="hero-saving">Saved 75%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="product-intro-section">
+        <div class="container">
+          <div class="product-intro">
+            <h2>One place for the file utilities you need every day.</h2>
+            <p class="section-description">
+              Utils-tool brings image, PDF, file, developer and design utilities
+              together behind a single, consistent interface. Each tool is tuned for
+              quality — you always keep control of the result — and because it ships as
+              a local web application, nothing leaves your machine unless you tell it
+              to.
             </p>
-            <div class="hero-actions">
-              <a href="/#tools" class="primary-button">Explore tools</a>
-             <a href="/tools/image-compressor" class="secondary-button">Start with a popular tool</a>
-             <a href="/tools/image-resizer" class="secondary-button">Or resize an image</a>
-              <a href="/tools/svg-generator" class="secondary-button">Or convert to SVG</a>
+            <div class="category-list">
+              <span class="category-chip">Images</span>
+              <span class="category-chip">PDFs</span>
+              <span class="category-chip">Files</span>
+              <span class="category-chip">Developer</span>
+              <span class="category-chip">Design</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="featured-section" id="featured">
+        <div class="container">
+          <div class="section-header centered">
+            <span class="eyebrow">Featured tools</span>
+            <h2>Start with a popular tool.</h2>
+            <p class="section-description">
+              These tools cover the most common jobs. Available tools open directly;
+              planned tools are marked as coming soon.
+            </p>
+          </div>
+          <div id="featured-tools" class="tool-grid featured-grid" aria-live="polite">
+            <p class="catalog-loading">Loading tools…</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="categories-section" id="categories">
+        <div class="container">
+          <div class="section-header centered">
+            <span class="eyebrow">Categories</span>
+            <h2>Everything, organised by what you are doing.</h2>
+            <p class="section-description">
+              Each category wraps a set of tools that solve one kind of job. Browse a
+              category to find exactly what you need.
+            </p>
+          </div>
+          <div class="category-showcase">
+            <a href="/tools#category-image" class="category-showcase-item">
+              <div class="category-showcase-icon" aria-hidden="true">
+                <i class="fa-solid fa-image" aria-hidden="true"></i>
+              </div>
+              <h3>Image tools</h3>
+              <p>Compress, convert, crop, resize, remove backgrounds and edit photos.</p>
+              <span class="category-showcase-link">Browse image tools →</span>
+            </a>
+            <a href="/tools#category-pdf" class="category-showcase-item">
+              <div class="category-showcase-icon" aria-hidden="true">
+                <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+              </div>
+              <h3>PDF tools</h3>
+              <p>Compress, merge, split, rotate and reorganize PDF documents.</p>
+              <span class="category-showcase-link">Browse PDF tools →</span>
+            </a>
+            <a href="/tools#category-file" class="category-showcase-item">
+              <div class="category-showcase-icon" aria-hidden="true">
+                <i class="fa-solid fa-folder" aria-hidden="true"></i>
+              </div>
+              <h3>File tools</h3>
+              <p>Analyze files, package archives and find duplicates.</p>
+              <span class="category-showcase-link">Browse file tools →</span>
+            </a>
+            <a href="/tools#category-developer" class="category-showcase-item">
+              <div class="category-showcase-icon" aria-hidden="true">
+                <i class="fa-solid fa-code" aria-hidden="true"></i>
+              </div>
+              <h3>Developer tools</h3>
+              <p>Favicons, SVG optimization, SVG generation, Base64, QR codes and barcodes.</p>
+              <span class="category-showcase-link">Browse developer tools →</span>
+            </a>
+            <a href="/tools#category-utility" class="category-showcase-item">
+              <div class="category-showcase-icon" aria-hidden="true">
+                <i class="fa-solid fa-palette" aria-hidden="true"></i>
+              </div>
+              <h3>Design tools</h3>
+              <p>Social media presets and screenshot beautification.</p>
+              <span class="category-showcase-link">Browse design tools →</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="how-it-works-section" id="how-it-works">
+        <div class="container">
+          <div class="section-header centered">
+            <span class="eyebrow">How it works</span>
+            <h2>Upload, adjust, download.</h2>
+            <p class="section-description">
+              Every tool follows the same calm four-step flow, from file to finished
+              result.
+            </p>
+          </div>
+          <ol class="steps">
+            <li class="step">
+              <div class="step-number" aria-hidden="true">01</div>
+              <div class="step-body">
+                <h3>Choose a tool</h3>
+                <p>Pick the utility that matches your task from the catalog. Each tool page explains what it does and which files it accepts.</p>
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-number" aria-hidden="true">02</div>
+              <div class="step-body">
+                <h3>Upload your file</h3>
+                <p>Drag files onto the page, drop them in the zone, or browse from your computer. Supported formats and size limits are always shown.</p>
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-number" aria-hidden="true">03</div>
+              <div class="step-body">
+                <h3>Adjust the settings</h3>
+                <p>Fine-tune quality, output format, dimensions and metadata. See a live hint of what each option does before you commit.</p>
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-number" aria-hidden="true">04</div>
+              <div class="step-body">
+                <h3>Download the result</h3>
+                <p>Inspect the output — original vs. result, file size and savings — then save the file or start another job.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="local-section" id="local">
+        <div class="container">
+          <div class="local-content">
+            <span class="eyebrow">Local processing</span>
+            <h2>Your files stay on your computer.</h2>
+            <p>
+              The application runs on your machine. When Utils-tool runs locally,
+              uploads are processed by the local Python server and stored
+              temporarily on disk while they are being processed. Files are never
+              sent to an external service in the local deployment, and the server
+              never reaches the network for processing.
+            </p>
+            <p>
+              Temporary files live in the configured storage directory and are
+              cleaned up automatically after each job, so nothing accumulates on
+              your disk.
+            </p>
+          </div>
+          <div class="local-points">
+            <div>
+              <strong>No account</strong>
+              <span>Nothing to sign up for. Just open the app and start working.</span>
+            </div>
+            <div>
+              <strong>No database</strong>
+              <span>Temporary state lives on disk in your storage directory.</span>
+            </div>
+            <div>
+              <strong>No cloud upload</strong>
+              <span>All processing happens on your machine.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="quality-section" id="quality">
+        <div class="container">
+          <div class="section-header centered">
+            <span class="eyebrow">Quality control</span>
+            <h2>You decide how the result looks.</h2>
+            <p class="section-description">
+              Utils-tool is not a black box. Every tool exposes meaningful settings
+              so you can inspect and fine-tune the output before you download.
+            </p>
+          </div>
+          <div class="quality-grid">
+            <div class="quality-item">
+              <div class="quality-item-icon" aria-hidden="true">
+                <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+              </div>
+              <h3>Compression quality</h3>
+              <p>Slide from aggressive to best for image and PDF tools, seeing the trade-off between size and fidelity.</p>
+            </div>
+            <div class="quality-item">
+              <div class="quality-item-icon" aria-hidden="true">
+                <i class="fa-solid fa-file-export" aria-hidden="true"></i>
+              </div>
+              <h3>Output format</h3>
+              <p>Choose JPEG, PNG, WebP, AVIF or let the tool pick the best fit for the source.</p>
+            </div>
+            <div class="quality-item">
+              <div class="quality-item-icon" aria-hidden="true">
+                <i class="fa-solid fa-expand" aria-hidden="true"></i>
+              </div>
+              <h3>Dimensions</h3>
+              <p>Resize, crop and set maximum bounds while keeping proportions intact.</p>
+            </div>
+            <div class="quality-item">
+              <div class="quality-item-icon" aria-hidden="true">
+                <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+              </div>
+              <h3>Target size</h3>
+              <p>Set a file-size goal and the compressor searches for the right quality to hit it.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tool-catalog-section" id="tools">
+        <div class="container">
+          <div class="section-header centered">
+            <span class="eyebrow">Complete tool directory</span>
+            <h2>All tools, grouped by category.</h2>
+            <p class="section-description">
+              Available tools open directly; planned tools are marked as coming soon.
+            </p>
+          </div>
+          <div id="tool-catalog" class="tool-catalog" aria-live="polite">
+            <p class="catalog-loading">Loading tools…</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="faq-section" id="faq">
+        <div class="container">
+          <div class="section-header centered">
+            <span class="eyebrow">Questions</span>
+            <h2>Frequently asked questions.</h2>
+          </div>
+          <dl class="faq">
+            <div class="faq-item">
+              <dt>What is Utils-tool?</dt>
+              <dd>A free, local-first collection of file utilities. Compress, convert, edit, remove backgrounds, process PDFs and analyze files in your browser.</dd>
+            </div>
+            <div class="faq-item">
+              <dt>Does Utils-tool work offline?</dt>
+              <dd>The Python backend runs on your machine. When started locally, all processing and storage happen on your computer — no internet connection is required to use the tools.</dd>
+            </div>
+            <div class="faq-item">
+              <dt>Where are my files stored?</dt>
+              <dd>Uploaded files are written to a temporary local directory while they are being processed and are cleaned up automatically. They are never sent to an external service in the local deployment.</dd>
+            </div>
+            <div class="faq-item">
+              <dt>What file formats are supported?</dt>
+              <dd>Images: JPG, PNG, WebP and AVIF. PDFs. SVG, ZIP and other common file types. Each tool lists the formats it accepts.</dd>
+            </div>
+            <div class="faq-item">
+              <dt>Can I process multiple files at once?</dt>
+              <dd>Yes — most tools support batch processing. The per-tool page shows the exact limit.</dd>
+            </div>
+            <div class="faq-item">
+              <dt>Can I control compression quality?</dt>
+              <dd>Yes. Image and PDF tools expose quality sliders, output format, target file size and metadata options.</dd>
+            </div>
+            <div class="faq-item">
+              <dt>Is Utils-tool free?</dt>
+              <dd>Yes. There are no paid tiers and no account is required.</dd>
+            </div>
+            <div class="faq-item">
+              <dt>Is there a browser extension or desktop app?</dt>
+              <dd>Utils-tool runs as a local web application. Start it with <code>start.sh</code> and open it in Chrome or any modern browser.</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="final-cta-section">
+        <div class="container">
+          <div class="final-cta">
+            <h2>Ready to get started?</h2>
+            <p class="final-cta-description">
+              No account. No subscriptions. Just fast, private tools in your browser.
+            </p>
+            <div class="final-cta-actions">
+              <a href="/tools" class="primary-button">Explore all tools</a>
               <a href="https://github.com/oyinlola-tech/utils-tools" target="_blank" rel="noopener noreferrer" class="secondary-button github-button">
                 <i class="fa-brands fa-github" aria-hidden="true"></i>
-                Star on GitHub
+                Star us on GitHub
               </a>
             </div>
-            <div class="hero-open-source">
-              <span class="open-source-badge">Open source</span>
-              <code class="clone-command">git clone https://github.com/oyinlola-tech/utils-tools.git</code>
-              <a href="https://github.com/oyinlola-tech/utils-tools" target="_blank" rel="noopener noreferrer" class="clone-button" aria-label="View on GitHub and clone the repo">View on GitHub</a>
-            </div>
-          </div>
-          <div class="hero-visual" aria-hidden="true">
-            <svg class="hero-mockup" viewBox="0 0 560 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Image Compressor workspace showing a photo being compressed with 75% space saved">
-              <rect x="4" y="4" width="552" height="412" rx="14" fill="var(--color-surface)" stroke="var(--color-border)" stroke-width="1" />
-              <rect x="24" y="28" width="504" height="88" rx="12" fill="var(--color-surface-muted)" />
-              <rect x="44" y="48" width="464" height="48" rx="8" fill="var(--color-text)" opacity="0.06" />
-              <circle cx="88" cy="124" r="28" fill="var(--color-primary-soft)" />
-              <path d="M72 116c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8-8 3.6-8 8z" fill="var(--color-text)" opacity="0.5" />
-              <path d="M80 96c-2.2 0-4 1.8-4 4 0 1.3.6 2.4 1.4 3.2 1.3 1.2 3.2 1.8 5.6 1.3.9-.2 1.7-.6 2.2-1.3.4-.6.7-1.4.7-2.2 0-2.2-1.8-4-4-4z" fill="var(--color-text)" opacity="0.4" />
-              <text x="124" y="116" font-family="Inter, sans-serif" font-size="17" font-weight="600" fill="var(--color-text-secondary)">Sunset landscape.jpg</text>
-              <text x="124" y="136" font-family="Inter, sans-serif" font-size="13" font-weight="500" fill="var(--color-text-secondary)">4.8 MB original · 1920 × 1080</text>
-
-              <text x="24" y="240" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="var(--color-text)" letter-spacing="-0.02em">Compression result</text>
-
-              <rect x="24" y="256" width="504" height="96" rx="12" fill="var(--color-surface)" stroke="var(--color-border)" stroke-width="1" />
-              <rect x="36" y="276" width="440" height="22" rx="4" fill="var(--color-text)" opacity="0.05" />
-              <rect x="36" y="306" width="380" height="22" rx="4" fill="var(--color-text)" opacity="0.05" />
-
-              <rect x="44" y="340" width="464" height="16" rx="3" fill="var(--color-surface-muted)" />
-              <rect x="44" y="360" width="200" height="10" rx="3" fill="var(--color-primary)" />
-              <text x="44" y="384" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="var(--color-success)">Saved 75%</text>
-              <rect x="44" y="186" width="464" height="1" stroke="var(--color-border)" />
-            </svg>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ==================== PRODUCT INTRODUCTION ==================== -->
-    <section class="product-intro-section">
-      <div class="container">
-        <div class="product-intro">
-          <h2>One place for the file utilities you need every day.</h2>
-          <p class="section-description">
-            Utils-tool brings image, PDF, file, developer and design utilities
-            together behind a single, consistent interface. Each tool is tuned for
-            quality — you always keep control of the result — and because it ships as
-            a local web application, nothing leaves your machine unless you tell it
-            to.
-          </p>
-          <p class="section-description">
-            Whether you are preparing assets for a website, shrinking a PDF before
-            an email, cleaning up product photos or generating developer assets,
-            there is a tool for it here. No accounts, no subscriptions, no tracking.
-          </p>
-          <div class="category-list">
-            <span class="category-chip">Images</span>
-            <span class="category-chip">PDFs</span>
-            <span class="category-chip">Files</span>
-            <span class="category-chip">Developer</span>
-            <span class="category-chip">Design</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== FEATURED TOOLS ==================== -->
-    <section class="featured-section" id="featured">
-      <div class="container">
-        <div class="section-header centered">
-          <span class="eyebrow">Featured tools</span>
-          <h2>Start with a popular tool.</h2>
-          <p class="section-description">
-            These tools cover the most common jobs. Available tools open directly;
-            planned tools are marked as coming soon.
-          </p>
-        </div>
-        <div id="featured-tools" class="tool-grid featured-grid" aria-live="polite">
-          <p class="catalog-loading">Loading tools…</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== TOOL CATEGORIES ==================== -->
-    <section class="categories-section" id="categories">
-      <div class="container">
-        <div class="section-header centered">
-          <span class="eyebrow">Categories</span>
-          <h2>Everything, organised by what you are doing.</h2>
-          <p class="section-description">
-            Each category wraps a set of tools that solve one kind of job. Browse a
-            category to find exactly what you need.
-          </p>
-        </div>
-        <div class="category-showcase">
-          <a href="#tools" class="category-showcase-item">
-            <div class="category-showcase-icon" aria-hidden="true">
-              <i class="fa-solid fa-image" aria-hidden="true"></i>
-            </div>
-            <h3>Image tools</h3>
-            <p>Compress, convert, crop, resize, remove backgrounds and edit photos.</p>
-            <span class="category-showcase-link">Browse image tools →</span>
-          </a>
-          <a href="#tools" class="category-showcase-item">
-            <div class="category-showcase-icon" aria-hidden="true">
-              <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
-            </div>
-            <h3>PDF tools</h3>
-            <p>Compress, merge, split, rotate and reorganize PDF documents.</p>
-            <span class="category-showcase-link">Browse PDF tools →</span>
-          </a>
-          <a href="#tools" class="category-showcase-item">
-            <div class="category-showcase-icon" aria-hidden="true">
-              <i class="fa-solid fa-folder" aria-hidden="true"></i>
-            </div>
-            <h3>File tools</h3>
-            <p>Analyze files, package archives and find duplicates.</p>
-            <span class="category-showcase-link">Browse file tools →</span>
-          </a>
-          <a href="#tools" class="category-showcase-item">
-            <div class="category-showcase-icon" aria-hidden="true">
-              <i class="fa-solid fa-code" aria-hidden="true"></i>
-            </div>
-            <h3>Developer tools</h3>
-            <p>Favicons, SVG optimization, SVG generation, Base64, QR codes and barcodes.</p>
-            <span class="category-showcase-link">Browse developer tools →</span>
-          </a>
-          <a href="#tools" class="category-showcase-item">
-            <div class="category-showcase-icon" aria-hidden="true">
-              <i class="fa-solid fa-palette" aria-hidden="true"></i>
-            </div>
-            <h3>Design tools</h3>
-            <p>Social media presets and screenshot beautification.</p>
-            <span class="category-showcase-link">Browse design tools →</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== HOW IT WORKS ==================== -->
-    <section class="how-it-works-section" id="how-it-works">
-      <div class="container">
-        <div class="section-header centered">
-          <span class="eyebrow">How it works</span>
-          <h2>Upload, adjust, download.</h2>
-          <p class="section-description">
-            Every tool follows the same calm four-step flow, from file to finished
-            result.
-          </p>
-        </div>
-        <ol class="steps">
-          <li class="step">
-            <div class="step-number" aria-hidden="true">01</div>
-            <div class="step-body">
-              <h3>Choose a tool</h3>
-              <p>Pick the utility that matches your task from the catalog. Each tool page explains what it does and which files it accepts.</p>
-            </div>
-          </li>
-          <li class="step">
-            <div class="step-number" aria-hidden="true">02</div>
-            <div class="step-body">
-              <h3>Upload your file</h3>
-              <p>Drag files onto the page, drop them in the zone, or browse from your computer. Supported formats and size limits are always shown.</p>
-            </div>
-          </li>
-          <li class="step">
-            <div class="step-number" aria-hidden="true">03</div>
-            <div class="step-body">
-              <h3>Adjust the settings</h3>
-              <p>Fine-tune quality, output format, dimensions and metadata. See a live hint of what each option does before you commit.</p>
-            </div>
-          </li>
-          <li class="step">
-            <div class="step-number" aria-hidden="true">04</div>
-            <div class="step-body">
-              <h3>Download the result</h3>
-              <p>Inspect the output — original vs. result, file size and savings — then save the file or start another job.</p>
-            </div>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ==================== LOCAL-FIRST / PRIVACY ==================== -->
-    <section class="local-section" id="local">
-      <div class="container">
-        <div class="local-content">
-          <span class="eyebrow">Local processing</span>
-          <h2>Your files stay on your computer.</h2>
-          <p>
-            The application runs on your machine. When Utils-tool runs locally,
-            uploads are processed by the local Python server and stored
-            temporarily on disk while they are being processed. Files are never
-            sent to an external service in the local deployment, and the server
-            never reaches the network for processing.
-          </p>
-          <p>
-            Temporary files live in the configured storage directory and are
-            cleaned up automatically after each job, so nothing accumulates on
-            your disk.
-          </p>
-        </div>
-        <div class="local-points">
-          <div>
-            <strong>No account</strong>
-            <span>Nothing to sign up for. Just open the app and start working.</span>
-          </div>
-          <div>
-            <strong>No database</strong>
-            <span>Temporary state lives on disk in your storage directory.</span>
-          </div>
-          <div>
-            <strong>No cloud upload</strong>
-            <span>All processing happens on your machine.</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== QUALITY / CONTROL ==================== -->
-    <section class="quality-section" id="quality">
-      <div class="container">
-        <div class="section-header centered">
-          <span class="eyebrow">Quality control</span>
-          <h2>You decide how the result looks.</h2>
-          <p class="section-description">
-            Utils-tool is not a black box. Every tool exposes meaningful settings
-            so you can inspect and fine-tune the output before you download.
-          </p>
-        </div>
-        <div class="quality-grid">
-          <div class="quality-item">
-            <div class="quality-item-icon" aria-hidden="true">
-              <i class="fa-solid fa-sliders" aria-hidden="true"></i>
-            </div>
-            <h3>Compression quality</h3>
-            <p>Slide from aggressive to best for image and PDF tools, seeing the trade-off between size and fidelity.</p>
-          </div>
-          <div class="quality-item">
-            <div class="quality-item-icon" aria-hidden="true">
-              <i class="fa-solid fa-file-export" aria-hidden="true"></i>
-            </div>
-            <h3>Output format</h3>
-            <p>Choose JPEG, PNG, WebP, AVIF or let the tool pick the best fit for the source.</p>
-          </div>
-          <div class="quality-item">
-            <div class="quality-item-icon" aria-hidden="true">
-              <i class="fa-solid fa-expand" aria-hidden="true"></i>
-            </div>
-            <h3>Dimensions</h3>
-            <p>Resize, crop and set maximum bounds while keeping proportions intact.</p>
-          </div>
-          <div class="quality-item">
-            <div class="quality-item-icon" aria-hidden="true">
-              <i class="fa-solid fa-bullseye" aria-hidden="true">dden="true"></i>
-            </div>
-            <h3>Target size</h3>
-            <p>Set a file-size goal and the compressor searches for the right quality to hit it.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== USE CASES ==================== -->
-    <section class="use-cases-section" id="use-cases">
-      <div class="container">
-        <div class="section-header centered">
-          <span class="eyebrow">Use cases</span>
-          <h2>Built for the work you do.</h2>
-          <p class="section-description">
-            Realistic jobs, kept simple.
-          </p>
-        </div>
-        <div class="use-cases">
-          <div class="use-case">
-            <h3>Compress images before upload</h3>
-            <p>Shrink JPGs and PNGs for websites and social media without visible loss, using quality sliders and target-size goals.</p>
-          </div>
-           <div class="use-case">
-             <h3>Convert between modern formats</h3>
-             <p>Move between JPEG, PNG, WebP and AVIF while preserving quality and transparency.</p>
-           </div>
-           <div class="use-case">
-             <h3>Resize with precision</h3>
-             <p>Resize images to exact dimensions, scale by percentage, or fit within maximum bounds. Aspect ratio presets cover Instagram, LinkedIn and YouTube dimensions.</p>
-           </div>
-           <div class="use-case">
-             <h3>Remove image backgrounds</h3>
-            <p>Get a clean transparent cutout for product shots and portraits in seconds.</p>
-          </div>
-          <div class="use-case">
-            <h3>Reduce PDF sizes</h3>
-            <p>Downsize documents for email and sharing with configurable quality modes.</p>
-          </div>
-          <div class="use-case">
-            <h3>Merge and reorganize documents</h3>
-            <p>Combine, reorder and extract pages from PDFs with drag-and-drop control.</p>
-          </div>
-          <div class="use-case">
-            <h3>Create developer assets</h3>
-            <p>Generate favicons, optimize SVGs, convert images to SVG, encode Base64 and build QR codes and barcodes.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== COMPLETE TOOL DIRECTORY ==================== -->
-    <section class="tool-catalog-section" id="tools">
-      <div class="container">
-        <div class="section-header centered">
-          <span class="eyebrow">Complete tool directory</span>
-          <h2>All tools, grouped by category.</h2>
-          <p class="section-description">
-            Available tools open directly; planned tools are marked as coming soon.
-          </p>
-        </div>
-        <div id="tool-catalog" class="tool-catalog" aria-live="polite">
-          <p class="catalog-loading">Loading tools…</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== FAQ ==================== -->
-    <section class="faq-section" id="faq">
-      <div class="container">
-        <div class="section-header centered">
-          <span class="eyebrow">Questions</span>
-          <h2>Frequently asked questions.</h2>
-        </div>
-        <dl class="faq">
-          <div class="faq-item">
-            <dt>What is Utils-tool?</dt>
-            <dd>A free, local-first collection of file utilities. Compress, convert, edit, remove backgrounds, process PDFs and analyze files in your browser.</dd>
-          </div>
-          <div class="faq-item">
-            <dt>Does Utils-tool work offline?</dt>
-            <dd>The Python backend runs on your machine. When started locally, all processing and storage happen on your computer — no internet connection is required to use the tools.</dd>
-          </div>
-          <div class="faq-item">
-            <dt>Where are my files stored?</dt>
-            <dd>Uploaded files are written to a temporary local directory while they are being processed and are cleaned up automatically. They are never sent to an external service in the local deployment.</dd>
-          </div>
-          <div class="faq-item">
-            <dt>What file formats are supported?</dt>
-            <dd>Images: JPG, PNG, WebP and AVIF. PDFs. SVG, ZIP and other common file types. Each tool lists the formats it accepts.</dd>
-          </div>
-          <div class="faq-item">
-            <dt>Can I process multiple files at once?</dt>
-            <dd>Yes — most tools support batch processing. The per-tool page shows the exact limit.</dd>
-          </div>
-          <div class="faq-item">
-            <dt>Can I control compression quality?</dt>
-            <dd>Yes. Image and PDF tools expose quality sliders, output format, target file size and metadata options.</dd>
-          </div>
-          <div class="faq-item">
-            <dt>Is Utils-tool free?</dt>
-            <dd>Yes. There are no paid tiers and no account is required.</dd>
-          </div>
-          <div class="faq-item">
-            <dt>Is there a browser extension or desktop app?</dt>
-            <dd>Utils-tool runs as a local web application. Start it with <code>start.sh</code> and open it in Chrome or any modern browser.</dd>
-          </div>
-        </dl>
-      </div>
-    </section>
-
-    <!-- ==================== FINAL CTA ==================== -->
-    <section class="final-cta-section">
-      <div class="container">
-        <div class="final-cta">
-          <h2>Ready to get started?</h2>
-          <p class="final-cta-description">
-            No account. No subscriptions. Just fast, private tools in your browser.
-          </p>
-          <div class="final-cta-actions">
-            <a href="/#tools" class="primary-button">Explore all tools</a>
-             <a href="https://github.com/oyinlola-tech/utils-tools" target="_blank" rel="noopener noreferrer" class="secondary-button github-button">
-               <i class="fa-brands fa-github" aria-hidden="true"></i>
-               Star us on GitHub
-             </a>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
     <div id="site-footer"></div>
 
@@ -443,7 +410,7 @@
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
-    <script defer src="/_vercel/insights/script.js"></script> 
+    <script defer src="/_vercel/insights/script.js"></script>
     <!-- Vercel Speed Insights -->
     <script>
       window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };

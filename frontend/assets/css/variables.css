@@ -128,6 +128,20 @@
     --content-max-width: 680px;
 
     /* ============
+       Layout tokens
+       ============ */
+    --header-height: 4rem;
+    --header-height-sm: 3.5rem;
+    --footer-padding-top: clamp(2.5rem, 6vw, 4rem);
+    --footer-padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
+
+    /* ============
+       Animation tokens
+       ============ */
+    --ease-out-quad: cubic-bezier(0.645, 0.045, 0.355, 1);
+    --ease-in-out-quad: cubic-bezier(0.455, 0.005, 0.55, 0.99);
+
+    /* ============
        Transitions
        ============ */
     --transition-fast: 150ms ease;

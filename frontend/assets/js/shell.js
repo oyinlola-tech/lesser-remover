@@ -7,24 +7,24 @@ import {
 } from "./capabilities.js";
 
 const GITHUB_URL = "https://github.com/oyinlola-tech/utils-tools";
-const SITE_URL = "https://oyinlola.site/";
+const SITE_URL = "https://tools.oyinlola.site/";
 
 const STAR_ICON = '<i class="fa-brands fa-github" aria-hidden="true"></i>';
 const HEART_ICON = '<i class="fa-solid fa-heart" aria-hidden="true"></i>';
 
 function renderHeader() {
     return `
-<header class="site-header" data-shell-header>
+<header class="site-header" data-shell-header role="banner">
   <div class="container header-inner">
-    <a href="/" class="brand" aria-label="Utils-tool home">
+    <a href="/" class="brand" aria-label="Utils-tool — home">
       <img src="/static/assets/brand/logo.svg" alt="" width="32" height="32" style="display:block;" />
       <span>Utils-tool</span>
     </a>
     <nav class="header-nav" aria-label="Main navigation">
-      <a href="/#featured">Tools</a>
-      <a href="/#categories">Categories</a>
-      <a href="/#how-it-works">How it works</a>
-      <a href="/#faq">FAQ</a>
+      <a href="/tools" class="nav-link">Tools</a>
+      <a href="/about" class="nav-link">About</a>
+      <a href="/#how-it-works" class="nav-link">How it works</a>
+      <a href="/#faq" class="nav-link">FAQ</a>
     </nav>
     <div class="header-actions">
       <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="header-star-button" aria-label="View and star this project on GitHub">
@@ -38,45 +38,43 @@ function renderHeader() {
 
 function renderFooter() {
     return `
-<footer class="site-footer" data-shell-footer>
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand-section">
-        <div class="footer-brand">
-          <img src="/static/assets/brand/logo.svg" alt="" width="28" height="28" />
-          <span>Utils-tool</span>
-        </div>
-        <p class="footer-tagline">
-          Private by default. Fast, calm, and precise file tools that run in your browser.
-        </p>
-        <div class="footer-actions">
-          <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="footer-star-button" aria-label="View and star this project on GitHub">
-            ${STAR_ICON}
-            Star
-          </a>
-          <button type="button" class="footer-support-button" data-shell-support>Support this project</button>
-        </div>
-      </div>
-      <div class="footer-links" data-footer-categories>
-        <div class="footer-column">
-          <h4 class="footer-heading">Product</h4>
-          <a href="/#featured">All tools</a>
-          <a href="/#categories">Categories</a>
-          <a href="/#how-it-works">How it works</a>
-          <a href="/#faq">FAQ</a>
-        </div>
-        <div class="footer-column">
-          <h4 class="footer-heading">Connect</h4>
-          <a href="${SITE_URL}" target="_blank" rel="noopener noreferrer">oyinlola.site</a>
-          <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer">GitHub</a>
-        </div>
+<footer class="site-footer" data-shell-footer role="contentinfo">
+  <div class="container footer-inner">
+    <div class="footer-brand-section">
+      <a href="/" class="footer-brand" aria-label="Utils-tool — home">
+        <img src="/static/assets/brand/logo.svg" alt="" width="28" height="28" />
+        <span>Utils-tool</span>
+      </a>
+      <p class="footer-tagline">
+        Private by default. Fast, calm, and precise file tools.
+      </p>
+      <div class="footer-actions">
+        <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer" class="footer-star-button" aria-label="View and star this project on GitHub">
+          ${STAR_ICON}
+          Star
+        </a>
+        <button type="button" class="footer-support-button" data-shell-support>Support this project</button>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© <span data-shell-year>2026</span> Oluwayemi Oyinlola. All rights reserved.</span>
-      <span class="footer-divider">·</span>
-      <span>Built with care. Runs locally in your browser.</span>
+    <div class="footer-columns" data-footer-categories>
+      <div class="footer-column">
+        <h4 class="footer-heading">Product</h4>
+        <a href="/tools">All tools</a>
+        <a href="/about">About</a>
+        <a href="/#how-it-works">How it works</a>
+        <a href="/#faq">FAQ</a>
+      </div>
+      <div class="footer-column">
+        <h4 class="footer-heading">Connect</h4>
+        <a href="${SITE_URL}" target="_blank" rel="noopener noreferrer">oyinlola.site</a>
+        <a href="${GITHUB_URL}" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
     </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span data-shell-year>2026</span> Oluwayemi Oyinlola.</span>
+    <span class="footer-divider">·</span>
+    <span>Open source · Local-first</span>
   </div>
 </footer>
 <button type="button" class="fab-support" data-shell-fab aria-label="Support this project">
@@ -92,6 +90,10 @@ export function renderShell() {
 
     if (headerHost) {
         headerHost.innerHTML = renderHeader();
+        const headerHeight = headerHost.querySelector(".site-header");
+        if (headerHeight) {
+            document.documentElement.style.setProperty("--header-height", `${headerHeight.offsetHeight}px`);
+        }
     }
     if (footerHost) {
         footerHost.innerHTML = renderFooter();
@@ -119,9 +121,7 @@ async function renderFooterCategories(footerHost) {
     } catch (error) {
         return;
     }
-    const available = new Set(
-        tools.filter((tool) => tool.status === "available").map((tool) => tool.id)
-    );
+
     const columns = CATEGORY_ORDER.map((category) => {
         const meta = CATEGORY_META[category];
         if (!meta) {
@@ -130,7 +130,7 @@ async function renderFooterCategories(footerHost) {
         const links = tools
             .filter((tool) => tool.category === category)
             .map((tool) => {
-                if (available.has(tool.id)) {
+                if (tool.status === "available") {
                     return `<a href="/tools/${tool.id}">${tool.name}</a>`;
                 }
                 return `<a href="/tools/${tool.id}" aria-disabled="true">${tool.name}</a>`;
