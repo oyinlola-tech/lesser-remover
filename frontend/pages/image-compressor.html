@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Compress JPG, PNG, WebP images and PDF files with quality presets and target-size control. Private, local, no account needed." />
+    <meta name="description" content="Compress JPG, PNG, and WebP images locally. Control quality (10-100), set a target file size, and strip metadata. Private, no account needed." />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://www.oyinlola.site/tools/image-compressor" />
     <meta property="og:title" content="Image Compressor - Utils-tool" />
-    <meta property="og:description" content="Reduce image and PDF file sizes without blindly sacrificing quality." />
+    <meta property="og:description" content="Reduce JPG, PNG, and WebP file sizes while keeping the quality that matters. Local, private, no account needed." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.oyinlola.site/tools/image-compressor" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -33,10 +33,10 @@
           <div class="hero-content">
             <span class="eyebrow">Image tool</span>
             <h1>Make your files smaller.</h1>
-            <p class="hero-description">
-              Reduce image and PDF file sizes while keeping the quality
-              that matters.
-            </p>
+             <p class="hero-description">
+               Reduce JPG, PNG, and WebP file sizes while keeping
+               the quality that matters.
+             </p>
           </div>
 
           <section class="compressor-card">
@@ -45,8 +45,8 @@
               <h2>Drop your files here</h2>
               <p>Or choose files from your computer</p>
               <label for="compressor-file-input" class="primary-button">Choose file</label>
-              <input id="compressor-file-input" type="file" accept="image/*,.pdf,application/pdf" multiple class="visually-hidden" />
-              <p class="file-hint">JPG, JPEG, PNG, WebP and PDF</p>
+              <input id="compressor-file-input" type="file" accept="image/jpeg,image/png,image/webp,image/jpg" multiple class="visually-hidden" />
+              <p class="file-hint">JPG, JPEG, PNG, WebP</p>
             </div>
 
             <div id="compressor-workspace" class="compressor-workspace hidden">
@@ -60,69 +60,77 @@
               <div id="file-queue" class="file-queue"></div>
 
               <div class="compression-settings">
-                <div class="setting-group">
-                  <label>Compression</label>
-                  <div class="quality-options">
-                    <button type="button" class="quality-option" data-preset="best_quality">
-                      <strong>Best quality</strong>
-                      <span>Keep more detail</span>
-                    </button>
-                    <button type="button" class="quality-option active" data-preset="balanced">
-                      <strong>Balanced</strong>
-                      <span>A strong balance of quality and size</span>
-                    </button>
-                    <button type="button" class="quality-option" data-preset="smallest">
-                      <strong>Smallest practical size</strong>
-                      <span>Prioritize a smaller file</span>
-                    </button>
-                  </div>
-                </div>
-                <div class="setting-group">
-                  <label for="max-dimension">Maximum dimension</label>
-                  <select id="max-dimension" class="select-input">
-                    <option value="">Keep original dimensions</option>
-                    <option value="5000">5000 px</option>
-                    <option value="4000">4000 px</option>
-                    <option value="3000">3000 px</option>
-                    <option value="2000">2000 px</option>
-                    <option value="1500">1500 px</option>
-                  </select>
-                  <small>Large images can be resized while keeping their proportions.</small>
-                </div>
-              </div>
+                 <div class="setting-group">
+                   <label for="quality-slider">Quality</label>
+                   <div class="quality-slider-container">
+                     <span class="quality-value" id="quality-value">80</span>
+                     <input
+                       type="range"
+                       id="quality-slider"
+                       min="10"
+                       max="100"
+                       value="80"
+                       aria-label="Quality (10 to 100, lower means smaller files)"
+                     />
+                   </div>
+                   <small>Lower quality = smaller files. Default 80 gives a strong balance of size and visual fidelity.</small>
+                 </div>
+                 <div class="setting-group">
+                   <label for="max-dimension">Maximum dimension</label>
+                   <select id="max-dimension" class="select-input">
+                     <option value="">Keep original dimensions</option>
+                     <option value="5000">5000 px</option>
+                     <option value="4000">4000 px</option>
+                     <option value="3000">3000 px</option>
+                     <option value="2000">2000 px</option>
+                     <option value="1500">1500 px</option>
+                   </select>
+                   <small>Large images can be resized while keeping their proportions.</small>
+                 </div>
+               </div>
 
-              <details class="advanced-settings">
-                <summary>
-                  <span>Advanced settings</span>
-                  <span class="advanced-settings-chevron">+</span>
-                </summary>
-                <div class="advanced-settings-content">
-                  <div class="setting-group">
-                    <label for="target-size">Target size</label>
-                    <div class="target-size-input">
-                      <input id="target-size" type="number" min="10" placeholder="Optional" />
-                      <span>KB</span>
-                    </div>
-                    <small>The compressor will try to find the highest quality below this size.</small>
-                  </div>
-                  <div class="setting-group">
-                    <label>Metadata</label>
-                    <label class="toggle">
-                      <input id="strip-metadata" type="checkbox" checked />
-                      <span class="toggle-track"><span class="toggle-thumb"></span></span>
-                      <span class="toggle-label">Remove unnecessary metadata</span>
-                    </label>
-                  </div>
-                  <div class="setting-group">
-                    <label for="advanced-format">Output format</label>
-                    <select id="advanced-format" class="select-input">
-                      <option value="webp">WebP</option>
-                      <option value="jpeg">JPEG</option>
-                      <option value="png">PNG</option>
-                    </select>
-                  </div>
-                </div>
-              </details>
+              <details class="advanced-settings" open>
+                 <summary>
+                   <span>Advanced settings</span>
+                   <span class="advanced-settings-chevron">+</span>
+                 </summary>
+                 <div class="advanced-settings-content">
+                   <div class="setting-group">
+                     <label for="target-size">Target file size</label>
+                     <div class="target-size-presets" id="target-size-presets">
+                       <button type="button" class="target-size-option" data-size="100">100&nbsp;KB</button>
+                       <button type="button" class="target-size-option" data-size="250">250&nbsp;KB</button>
+                       <button type="button" class="target-size-option" data-size="500">500&nbsp;KB</button>
+                       <button type="button" class="target-size-option" data-size="1000">1&nbsp;MB</button>
+                       <button type="button" class="target-size-option" data-size="custom">Custom</button>
+                     </div>
+                     <div class="target-size-custom hidden" id="target-size-custom">
+                       <div class="target-size-input">
+                         <input id="target-size" type="number" min="10" placeholder="KB" />
+                         <span>KB</span>
+                       </div>
+                     </div>
+                     <small>The compressor will try to find the highest quality below this size.</small>
+                   </div>
+                   <div class="setting-group">
+                     <label>Metadata</label>
+                     <label class="toggle">
+                       <input id="strip-metadata" type="checkbox" checked />
+                       <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                       <span class="toggle-label">Remove unnecessary metadata</span>
+                     </label>
+                   </div>
+                   <div class="setting-group">
+                     <label for="advanced-format">Output format</label>
+                     <select id="advanced-format" class="select-input">
+                       <option value="auto">Auto — preserve format</option>
+                       <option value="webp">WebP</option>
+                       <option value="jpeg">JPEG</option>
+                       <option value="png">PNG</option>
+                     </select>
+                   </div>
+                 </div>
+               </details>
 
               <button type="button" class="compress-button primary-button" id="compress-button">Compress files</button>
             </div>
