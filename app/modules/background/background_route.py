@@ -5,6 +5,7 @@ from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 
 from app.api import API_PREFIX
+from app.core.capabilities import capability_registry
 from app.modules.background.background_controller import (
     background_controller,
 )
@@ -23,6 +24,14 @@ router = APIRouter(
 _background_jobs: dict[str, dict] = {}
 
 
+def _check_background_capability() -> None:
+    if not capability_registry.is_available("background-remover"):
+        raise HTTPException(
+            status_code=503,
+            detail="Background removal is unavailable in the current environment.",
+        )
+
+
 def _validate_output_format(output_format: str) -> str:
     normalized = output_format.lower()
     if normalized not in {"webp", "png"}:
@@ -38,6 +47,7 @@ async def start_background(
     file: UploadFile = File(...),
     output_format: str = "webp",
 ):
+    _check_background_capability()
     logger.info(
         "Starting background removal for file: %s, format: %s",
         file.filename,
@@ -72,6 +82,7 @@ async def replace_background(
     blur: int = Form(0),
     output_format: str = Form("png"),
 ):
+    _check_background_capability()
     logger.info(
         "Replacing background for file: %s",
         file.filename,

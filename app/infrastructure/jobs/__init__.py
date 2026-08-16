@@ -2,8 +2,9 @@ from app.core.config import settings
 
 if settings.storage_driver == "vercel":
     from app.infrastructure.jobs.vercel_job_storage import (
-        vercel_job_storage as local_job_storage,
+        VercelJobStorage,
     )
+    local_job_storage = VercelJobStorage()
 else:
     from app.infrastructure.jobs.local_job_storage import (
         local_job_storage,

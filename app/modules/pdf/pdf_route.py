@@ -4,6 +4,7 @@ from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 
 from app.api import API_PREFIX
+from app.core.capabilities import capability_registry
 from app.modules.pdf.pdf_controller import pdf_controller
 from app.modules.pdf.pdf_repository import pdf_repository
 from app.modules.pdf.pdf_schema import (
@@ -19,6 +20,14 @@ router = APIRouter(
     prefix=f"{API_PREFIX}/tools/pdf",
     tags=["PDF Tools"],
 )
+
+
+def _check_pdf_to_image_capability() -> None:
+    if not capability_registry.is_available("pdf-to-image"):
+        raise HTTPException(
+            status_code=503,
+            detail="PDF to image conversion is unavailable in the current environment.",
+        )
 
 
 @router.post("/merge", response_model=PdfToolResponse)
@@ -70,6 +79,7 @@ async def pdf_to_images(
     dpi: int = Form(150),
     as_zip: bool = Form(False),
 ):
+    _check_pdf_to_image_capability()
     logger.info(
         "pdf_to_images: file=%s format=%s dpi=%d as_zip=%s",
         file.filename,

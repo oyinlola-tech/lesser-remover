@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from pathlib import Path
 
@@ -19,6 +20,8 @@ from app.shared.file_inspection.file_validation import (
     inspect_and_validate,
 )
 from app.shared.utils.file_util import generate_filename
+
+logger = logging.getLogger(__name__)
 
 
 class CompressionController:
@@ -228,7 +231,12 @@ class CompressionController:
                 files=results,
                 download_all_url=f"/api/v1/compression/download/{archive_filename}",
             )
-        except Exception:
+        except Exception as error:
+            logger.exception(
+                "Failed to finalize batch compression job %s: %s",
+                job_id,
+                error,
+            )
             job_service.update_status(job_id, "failed")
             raise
 

@@ -115,6 +115,7 @@ class VercelStorage(StorageInterface):
         file_path.unlink(missing_ok=True)
 
     def exists(self, file_path: Path) -> bool:
+        self._check_token()
         try:
             head(self._blob_key(file_path))
             return True
@@ -122,10 +123,12 @@ class VercelStorage(StorageInterface):
             return False
 
     def get_size(self, file_path: Path) -> int:
+        self._check_token()
         result = head(self._blob_key(file_path))
         return result.size
 
     def get_url(self, file_path: Path) -> str:
+        self._check_token()
         blob_path = self._blob_key(file_path)
         url = self._urls.get(blob_path)
         if url is None:

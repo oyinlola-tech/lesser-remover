@@ -1,3 +1,4 @@
+import logging
 from io import BytesIO
 
 from PIL import Image
@@ -7,6 +8,8 @@ from app.shared.file_inspection.file_inspector import (
     file_inspector,
 )
 from app.shared.utils.hash_util import sha256_hex
+
+logger = logging.getLogger(__name__)
 
 
 class FileToolsService:
@@ -41,8 +44,12 @@ class FileToolsService:
                         password="",
                     ) as pdf:
                         result["page_count"] = len(pdf.pages)
-                except Exception:
-                    pass
+                except Exception as error:
+                    logger.debug(
+                        "Failed to read PDF metadata for %s: %s",
+                        filename,
+                        error,
+                    )
             results.append(result)
         return results
 

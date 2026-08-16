@@ -103,13 +103,17 @@ class VercelJobStorage:
         filename: str,
         data: bytes,
     ) -> Path:
+        blob_path = self._blob_path(job_id, f"input/{filename}")
+        self._put_blob(blob_path, data)
         path = self.get_input_path(job_id) / filename
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(data)
-        self._put_blob(
-            self._blob_path(job_id, f"input/{filename}"),
-            data,
-        )
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+        except OSError:
+            logger.debug(
+                "Local mirror write failed for input %s; blob is source of truth.",
+                blob_path,
+            )
         return path
 
     def save_output(
@@ -118,13 +122,17 @@ class VercelJobStorage:
         filename: str,
         data: bytes,
     ) -> Path:
+        blob_path = self._blob_path(job_id, f"output/{filename}")
+        self._put_blob(blob_path, data)
         path = self.get_output_path(job_id) / filename
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(data)
-        self._put_blob(
-            self._blob_path(job_id, f"output/{filename}"),
-            data,
-        )
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+        except OSError:
+            logger.debug(
+                "Local mirror write failed for output %s; blob is source of truth.",
+                blob_path,
+            )
         return path
 
     def save_download(
@@ -132,13 +140,17 @@ class VercelJobStorage:
         filename: str,
         data: bytes,
     ) -> Path:
+        blob_path = f"downloads/{filename}"
+        self._put_blob(blob_path, data)
         path = self.download_path / filename
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(data)
-        self._put_blob(
-            f"downloads/{filename}",
-            data,
-        )
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+        except OSError:
+            logger.debug(
+                "Local mirror write failed for download %s; blob is source of truth.",
+                blob_path,
+            )
         return path
 
     def materialize_download(
@@ -186,12 +198,3 @@ class VercelJobStorage:
         if blobs:
             delete([blob.pathname for blob in blobs])
         shutil.rmtree(self.get_job_path(job_id), ignore_errors=True)
-
-
-try:
-    vercel_job_storage = VercelJobStorage()
-except ValueError:
-    # No token configured (e.g. local development). ``app.main`` performs
-    # its own startup check with a clear message when STORAGE_DRIVER=vercel,
-    # so a missing token here just leaves the singleton unset.
-    vercel_job_storage = None  # type: ignore[assignment]

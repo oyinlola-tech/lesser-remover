@@ -13,6 +13,7 @@ from fastapi.responses import FileResponse
 
 logger = logging.getLogger(__name__)
 from app.api import API_PREFIX
+from app.core.capabilities import capability_registry
 from app.infrastructure.jobs import local_job_storage
 from app.modules.compression.batch_compression_service import (
     batch_compression_service,
@@ -131,6 +132,12 @@ async def _start_compression(
             detail=f"Maximum of {MAX_FILES_PER_BATCH} files.",
         )
 
+    if tool_id == "pdf_compressor" and not capability_registry.is_available("pdf-compressor"):
+        raise HTTPException(
+            status_code=503,
+            detail="PDF compression is unavailable in the current environment.",
+        )
+
     filenames = [
         file.filename or "file"
         for file in files
@@ -244,7 +251,12 @@ async def _start_compression(
             quality,
         )
 
-    except Exception:
+    except Exception as error:
+        logger.exception(
+            "Failed to create compression job %s: %s",
+            job_id,
+            error,
+        )
         job_service.cancel(
             job_id
         )

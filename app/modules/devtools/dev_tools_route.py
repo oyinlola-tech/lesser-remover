@@ -1,9 +1,10 @@
 import logging
 
-from fastapi import APIRouter, File, Form, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import Response
 
 from app.api import API_PREFIX
+from app.core.capabilities import capability_registry
 from app.modules.devtools.dev_tools_controller import (
     dev_tools_controller,
 )
@@ -14,6 +15,14 @@ router = APIRouter(
     prefix=f"{API_PREFIX}/tools/dev",
     tags=["Developer Tools"],
 )
+
+
+def _check_svg_capability() -> None:
+    if not capability_registry.is_available("svg-generator"):
+        raise HTTPException(
+            status_code=503,
+            detail="SVG generation is unavailable in the current environment.",
+        )
 
 
 @router.post("/favicon")
@@ -72,6 +81,7 @@ async def generate_svg(
     background_color: str = Form("white"),
     foreground_color: str = Form("black"),
 ):
+    _check_svg_capability()
     logger.info("generate_svg: image=%s threshold=%d", image.filename, threshold)
     data, content_type = await dev_tools_controller.svg(
         image,

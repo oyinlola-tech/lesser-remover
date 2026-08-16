@@ -73,7 +73,18 @@ def fake_sdk(monkeypatch):
     monkeypatch.setattr(f"{jobs_module}.put", fake_put)
     monkeypatch.setattr(f"{jobs_module}.get", fake_get)
     monkeypatch.setattr(f"{jobs_module}.delete", fake_delete)
-    monkeypatch.setattr(f"{jobs_module}.list_objects", lambda **kw: FakeResult(blobs=[], has_more=False, cursor=None))
+
+    def fake_list_objects(**kwargs):
+        prefix = kwargs.get("prefix", "")
+        matching_blobs = []
+        for pathname in blob_store:
+            if pathname.startswith(prefix):
+                matching_blobs.append(
+                    FakeResult(pathname=pathname)
+                )
+        return FakeResult(blobs=matching_blobs, has_more=False, cursor=None)
+
+    monkeypatch.setattr(f"{jobs_module}.list_objects", fake_list_objects)
 
     return calls, blob_store
 
@@ -245,10 +256,15 @@ class TestVercelJobStorage:
         assert dest.read_bytes() == b"payload"
 
     def test_delete_job_removes_local(self, job_storage, fake_sdk):
+        calls, blob_store = fake_sdk
         job_id = job_storage.create_job()
         assert job_storage.get_job_path(job_id).exists()
+        metadata_key = f"jobs/{job_id}/metadata.json"
+        assert metadata_key in blob_store
         job_storage.delete_job(job_id)
         assert not job_storage.get_job_path(job_id).exists()
+        assert metadata_key not in blob_store
+        assert calls["delete"]
 
     def test_constructor_requires_token(self, fake_sdk, monkeypatch):
         monkeypatch.setattr(

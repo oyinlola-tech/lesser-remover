@@ -7,12 +7,15 @@ now run in any environment.
 """
 
 import io
+import logging
 from typing import TYPE_CHECKING, ClassVar
 
 from PIL import Image
 
 if TYPE_CHECKING:
     import pymupdf
+
+logger = logging.getLogger(__name__)
 
 
 def _get_pymupdf() -> "pymupdf":
@@ -72,7 +75,12 @@ class GhostscriptAdapter:
                         continue
                     try:
                         extracted = document.extract_image(xref)
-                    except Exception:
+                    except Exception as error:
+                        logger.debug(
+                            "Failed to extract image xref %s: %s",
+                            xref,
+                            error,
+                        )
                         continue
                     if extracted.get("ext") != "jpeg":
                         continue
@@ -90,7 +98,11 @@ class GhostscriptAdapter:
                             optimize=True,
                             progressive=True,
                         )
-                    except Exception:
+                    except Exception as error:
+                        logger.debug(
+                            "Failed to process extracted image: %s",
+                            error,
+                        )
                         continue
                     recompressed = buffer.getvalue()
                     if len(recompressed) >= len(

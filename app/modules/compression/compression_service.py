@@ -1,3 +1,4 @@
+import logging
 from io import BytesIO
 
 from app.modules.compression.image_compression.image_compression_service import (
@@ -6,6 +7,8 @@ from app.modules.compression.image_compression.image_compression_service import 
 from app.modules.compression.pdf_compression.pdf_compression_service import (
     pdf_compression_service,
 )
+
+logger = logging.getLogger(__name__)
 
 SUPPORTED_IMAGE_FORMATS = {"webp", "jpeg", "png"}
 
@@ -105,7 +108,11 @@ class CompressionService:
                     source_image.format or "webp"
                 ).lower()
                 source_image.close()
-            except Exception:
+            except Exception as error:
+                logger.debug(
+                    "Failed to detect source image format, defaulting to webp: %s",
+                    error,
+                )
                 source_format = "webp"
             if source_format not in SUPPORTED_IMAGE_FORMATS:
                 source_format = "webp"
