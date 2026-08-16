@@ -112,14 +112,15 @@ def get_tool_logger(tool_id: str) -> logging.Logger:
 
 
 def setup_logging() -> None:
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.DEBUG)
+    root_logger.handlers.clear()
+
     console_handler = logging.StreamHandler(
         stream=sys.stdout,
     )
     console_handler.setLevel(logging.INFO)
     console_handler.setFormatter(_console_formatter)
-
-    root_logger = logging.getLogger()
-    root_logger.setLevel(logging.DEBUG)
     root_logger.addHandler(console_handler)
 
     if settings.app_env == "production":

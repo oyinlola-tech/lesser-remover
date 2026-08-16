@@ -6,8 +6,6 @@ without touching a real Blob store or needing a token.
 """
 
 import json
-from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
