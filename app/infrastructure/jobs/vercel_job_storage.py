@@ -1,3 +1,11 @@
+"""Vercel Blob-backed job storage.
+
+Job metadata, inputs, outputs and downloads live in Vercel Blob through
+the official ``vercel`` Python SDK. Paths mirror the local layout
+(``jobs/{job_id}/...``, ``downloads/...``) so the drivers are
+interchangeable, with a local temp mirror for fast in-instance access.
+"""
+
 import json
 import logging
 import shutil
@@ -6,27 +14,28 @@ from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 
-import requests
+from vercel.blob import (
+    BlobNotFoundError,
+    delete,
+    get,
+    list_objects,
+    put,
+)
 
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
-
-BLOB_BASE_URL = "https://blob.vercel-storage.com"
 
 _LOCAL_ROOT = Path(tempfile.gettempdir()) / "vercel_jobs"
 
 
 class VercelJobStorage:
     def __init__(self) -> None:
-        self._token = settings.blob_read_write_token
-        if not self._token:
+        if not settings.blob_read_write_token:
             raise ValueError(
                 "BLOB_READ_WRITE_TOKEN is required for Vercel job storage."
             )
-        self._headers = {
-            "Authorization": f"Bearer {self._token}",
-        }
+        self._access = settings.blob_access_mode
         self._prefix = "jobs"
         self.root_path = _LOCAL_ROOT / self._prefix
         self.download_path = _LOCAL_ROOT / "downloads"
@@ -40,12 +49,7 @@ class VercelJobStorage:
         return f"{self._job_prefix(job_id)}/{filename}"
 
     def _put_blob(self, blob_path: str, data: bytes) -> None:
-        response = requests.put(
-            f"{BLOB_BASE_URL}/{blob_path}",
-            headers=self._headers,
-            data=data,
-        )
-        response.raise_for_status()
+        put(blob_path, data, access=self._access)
 
     def create_job(self) -> str:
         job_id = uuid4().hex
@@ -87,14 +91,11 @@ class VercelJobStorage:
 
     def read_metadata(self, job_id: str) -> dict:
         blob_path = self._blob_path(job_id, "metadata.json")
-        response = requests.get(
-            f"{BLOB_BASE_URL}/{blob_path}",
-            headers=self._headers,
-        )
-        if response.status_code == 404:
+        try:
+            result = get(blob_path, access=self._access)
+        except BlobNotFoundError:
             return {}
-        response.raise_for_status()
-        return response.json()
+        return json.loads(result.content.decode("utf-8"))
 
     def save_input(
         self,
@@ -148,15 +149,12 @@ class VercelJobStorage:
         if path.exists():
             return path
         blob_path = f"downloads/{filename}"
-        response = requests.get(
-            f"{BLOB_BASE_URL}/{blob_path}",
-            headers=self._headers,
-        )
-        if response.status_code == 404:
+        try:
+            result = get(blob_path, access=self._access)
+        except BlobNotFoundError:
             return path
-        response.raise_for_status()
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(response.content)
+        path.write_bytes(result.content)
         return path
 
     def move_download(
@@ -173,20 +171,27 @@ class VercelJobStorage:
 
     def delete_job(self, job_id: str) -> None:
         prefix = self._job_prefix(job_id)
-        response = requests.get(
-            f"{BLOB_BASE_URL}/list",
-            headers=self._headers,
-            params={"prefix": prefix},
-        )
-        response.raise_for_status()
-        blobs = response.json().get("blobs", [])
-        for blob in blobs:
-            delete_response = requests.delete(
-                f"{BLOB_BASE_URL}/{blob['pathname']}",
-                headers=self._headers,
+        blobs = []
+        cursor = None
+        while True:
+            page = list_objects(
+                prefix=prefix,
+                cursor=cursor,
+                limit=1000,
             )
-            delete_response.raise_for_status()
+            blobs.extend(page.blobs)
+            if not page.has_more or page.cursor is None:
+                break
+            cursor = page.cursor
+        if blobs:
+            delete([blob.pathname for blob in blobs])
         shutil.rmtree(self.get_job_path(job_id), ignore_errors=True)
 
 
-vercel_job_storage = VercelJobStorage()
+try:
+    vercel_job_storage = VercelJobStorage()
+except ValueError:
+    # No token configured (e.g. local development). ``app.main`` performs
+    # its own startup check with a clear message when STORAGE_DRIVER=vercel,
+    # so a missing token here just leaves the singleton unset.
+    vercel_job_storage = None  # type: ignore[assignment]

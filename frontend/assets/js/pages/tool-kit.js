@@ -43,6 +43,12 @@ export async function initToolPage(toolId) {
         )) {
             element.disabled = true;
         }
+        // Grey out the upload zone so it no longer looks interactive.
+        const uploadHost = document.querySelector("#tool-upload");
+        if (uploadHost) {
+            uploadHost.classList.add("is-disabled");
+            uploadHost.setAttribute("aria-disabled", "true");
+        }
     }
 
     return {

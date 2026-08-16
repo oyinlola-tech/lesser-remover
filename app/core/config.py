@@ -26,6 +26,8 @@ class Settings(BaseSettings):
 
     storage_driver: str = "local"
     blob_read_write_token: str = ""
+    # Access mode of the connected Vercel Blob store: "public" or "private"
+    blob_access_mode: str = "public"
 
     rembg_model: str = "silueta"
 
@@ -47,6 +49,17 @@ class Settings(BaseSettings):
         if normalized not in {"local", "vercel"}:
             raise ValueError(
                 "STORAGE_DRIVER must be 'local' or 'vercel', "
+                f"got '{value}'."
+            )
+        return normalized
+
+    @field_validator("blob_access_mode")
+    @classmethod
+    def validate_blob_access_mode(cls, value: str) -> str:
+        normalized = value.strip().lower()
+        if normalized not in {"public", "private"}:
+            raise ValueError(
+                "BLOB_ACCESS_MODE must be 'public' or 'private', "
                 f"got '{value}'."
             )
         return normalized

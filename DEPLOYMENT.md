@@ -40,6 +40,7 @@ The repo is wired for Vercel serverless (Python):
 3. Set environment variables:
    - `STORAGE_DRIVER=vercel`
    - `BLOB_READ_WRITE_TOKEN=<token>`
+   - `BLOB_ACCESS_MODE=public` (or `private`, matching the store)
    - `CORS_ORIGINS=https://<your-domain>.vercel.app`
    - `APP_ENV=production`, `DEBUG=false`
 4. Deploy.
@@ -51,7 +52,7 @@ The repo is wired for Vercel serverless (Python):
 | Storage | all files go to Vercel Blob via the `vercel` storage driver |
 | Logs | file logging disabled; everything streams to stdout (Vercel dashboard) |
 | Ghostscript tools | unavailable — `pdf-compressor` and `pdf-to-image` report `unavailable` via `/api/v1/capabilities` and their pages show the disabled state |
-| Background remover | works; the rembg model is fetched on first request |
+| Background tools | unavailable on the current build — `rembg` was trimmed from `api/requirements.txt` to fit the 500 MB function limit, so `background-remover` and `background-replacement` report `unavailable` and their pages show the disabled state |
 | Temp files | `TEMP_DIRECTORY` / `XDG_CACHE_HOME` point under `/tmp` (serverless) |
 
 The capabilities endpoint is the source of truth: the frontend never hardcodes
@@ -59,9 +60,13 @@ which tools exist, so the same pages work in both environments.
 
 ### Blob notes
 
+- Storage goes through the official Vercel Python SDK (`vercel.blob`,
+  pinned in `api/requirements.txt`), which handles API versioning headers,
+  retries for transient failures and signed URLs.
 - `BLOB_READ_WRITE_TOKEN` is read at import time; a missing token raises a
   startup error on Vercel (the local driver remains usable without it).
-- Download URLs are time-limited via the blob SDK's signed URLs.
+- `BLOB_ACCESS_MODE` must match the store's access mode (`public` or
+  `private`). Private stores return time-limited signed download URLs.
 
 ## Troubleshooting
 
@@ -71,5 +76,8 @@ which tools exist, so the same pages work in both environments.
 - **`gs --version` not found** — install Ghostscript; the two `gs` tools
   will otherwise be flagged unavailable (capabilities), so pages degrade
   cleanly instead of crashing.
-- **Model download slow on first background-removal request** — cold start
-  on Vercel; subsequent calls are fast.
+- **Background removal unavailable on Vercel** — `rembg` (with its
+  ONNX runtime and models) is excluded from `api/requirements.txt` to stay
+  under the 500 MB serverless function limit, so the two background tools
+  are reported unavailable and their pages show the disabled state. They
+  work fully in local mode.

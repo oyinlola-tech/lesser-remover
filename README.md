@@ -1,6 +1,6 @@
 # Utils-tool
 
-A local-first file and media utility suite: **29 tools** for images, PDFs,
+A local-first file and media utility suite: **28 tools** for images, PDFs,
 files, developer assets and everyday utilities. Includes the new Image
 Resizer, enhanced batch Image Converter, Image Cropper, and SVG Generator
 (image-to-SVG). One codebase runs locally with full features, or on Vercel
@@ -119,7 +119,7 @@ app/
 
 frontend/
 ├── index.html                       # Capability-driven landing grid
-├── pages/                           # 27 tool pages (one HTML + one JS per tool)
+├── pages/                           # 28 tool pages (one HTML + one JS per tool)
 └── assets/
     ├── css/                         # reset / variables / base / components / responsive
     └── js/
@@ -156,10 +156,10 @@ storage/                             # Local mode only
 
 ```bash
 source .venv/bin/activate
-python -m pytest tests/ -q        # 230 tests: units, API contracts, capability gating
+python -m pytest tests/ -q        # 250+ tests: units, API contracts, capability gating
 ```
 
-Covers the unified error format, all 29 tools' services, the capability registry
+Covers the unified error format, all 28 tools' services, the capability registry
 (including Vercel gating), and every frontend page + page script serving correctly.
 
 ## Environment variables
@@ -239,8 +239,13 @@ gs --version          # required for PDF compression / PDF->image
 ### Vercel mode
 
 Set `STORAGE_DRIVER=vercel` and `BLOB_READ_WRITE_TOKEN=<token>` in Vercel,
-connect Vercel Blob, and deploy. The capability system automatically restricts
-Ghostscript-based tools (PDF compression, PDF→image) to local runs.
+connect Vercel Blob, and deploy. File storage goes through the official
+`vercel` Python SDK (`vercel.blob`). The capability system automatically
+marks tools unavailable when their runtime dependencies are missing — on
+Vercel that currently means the two background tools (`background-remover`,
+`background-replacement`), whose `rembg` stack was trimmed from
+`api/requirements.txt` to fit the 500 MB serverless function limit. Their
+pages show the disabled state instead of failing. See [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ---
 

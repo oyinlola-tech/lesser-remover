@@ -26,3 +26,15 @@ python-barcode==0.16.1
 numpy==2.4.6
 potracer==0.0.4
 requests==2.34.2
+
+vercel==0.10.0
+cbor2==6.1.4
+httpx==0.28.1
+websockets==16.1.1
+vercel-cache==0.7.2
+vercel-headers==0.7.1
+vercel-internal-core==0.1.2
+vercel-internal-telemetry==0.7.2
+vercel-oidc==0.8.0
+vercel-queue==0.8.0
+vercel-sandbox==0.4.0

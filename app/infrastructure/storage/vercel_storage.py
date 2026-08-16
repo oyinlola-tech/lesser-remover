@@ -1,34 +1,51 @@
+"""Vercel Blob storage adapter.
+
+Uses the official ``vercel`` Python SDK (``vercel.blob``) instead of a
+hand-rolled REST client. The SDK handles the current API version headers,
+retries with backoff for transient failures, content-type inference and
+signed download URLs — all details the previous implementation got wrong,
+which surfaced as failing tools on Vercel.
+
+Blob keys mirror the local filesystem layout (``uploads/...``,
+``processed/...``, ...) so the two drivers stay interchangeable. A local
+mirror under the ephemeral temp dir keeps ``materialize()`` cheap for
+short-lived serverless instances.
+"""
+
 import logging
 import tempfile
 from pathlib import Path
 
-import requests
+from vercel.blob import (
+    BlobNotFoundError,
+    delete,
+    get,
+    get_download_url,
+    head,
+    put,
+)
 
 from app.core.config import settings
 from app.infrastructure.storage.base import StorageInterface
 
 logger = logging.getLogger(__name__)
 
-BLOB_BASE_URL = "https://blob.vercel-storage.com"
-
 _LOCAL_ROOT = Path(tempfile.gettempdir()) / "vercel_storage"
 
 
 class VercelStorage(StorageInterface):
     def __init__(self) -> None:
-        self._token = settings.blob_read_write_token
-        self._headers = (
-            {"Authorization": f"Bearer {self._token}"}
-            if self._token
-            else {}
-        )
+        self._access = settings.blob_access_mode
+        # Blob path -> public URL returned by the SDK on upload, so
+        # get_url() does not need a network round-trip for fresh files.
+        self._urls: dict[str, str] = {}
         self.upload_path = _LOCAL_ROOT / "uploads"
         self.processed_path = _LOCAL_ROOT / "processed"
         self.compressed_path = _LOCAL_ROOT / "compressed"
         self.temp_path = _LOCAL_ROOT / "temp"
 
     def _check_token(self) -> None:
-        if not self._token:
+        if not settings.blob_read_write_token:
             raise RuntimeError(
                 "BLOB_READ_WRITE_TOKEN is required for Vercel storage."
             )
@@ -46,20 +63,17 @@ class VercelStorage(StorageInterface):
         except ValueError:
             return file_path.as_posix()
 
-    def _put_blob(self, file_path: Path, data: bytes) -> None:
-        self._check_token()
-        blob_path = self._blob_key(file_path)
-        response = requests.put(
-            f"{BLOB_BASE_URL}/{blob_path}",
-            headers=self._headers,
-            data=data,
-        )
-        response.raise_for_status()
-
     def write(self, file_path: Path, data: bytes) -> None:
+        self._check_token()
         file_path.parent.mkdir(parents=True, exist_ok=True)
         file_path.write_bytes(data)
-        self._put_blob(file_path, data)
+        blob_path = self._blob_key(file_path)
+        result = put(
+            blob_path,
+            data,
+            access=self._access,
+        )
+        self._urls[blob_path] = result.url
 
     def save(
         self,
@@ -73,57 +87,56 @@ class VercelStorage(StorageInterface):
     def read(self, file_path: Path) -> bytes:
         self._check_token()
         blob_path = self._blob_key(file_path)
-        response = requests.get(
-            f"{BLOB_BASE_URL}/{blob_path}",
-            headers=self._headers,
-        )
-        response.raise_for_status()
-        return response.content
+        result = get(blob_path, access=self._access)
+        return result.content
 
     def materialize(self, file_path: Path) -> Path:
         if file_path.exists():
             return file_path
         try:
-            data = self.read(file_path)
-        except requests.HTTPError as error:
-            if error.response is not None and error.response.status_code == 404:
-                return file_path
-            raise
+            result = get(
+                self._blob_key(file_path),
+                access=self._access,
+            )
+        except BlobNotFoundError:
+            return file_path
         file_path.parent.mkdir(parents=True, exist_ok=True)
-        file_path.write_bytes(data)
+        file_path.write_bytes(result.content)
         return file_path
 
     def delete(self, file_path: Path) -> None:
         self._check_token()
         blob_path = self._blob_key(file_path)
-        response = requests.delete(
-            f"{BLOB_BASE_URL}/{blob_path}",
-            headers=self._headers,
-        )
-        if response.status_code == 404:
-            return
-        response.raise_for_status()
+        try:
+            delete(blob_path)
+        except BlobNotFoundError:
+            pass
+        self._urls.pop(blob_path, None)
         file_path.unlink(missing_ok=True)
 
     def exists(self, file_path: Path) -> bool:
-        blob_path = self._blob_key(file_path)
-        response = requests.head(
-            f"{BLOB_BASE_URL}/{blob_path}",
-            headers=self._headers,
-        )
-        return response.status_code == 200
+        try:
+            head(self._blob_key(file_path))
+            return True
+        except BlobNotFoundError:
+            return False
 
     def get_size(self, file_path: Path) -> int:
-        blob_path = self._blob_key(file_path)
-        response = requests.head(
-            f"{BLOB_BASE_URL}/{blob_path}",
-            headers=self._headers,
-        )
-        response.raise_for_status()
-        return int(response.headers.get("Content-Length", 0))
+        result = head(self._blob_key(file_path))
+        return result.size
 
     def get_url(self, file_path: Path) -> str:
-        return f"{BLOB_BASE_URL}/{self._blob_key(file_path)}"
+        blob_path = self._blob_key(file_path)
+        url = self._urls.get(blob_path)
+        if url is None:
+            try:
+                url = head(blob_path).url
+            except BlobNotFoundError:
+                return ""
+            self._urls[blob_path] = url
+        if self._access == "private":
+            return get_download_url(url)
+        return url
 
 
 vercel_storage = VercelStorage()

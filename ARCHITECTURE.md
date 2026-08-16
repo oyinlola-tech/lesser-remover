@@ -77,7 +77,7 @@ storage-generated URL; the frontend calls it via `apiDownload`.
 
 ## Capability registry
 
-`app/core/capabilities.py` declares all 27 tools with:
+`app/core/capabilities.py` declares all 28 tools with:
 
 - `id`, `name`, `description`, `icon`
 - `status` — `available` (or `unavailable` with a reason)

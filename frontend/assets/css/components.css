@@ -1885,6 +1885,12 @@ summary:focus-visible,
   margin-bottom: 16px;
 }
 
+#tool-upload.is-disabled .drop-zone {
+  pointer-events: none;
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .tool-results {
   margin-top: 20px;
 }
