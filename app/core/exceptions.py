@@ -95,7 +95,7 @@ class FileTooLargeError(AppException):
     ):
         super().__init__(
             message,
-            status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            status.HTTP_413_CONTENT_TOO_LARGE,
             code,
         )
 
@@ -192,7 +192,7 @@ def register_exception_handlers(app) -> None:
         code_map = {
             status.HTTP_404_NOT_FOUND: "NOT_FOUND",
             status.HTTP_400_BAD_REQUEST: "INVALID_REQUEST",
-            status.HTTP_413_REQUEST_ENTITY_TOO_LARGE: "FILE_TOO_LARGE",
+            status.HTTP_413_CONTENT_TOO_LARGE: "FILE_TOO_LARGE",
             status.HTTP_415_UNSUPPORTED_MEDIA_TYPE: (
                 "UNSUPPORTED_FILE_TYPE"
             ),
