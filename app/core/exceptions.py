@@ -34,10 +34,18 @@ ERROR_PAGES_DIR = (
 
 
 def _wants_html(request: Request) -> bool:
-    """A browser navigation wants an HTML page; API calls want JSON."""
+    """A browser navigation wants an HTML page; API calls want JSON.
+
+    Browsers send ``Accept: text/html,...`` on navigation, but some
+    clients (and simple requests) send ``*/*`` or nothing at all.
+    Anything that is not an API path is treated as a page request so
+    the designed ``.html`` error pages are always served.
+    """
     if request.url.path.startswith(API_PREFIX):
         return False
-    accept = request.headers.get("accept", "")
+    accept = request.headers.get("accept", "").lower()
+    if not accept or accept.strip() == "*/*":
+        return True
     return "text/html" in accept
 
 

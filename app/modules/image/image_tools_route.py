@@ -245,6 +245,14 @@ async def add_watermark(
     )
 
 
+@router.post("/palette-extractor")
+async def extract_palette(
+    file: UploadFile = File(...),
+    num_colors: int = Form(6),
+):
+    return await image_tools_controller.extract_palette(file, num_colors=num_colors)
+
+
 @router.get("/download/{filename}")
 async def download_processed_file(
     filename: str,

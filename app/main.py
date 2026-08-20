@@ -44,6 +44,8 @@ from app.modules.jobs.job_cleanup_service import (
 )
 from app.modules.jobs.job_route import router as job_router
 from app.modules.pdf.pdf_route import router as pdf_router
+from app.modules.text.text_route import router as text_router
+from app.modules.video.video_route import router as video_router
 
 setup_logging()
 
@@ -94,6 +96,8 @@ app.include_router(images_router)
 app.include_router(pdf_router)
 app.include_router(file_tool_router)
 app.include_router(dev_tools_router)
+app.include_router(video_router)
+app.include_router(text_router)
 
 @app.on_event("startup")
 async def startup_cleanup():

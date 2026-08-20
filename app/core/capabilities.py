@@ -28,6 +28,7 @@ CATEGORY_PDF = "pdf"
 CATEGORY_FILE = "file"
 CATEGORY_DEVELOPER = "developer"
 CATEGORY_UTILITY = "utility"
+CATEGORY_TEXT = "text"
 
 
 @dataclass(frozen=True)
@@ -433,6 +434,115 @@ class CapabilityRegistry:
                 environments=(LOCAL_DRIVER, VERCEL_DRIVER),
                 max_upload_mb=25,
                 notes="Runs entirely in the browser.",
+            ),
+            Tool(
+                id="video-downloader",
+                name="Video Downloader",
+                category=CATEGORY_UTILITY,
+                description=(
+                    "Download videos from YouTube, TikTok (no watermark), "
+                    "Facebook, Instagram, Twitter/X and more."
+                ),
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
+                requires_module="yt_dlp",
+                featured=True,
+            ),
+            # --- New PDF Tools ---
+            Tool(
+                id="pdf-encrypt",
+                name="PDF Password Protect",
+                category=CATEGORY_PDF,
+                description="Encrypt PDF files with user and owner passwords.",
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
+                requires_module="pikepdf",
+            ),
+            Tool(
+                id="pdf-page-number",
+                name="PDF Page Numberer",
+                category=CATEGORY_PDF,
+                description="Add page numbers to PDF documents.",
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
+                requires_module="fitz",
+            ),
+            Tool(
+                id="pdf-watermark",
+                name="PDF Watermark",
+                category=CATEGORY_PDF,
+                description="Add text watermark overlay to PDF pages.",
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
+                requires_module="fitz",
+            ),
+            # --- New Dev & Data Tools ---
+            Tool(
+                id="json-csv-converter",
+                name="JSON / CSV Converter",
+                category=CATEGORY_DEVELOPER,
+                description="Convert JSON data to CSV spreadsheets and vice versa.",
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
+            ),
+            Tool(
+                id="json-formatter",
+                name="JSON Formatter & Minifier",
+                category=CATEGORY_DEVELOPER,
+                description="Format, validate, or minify JSON data.",
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
+            ),
+            Tool(
+                id="jwt-decoder",
+                name="JWT Decoder",
+                category=CATEGORY_DEVELOPER,
+                description="Decode JSON Web JWT headers and payloads safely.",
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
+            ),
+            # --- New Text & Audio Tools ---
+            Tool(
+                id="text-diff",
+                name="Text Diff Tool",
+                category=CATEGORY_TEXT,
+                description="Compare two texts side-by-side and highlight differences.",
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
+            ),
+            Tool(
+                id="case-converter",
+                name="Text Case Converter",
+                category=CATEGORY_TEXT,
+                description="Convert text between camelCase, snake_case, UPPERCASE, etc.",
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
+            ),
+            Tool(
+                id="word-counter",
+                name="Word & Character Counter",
+                category=CATEGORY_TEXT,
+                description="Count words, characters, sentences, and reading time.",
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
+            ),
+            Tool(
+                id="text-to-speech",
+                name="Text-to-Speech",
+                category=CATEGORY_TEXT,
+                description="Convert text input into downloadable MP3 audio speech.",
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
+                requires_module="gtts",
+            ),
+            # --- New Image Tools ---
+            Tool(
+                id="palette-extractor",
+                name="Color Palette Extractor",
+                category=CATEGORY_IMAGE,
+                description="Extract dominant HEX color codes from photos.",
+                status="available",
+                environments=(LOCAL_DRIVER, VERCEL_DRIVER),
             ),
         )
 

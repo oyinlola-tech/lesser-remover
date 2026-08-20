@@ -649,5 +649,17 @@ class ImageToolsController:
             failures=failures,
         )
 
+    async def extract_palette(
+        self,
+        file: UploadFile,
+        num_colors: int = 6,
+    ) -> dict:
+        file_data, filename = await self._read_image(file)
+        try:
+            colors = image_service.extract_palette(file_data, num_colors=num_colors)
+            return {"success": True, "filename": filename, "colors": colors}
+        except ValueError as err:
+            raise HTTPException(status_code=400, detail=str(err))
+
 
 image_tools_controller = ImageToolsController()

@@ -111,6 +111,31 @@ async def pdf_info(
     return await pdf_controller.info(file)
 
 
+@router.post("/encrypt", response_model=PdfToolResponse)
+async def encrypt_pdf(
+    file: UploadFile = File(...),
+    password: str = Form(...),
+    owner_password: str | None = Form(None),
+):
+    return await pdf_controller.encrypt(file, user_password=password, owner_password=owner_password)
+
+
+@router.post("/page-number", response_model=PdfToolResponse)
+async def page_number_pdf(
+    file: UploadFile = File(...),
+    position: str = Form("bottom-right"),
+):
+    return await pdf_controller.page_number(file, position=position)
+
+
+@router.post("/watermark", response_model=PdfToolResponse)
+async def watermark_pdf(
+    file: UploadFile = File(...),
+    text: str = Form("CONFIDENTIAL"),
+):
+    return await pdf_controller.watermark(file, text=text)
+
+
 @router.get("/download/{filename}")
 async def download_output_file(
     filename: str,

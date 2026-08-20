@@ -26,6 +26,7 @@ python-barcode==0.16.1
 numpy==2.4.6
 potracer==0.0.4
 requests==2.34.2
+gTTS==2.5.4
 
 vercel==0.10.0
 cbor2==6.1.4

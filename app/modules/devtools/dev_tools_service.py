@@ -1,7 +1,10 @@
+import time
 from io import BytesIO
 from xml.etree import ElementTree
 
 from PIL import Image
+
+from app.core.logging import get_tool_logger
 
 
 def _favicon_sizes(image: Image.Image, size: int) -> Image.Image:
@@ -61,6 +64,8 @@ class DevToolsService:
         add_padding: bool = False,
     ) -> dict:
         """Create a favicon set (ICO + PNGs) from a source image."""
+        tool_logger = get_tool_logger("favicon-generator")
+        started = time.monotonic()
         source = Image.open(BytesIO(image_data))
         source.load()
         square = source.convert("RGBA")
@@ -104,6 +109,13 @@ class DevToolsService:
             png_buffer,
             format="PNG",
         )
+        tool_logger.info(
+            "generated favicon set %s (ico %d, png %d bytes) in %.2fs",
+            sizes,
+            ico_buffer.getbuffer().nbytes,
+            png_buffer.getbuffer().nbytes,
+            time.monotonic() - started,
+        )
         return {
             "ico": ico_buffer.getvalue(),
             "png": png_buffer.getvalue(),
@@ -121,6 +133,8 @@ class DevToolsService:
         collapse, numeric rounding) and verifies the result still
         parses as XML before returning it.
         """
+        tool_logger = get_tool_logger("svg-optimizer")
+        started = time.monotonic()
         import re
 
         text = svg_data.decode("utf-8")
@@ -169,6 +183,13 @@ class DevToolsService:
                 f"Minification produced invalid SVG: {error}"
             ) from error
         minified_bytes = minified.encode("utf-8")
+        tool_logger.info(
+            "optimized svg %d -> %d bytes (%.1f%%) in %.2fs",
+            len(svg_data),
+            len(minified_bytes),
+            100 * (1 - len(minified_bytes) / max(1, len(svg_data))),
+            time.monotonic() - started,
+        )
         return {
             "data": minified_bytes,
             "original_size": len(svg_data),
@@ -200,6 +221,8 @@ class DevToolsService:
         foreground_color
             Color name or hex code for the traced paths.
         """
+        tool_logger = get_tool_logger("svg-generator")
+        started = time.monotonic()
         import numpy as np
         import potrace
 
@@ -245,7 +268,16 @@ class DevToolsService:
                 f'd="{" ".join(d)}"/>'
             )
         parts.append("</svg>")
-        return "".join(parts)
+        result = "".join(parts)
+        tool_logger.info(
+            "traced %dx%d image to %d svg paths (%d bytes) in %.2fs",
+            w,
+            h,
+            len(path),
+            len(result.encode("utf-8")),
+            time.monotonic() - started,
+        )
+        return result
 
     def generate_qr(
         self,
@@ -257,6 +289,8 @@ class DevToolsService:
         output_format: str = "png",
         image_data: bytes | None = None,
     ) -> tuple[bytes, str]:
+        tool_logger = get_tool_logger("qr-generator")
+        started = time.monotonic()
         import qrcode
 
         if not content.strip():
@@ -309,12 +343,28 @@ class DevToolsService:
             )
             buffer = BytesIO()
             svg_img.save(buffer)
+            tool_logger.info(
+                "generated qr (%s, %d bytes) in %.2fs",
+                output_format,
+                buffer.getbuffer().nbytes,
+                time.monotonic() - started,
+            )
             return buffer.getvalue(), "image/svg+xml"
         buffer = BytesIO()
         if output_format == "webp":
             img.save(buffer, format="WEBP", quality=95)
+            tool_logger.info(
+                "generated qr (webp, %d bytes) in %.2fs",
+                buffer.getbuffer().nbytes,
+                time.monotonic() - started,
+            )
             return buffer.getvalue(), "image/webp"
         img.save(buffer, format="PNG")
+        tool_logger.info(
+            "generated qr (png, %d bytes) in %.2fs",
+            buffer.getbuffer().nbytes,
+            time.monotonic() - started,
+        )
         return buffer.getvalue(), "image/png"
 
     def generate_barcode(
@@ -323,6 +373,8 @@ class DevToolsService:
         code_type: str = "code128",
         output_format: str = "png",
     ) -> tuple[bytes, str]:
+        tool_logger = get_tool_logger("barcode-generator")
+        started = time.monotonic()
         if not content.strip():
             raise ValueError("Barcode content cannot be empty.")
         cls = _barcode_factory(code_type)
@@ -352,6 +404,12 @@ class DevToolsService:
                     "write_text": True,
                 }
             )
+            tool_logger.info(
+                "generated %s barcode (svg, %d bytes) in %.2fs",
+                code_type,
+                len(data),
+                time.monotonic() - started,
+            )
             return data, "image/svg+xml"
         from barcode.writer import ImageWriter
 
@@ -374,9 +432,137 @@ class DevToolsService:
                 format="WEBP",
                 quality=95,
             )
+            tool_logger.info(
+                "generated %s barcode (webp, %d bytes) in %.2fs",
+                code_type,
+                buffer.getbuffer().nbytes,
+                time.monotonic() - started,
+            )
             return buffer.getvalue(), "image/webp"
         image.save(buffer, format="PNG")
+        tool_logger.info(
+            "generated %s barcode (png, %d bytes) in %.2fs",
+            code_type,
+            buffer.getbuffer().nbytes,
+            time.monotonic() - started,
+        )
         return buffer.getvalue(), "image/png"
+
+    def json_to_csv(self, json_text: str) -> str:
+        tool_logger = get_tool_logger("json-csv-converter")
+        started = time.monotonic()
+        import csv
+        import json
+        from io import StringIO
+
+        try:
+            data = json.loads(json_text)
+        except Exception as err:
+            raise ValueError(f"Invalid JSON string: {err}")
+
+        output = StringIO()
+        if isinstance(data, list):
+            if not data:
+                return ""
+            if isinstance(data[0], dict):
+                headers = list(data[0].keys())
+                writer = csv.DictWriter(output, fieldnames=headers)
+                writer.writeheader()
+                for row in data:
+                    if isinstance(row, dict):
+                        writer.writerow(row)
+            else:
+                writer = csv.writer(output)
+                writer.writerow(["value"])
+                for val in data:
+                    writer.writerow([val])
+        elif isinstance(data, dict):
+            writer = csv.writer(output)
+            writer.writerow(["Key", "Value"])
+            for k, v in data.items():
+                writer.writerow([k, json.dumps(v) if isinstance(v, (dict, list)) else v])
+        else:
+            raise ValueError("JSON must be an array of objects or an object.")
+
+        tool_logger.info(
+            "converted json -> csv (%d bytes) in %.2fs",
+            len(output.getvalue()),
+            time.monotonic() - started,
+        )
+        return output.getvalue()
+
+    def csv_to_json(self, csv_text: str) -> str:
+        tool_logger = get_tool_logger("json-csv-converter")
+        started = time.monotonic()
+        import csv
+        import json
+        from io import StringIO
+
+        try:
+            reader = csv.DictReader(StringIO(csv_text.strip()))
+            rows = [dict(row) for row in reader]
+            tool_logger.info(
+                "converted csv -> json (%d rows) in %.2fs",
+                len(rows),
+                time.monotonic() - started,
+            )
+            return json.dumps(rows, indent=2)
+        except Exception as err:
+            raise ValueError(f"Invalid CSV string: {err}")
+
+    def json_format(self, json_text: str, minify: bool = False) -> str:
+        tool_logger = get_tool_logger("json-formatter")
+        started = time.monotonic()
+        import json
+
+        try:
+            obj = json.loads(json_text)
+            if minify:
+                result = json.dumps(obj, separators=(",", ":"))
+            else:
+                result = json.dumps(obj, indent=2)
+            tool_logger.info(
+                "formatted json (%s, %d bytes) in %.2fs",
+                "minified" if minify else "pretty",
+                len(result.encode("utf-8")),
+                time.monotonic() - started,
+            )
+            return result
+        except Exception as err:
+            raise ValueError(f"Invalid JSON string: {err}")
+
+    def jwt_decode(self, token: str) -> dict:
+        tool_logger = get_tool_logger("jwt-decoder")
+        started = time.monotonic()
+        import base64
+        import json
+
+        parts = token.strip().split(".")
+        if len(parts) < 2:
+            raise ValueError("Invalid JWT token structure (must contain at least 2 segments).")
+
+        def _b64decode(s: str) -> dict:
+            # Pad base64 string
+            padded = s + "=" * (-len(s) % 4)
+            decoded_bytes = base64.urlsafe_b64decode(padded)
+            return json.loads(decoded_bytes.decode("utf-8"))
+
+        try:
+            header = _b64decode(parts[0])
+            payload = _b64decode(parts[1])
+            result = {
+                "header": header,
+                "payload": payload,
+                "signature_present": len(parts) >= 3 and bool(parts[2]),
+            }
+            tool_logger.info(
+                "decoded jwt (%d segments) in %.2fs",
+                len(parts),
+                time.monotonic() - started,
+            )
+            return result
+        except Exception as err:
+            raise ValueError(f"Failed to decode JWT token: {err}")
 
 
 dev_tools_service = DevToolsService()

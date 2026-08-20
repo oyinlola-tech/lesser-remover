@@ -290,5 +290,44 @@ class PdfController:
             file_size_bytes=len(file_data),
         )
 
+    async def encrypt(
+        self,
+        file: UploadFile,
+        user_password: str,
+        owner_password: str | None = None,
+    ) -> PdfToolResponse:
+        file_data, filename = await self._read_pdf(file)
+        try:
+            data, page_count = pdf_service.encrypt(
+                file_data, user_password, owner_password
+            )
+        except ValueError as error:
+            raise HTTPException(status_code=400, detail=str(error)) from error
+        return self._save(data, f"encrypted_{filename}", {"page_count": page_count})
+
+    async def page_number(
+        self,
+        file: UploadFile,
+        position: str = "bottom-right",
+    ) -> PdfToolResponse:
+        file_data, filename = await self._read_pdf(file)
+        try:
+            data, page_count = pdf_service.add_page_numbers(file_data, position)
+        except ValueError as error:
+            raise HTTPException(status_code=400, detail=str(error)) from error
+        return self._save(data, f"numbered_{filename}", {"page_count": page_count})
+
+    async def watermark(
+        self,
+        file: UploadFile,
+        text: str = "CONFIDENTIAL",
+    ) -> PdfToolResponse:
+        file_data, filename = await self._read_pdf(file)
+        try:
+            data, page_count = pdf_service.add_watermark(file_data, text)
+        except ValueError as error:
+            raise HTTPException(status_code=400, detail=str(error)) from error
+        return self._save(data, f"watermarked_{filename}", {"page_count": page_count})
+
 
 pdf_controller = PdfController()

@@ -1,6 +1,8 @@
 import logging
+import time
 from io import BytesIO
 
+from app.core.logging import get_tool_logger
 from app.modules.compression.image_compression.image_compression_service import (
     image_compression_service,
 )
@@ -25,6 +27,8 @@ class CompressionService:
         strip_metadata: bool = True,
     ) -> tuple[bytes, str, int, int, int]:
 
+        tool_logger = get_tool_logger("image-compressor")
+        started = time.monotonic()
         actual_format = self._resolve_output_format(
             file_data,
             output_format,
@@ -32,7 +36,7 @@ class CompressionService:
 
         if target_size_bytes is not None:
 
-            return (
+            result = (
                 image_compression_service
                 .compress_to_target(
                     file_data=file_data,
@@ -42,8 +46,17 @@ class CompressionService:
                     strip_metadata=strip_metadata,
                 )
             )
+            tool_logger.info(
+                "compressed image to target %d bytes (%d -> %d bytes, %s) in %.2fs",
+                target_size_bytes,
+                len(file_data),
+                len(result[0]),
+                actual_format,
+                time.monotonic() - started,
+            )
+            return result
 
-        return (
+        result = (
             image_compression_service
             .compress_with_preset(
                 file_data=file_data,
@@ -53,6 +66,15 @@ class CompressionService:
                 strip_metadata=strip_metadata,
             )
         )
+        tool_logger.info(
+            "compressed image with preset %s (%d -> %d bytes, %s) in %.2fs",
+            preset,
+            len(file_data),
+            len(result[0]),
+            actual_format,
+            time.monotonic() - started,
+        )
+        return result
 
     def compress_image_quality(
         self,
@@ -64,6 +86,8 @@ class CompressionService:
         strip_metadata: bool = True,
     ) -> tuple[bytes, str, int, int, int]:
 
+        tool_logger = get_tool_logger("image-compressor")
+        started = time.monotonic()
         actual_format = self._resolve_output_format(
             file_data,
             output_format,
@@ -71,7 +95,7 @@ class CompressionService:
 
         if target_size_bytes is not None:
 
-            return (
+            result = (
                 image_compression_service
                 .compress_to_target(
                     file_data=file_data,
@@ -81,8 +105,18 @@ class CompressionService:
                     strip_metadata=strip_metadata,
                 )
             )
+            tool_logger.info(
+                "compressed image to target %d bytes (q%d, %d -> %d bytes, %s) in %.2fs",
+                target_size_bytes,
+                quality,
+                len(file_data),
+                len(result[0]),
+                actual_format,
+                time.monotonic() - started,
+            )
+            return result
 
-        return (
+        result = (
             image_compression_service
             .compress(
                 file_data=file_data,
@@ -92,6 +126,15 @@ class CompressionService:
                 strip_metadata=strip_metadata,
             )
         )
+        tool_logger.info(
+            "compressed image at quality %d (%d -> %d bytes, %s) in %.2fs",
+            quality,
+            len(file_data),
+            len(result[0]),
+            actual_format,
+            time.monotonic() - started,
+        )
+        return result
 
     @staticmethod
     def _resolve_output_format(
@@ -125,13 +168,21 @@ class CompressionService:
         preset: str = "balanced",
     ) -> tuple[bytes, str, str]:
 
+        tool_logger = get_tool_logger("pdf-compressor")
+        started = time.monotonic()
         data, quality = (
             pdf_compression_service.compress_best(
                 file_data=file_data,
                 preset=preset,
             )
         )
-
+        tool_logger.info(
+            "compressed pdf with preset %s (%d -> %d bytes) in %.2fs",
+            preset,
+            len(file_data),
+            len(data),
+            time.monotonic() - started,
+        )
         return (
             data,
             "application/pdf",

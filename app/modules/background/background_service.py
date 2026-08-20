@@ -1,6 +1,9 @@
+import time
 from io import BytesIO
 
 from PIL import Image, ImageFilter
+
+from app.core.logging import get_tool_logger
 
 
 def _get_rembg_adapter():
@@ -14,6 +17,8 @@ class BackgroundService:
         file_data: bytes,
         original_filename: str,
     ) -> tuple[Image.Image, int, int]:
+        tool_logger = get_tool_logger("background-remover")
+        started = time.monotonic()
         image = Image.open(
             BytesIO(file_data),
         )
@@ -23,6 +28,14 @@ class BackgroundService:
             _get_rembg_adapter().remove_background(
                 image,
             )
+        )
+        tool_logger.info(
+            "removed background from %dx%d image (%s, %d bytes) in %.2fs",
+            width,
+            height,
+            original_filename,
+            len(file_data),
+            time.monotonic() - started,
         )
         return (
             processed_image,
@@ -40,6 +53,8 @@ class BackgroundService:
         """Remove the subject's background and place it on a solid
         color, an uploaded image, or a blurred copy of itself.
         """
+        tool_logger = get_tool_logger("background-replacement")
+        started = time.monotonic()
         source = Image.open(BytesIO(file_data))
         source.load()
         width, height = source.size
@@ -75,6 +90,15 @@ class BackgroundService:
                 ImageFilter.GaussianBlur(blur or 20)
             )
 
+        tool_logger.info(
+            "replaced background of %dx%d image (mode=%s, blur=%d, %d bytes) in %.2fs",
+            width,
+            height,
+            "image" if image_data is not None else ("color" if color is not None else "blur"),
+            blur,
+            len(file_data),
+            time.monotonic() - started,
+        )
         return (
             Image.alpha_composite(background, subject),
             width,

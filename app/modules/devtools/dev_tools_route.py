@@ -2,6 +2,7 @@ import logging
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import Response
+from pydantic import BaseModel
 
 from app.api import API_PREFIX
 from app.core.capabilities import capability_registry
@@ -140,3 +141,36 @@ async def generate_barcode(
         content=data,
         media_type=content_type,
     )
+
+
+class JsonCsvPayload(BaseModel):
+    data: str
+
+
+class JsonFormatPayload(BaseModel):
+    json_text: str
+    minify: bool = False
+
+
+class JwtDecodePayload(BaseModel):
+    token: str
+
+
+@router.post("/json-to-csv")
+async def json_to_csv(payload: JsonCsvPayload):
+    return dev_tools_controller.json_to_csv(payload.data)
+
+
+@router.post("/csv-to-json")
+async def csv_to_json(payload: JsonCsvPayload):
+    return dev_tools_controller.csv_to_json(payload.data)
+
+
+@router.post("/json-format")
+async def json_format(payload: JsonFormatPayload):
+    return dev_tools_controller.json_format(payload.json_text, minify=payload.minify)
+
+
+@router.post("/jwt-decode")
+async def jwt_decode(payload: JwtDecodePayload):
+    return dev_tools_controller.jwt_decode(payload.token)

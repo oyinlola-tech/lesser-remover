@@ -143,5 +143,33 @@ class DevToolsController:
             ) from error
         return data, content_type
 
+    def json_to_csv(self, json_text: str) -> dict:
+        try:
+            result = dev_tools_service.json_to_csv(json_text)
+            return {"success": True, "csv": result}
+        except ValueError as err:
+            raise HTTPException(status_code=400, detail=str(err))
+
+    def csv_to_json(self, csv_text: str) -> dict:
+        try:
+            result = dev_tools_service.csv_to_json(csv_text)
+            return {"success": True, "json": result}
+        except ValueError as err:
+            raise HTTPException(status_code=400, detail=str(err))
+
+    def json_format(self, json_text: str, minify: bool = False) -> dict:
+        try:
+            result = dev_tools_service.json_format(json_text, minify=minify)
+            return {"success": True, "result": result}
+        except ValueError as err:
+            raise HTTPException(status_code=400, detail=str(err))
+
+    def jwt_decode(self, token: str) -> dict:
+        try:
+            result = dev_tools_service.jwt_decode(token)
+            return {"success": True, "data": result}
+        except ValueError as err:
+            raise HTTPException(status_code=400, detail=str(err))
+
 
 dev_tools_controller = DevToolsController()

@@ -1,8 +1,10 @@
+import time
 from io import BytesIO
 
 from PIL import Image, ImageDraw, ImageFont
 
 from app.core.config import settings
+from app.core.logging import get_tool_logger
 from app.infrastructure.compression.pillow_adapter import (
     pillow_adapter,
 )
@@ -280,6 +282,8 @@ class ImageService:
         Returns encoded bytes plus metadata about the conversion,
         including whether transparency was flattened.
         """
+        tool_logger = get_tool_logger("image-converter")
+        started = time.monotonic()
         output_format = output_format.lower()
         if output_format not in SUPPORTED_CONVERSION_FORMATS:
             raise ValueError(
@@ -317,6 +321,16 @@ class ImageService:
             background_color=background_color,
         )
 
+        tool_logger.info(
+            "converted %s -> %s (%dx%d, %d -> %d bytes) in %.2fs",
+            input_format,
+            output_format,
+            original_width,
+            original_height,
+            original_size,
+            len(data),
+            time.monotonic() - started,
+        )
         return {
             "data": data,
             "content_type": content_type,
@@ -358,6 +372,8 @@ class ImageService:
         ``output_format`` of ``"auto"`` preserves the source format when
         the chosen format is JPEG/PNG/WebP; otherwise defaults to PNG.
         """
+        tool_logger = get_tool_logger("image-resizer")
+        started = time.monotonic()
         image = self._open(file_data)
 
         if self._is_animated(image):
@@ -437,6 +453,17 @@ class ImageService:
             background_color=background_color,
         )
 
+        tool_logger.info(
+            "resized %dx%d -> %dx%d (%d -> %d bytes, %s) in %.2fs",
+            original_width,
+            original_height,
+            resized.width,
+            resized.height,
+            original_size,
+            len(data),
+            output_format,
+            time.monotonic() - started,
+        )
         return {
             "data": data,
             "content_type": content_type,
@@ -461,6 +488,8 @@ class ImageService:
         Explicit operation: callers only invoke it when the user asked
         for metadata removal.
         """
+        tool_logger = get_tool_logger("metadata-remover")
+        started = time.monotonic()
         image = self._open(file_data)
         source_format = (
             image.format or "png"
@@ -501,6 +530,13 @@ class ImageService:
             )
             content_type = "image/png"
             extension = "png"
+        tool_logger.info(
+            "stripped metadata %s from %s (%d bytes) in %.2fs",
+            removed,
+            source_format,
+            len(data),
+            time.monotonic() - started,
+        )
         return {
             "data": data,
             "content_type": content_type,
@@ -535,6 +571,8 @@ class ImageService:
         rotation or flip).  The backend applies the full transformation
         pipeline so that the output always matches the frontend preview.
         """
+        tool_logger = get_tool_logger("image-cropper")
+        started = time.monotonic()
         image = self._open(file_data)
 
         if self._is_animated(image):
@@ -608,6 +646,16 @@ class ImageService:
             background_color=background_color,
         )
 
+        tool_logger.info(
+            "cropped %dx%d -> %dx%d (%d -> %d bytes) in %.2fs",
+            original_width,
+            original_height,
+            image.width,
+            image.height,
+            original_size,
+            len(data),
+            time.monotonic() - started,
+        )
         return {
             "data": data,
             "content_type": content_type,
@@ -636,6 +684,8 @@ class ImageService:
         rotation: int = 0,
     ) -> dict:
         """Overlay a text or logo watermark onto an image."""
+        tool_logger = get_tool_logger("watermark")
+        started = time.monotonic()
         image = self._open(file_data).convert("RGBA")
         layer = Image.new(
             "RGBA",
@@ -745,6 +795,14 @@ class ImageService:
             result,
             quality=95,
         )
+        tool_logger.info(
+            "watermarked %dx%d image (%s, %d bytes) in %.2fs",
+            image.width,
+            image.height,
+            "text" if text else "logo",
+            len(data),
+            time.monotonic() - started,
+        )
         return {
             "data": data,
             "content_type": "image/webp",
@@ -752,6 +810,39 @@ class ImageService:
             "width": image.width,
             "height": image.height,
         }
+
+    def extract_palette(self, image_data: bytes, num_colors: int = 6) -> list[dict]:
+        tool_logger = get_tool_logger("palette-extractor")
+        started = time.monotonic()
+        img = Image.open(BytesIO(image_data))
+        img = img.convert("RGB")
+        img.thumbnail((150, 150))
+        quantized = img.quantize(colors=num_colors)
+        palette = quantized.getpalette()[: num_colors * 3]
+        counts = quantized.getcolors()
+
+        colors = []
+        if counts:
+            total_pixels = sum(count for count, _ in counts)
+            for count, index in counts:
+                r = palette[index * 3]
+                g = palette[index * 3 + 1]
+                b = palette[index * 3 + 2]
+                hex_code = f"#{r:02x}{g:02x}{b:02x}"
+                pct = round((count / total_pixels) * 100, 1)
+                colors.append({
+                    "hex": hex_code,
+                    "rgb": [r, g, b],
+                    "percentage": pct,
+                })
+            colors.sort(key=lambda c: c["percentage"], reverse=True)
+        tool_logger.info(
+            "extracted %d colors from %d-byte image in %.2fs",
+            len(colors),
+            len(image_data),
+            time.monotonic() - started,
+        )
+        return colors
 
 
 image_service = ImageService()
