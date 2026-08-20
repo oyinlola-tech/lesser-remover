@@ -1,7 +1,7 @@
 fastapi==0.141.1
 h11==0.16.0
 idna==3.18
-markupsafe==2.1.5
+markupsafe==3.0.2
 mangum==0.19.0
 packaging==26.3
 pydantic==2.13.4
@@ -15,7 +15,7 @@ typing-inspection==0.4.4
 urllib3==2.7.0
 uvicorn==0.52.3
 pillow==12.3.0
-click==8.4.2
+click==8.1.8
 anyio==4.14.2
 certifi==2026.7.22
 charset-normalizer==3.5.0
