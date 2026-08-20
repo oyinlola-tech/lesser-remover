@@ -67,7 +67,7 @@ def fake_sdk(monkeypatch):
     monkeypatch.setattr(f"{module}.head", fake_head)
     monkeypatch.setattr(f"{module}.get_download_url", fake_get_download_url)
 
-    jobs_module = "app.infrastructure.jobs.vercel_job_storage"
+    jobs_module = "app.infrastructure.jobs.vercel_blob_io"
     monkeypatch.setattr(f"{jobs_module}.put", fake_put)
     monkeypatch.setattr(f"{jobs_module}.get", fake_get)
     monkeypatch.setattr(f"{jobs_module}.delete", fake_delete)

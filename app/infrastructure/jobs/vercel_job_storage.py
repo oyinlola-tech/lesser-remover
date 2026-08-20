@@ -6,30 +6,29 @@ the official ``vercel`` Python SDK. Paths mirror the local layout
 interchangeable, with a local temp mirror for fast in-instance access.
 """
 
-import json
-import logging
-import shutil
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 
-from vercel.blob import (
-    BlobNotFoundError,
-    delete,
-    get,
-    list_objects,
-    put,
-)
-
 from app.core.config import settings
-
-logger = logging.getLogger(__name__)
+from app.infrastructure.jobs.vercel_files import (
+    delete_job,
+    materialize_download,
+    move_download,
+    save_download,
+    save_file,
+)
+from app.infrastructure.jobs.vercel_metadata import (
+    read_metadata,
+    write_metadata,
+)
 
 _LOCAL_ROOT = Path(tempfile.gettempdir()) / "vercel_jobs"
 
 
 class VercelJobStorage:
+
     def __init__(self) -> None:
         if not settings.blob_read_write_token:
             raise ValueError(
@@ -42,25 +41,13 @@ class VercelJobStorage:
         self.root_path.mkdir(parents=True, exist_ok=True)
         self.download_path.mkdir(parents=True, exist_ok=True)
 
-    def _job_prefix(self, job_id: str) -> str:
-        return f"{self._prefix}/{job_id}"
-
-    def _blob_path(self, job_id: str, filename: str) -> str:
-        return f"{self._job_prefix(job_id)}/{filename}"
-
-    def _put_blob(self, blob_path: str, data: bytes) -> None:
-        put(blob_path, data, access=self._access)
-
     def create_job(self) -> str:
         job_id = uuid4().hex
-        job_path = self.get_job_path(job_id)
-        (job_path / "input").mkdir(parents=True, exist_ok=True)
-        (job_path / "output").mkdir(parents=True, exist_ok=True)
+        (self.get_job_path(job_id) / "input").mkdir(parents=True, exist_ok=True)
+        (self.get_job_path(job_id) / "output").mkdir(parents=True, exist_ok=True)
         metadata = {
             "job_id": job_id,
-            "created_at": datetime.now(
-                timezone.utc
-            ).isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
             "status": "created",
         }
         self.write_metadata(job_id, metadata)
@@ -83,19 +70,10 @@ class VercelJobStorage:
         job_id: str,
         metadata: dict,
     ) -> None:
-        blob_path = self._blob_path(job_id, "metadata.json")
-        self._put_blob(
-            blob_path,
-            json.dumps(metadata).encode("utf-8"),
-        )
+        write_metadata(self._prefix, self._access, job_id, metadata)
 
     def read_metadata(self, job_id: str) -> dict:
-        blob_path = self._blob_path(job_id, "metadata.json")
-        try:
-            result = get(blob_path, access=self._access)
-        except BlobNotFoundError:
-            return {}
-        return json.loads(result.content.decode("utf-8"))
+        return read_metadata(self._prefix, self._access, job_id)
 
     def save_input(
         self,
@@ -103,18 +81,15 @@ class VercelJobStorage:
         filename: str,
         data: bytes,
     ) -> Path:
-        blob_path = self._blob_path(job_id, f"input/{filename}")
-        self._put_blob(blob_path, data)
-        path = self.get_input_path(job_id) / filename
-        try:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(data)
-        except OSError:
-            logger.debug(
-                "Local mirror write failed for input %s; blob is source of truth.",
-                blob_path,
-            )
-        return path
+        return save_file(
+            self._prefix,
+            self._access,
+            job_id,
+            filename,
+            data,
+            "input",
+            self.root_path,
+        )
 
     def save_output(
         self,
@@ -122,79 +97,52 @@ class VercelJobStorage:
         filename: str,
         data: bytes,
     ) -> Path:
-        blob_path = self._blob_path(job_id, f"output/{filename}")
-        self._put_blob(blob_path, data)
-        path = self.get_output_path(job_id) / filename
-        try:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(data)
-        except OSError:
-            logger.debug(
-                "Local mirror write failed for output %s; blob is source of truth.",
-                blob_path,
-            )
-        return path
+        return save_file(
+            self._prefix,
+            self._access,
+            job_id,
+            filename,
+            data,
+            "output",
+            self.root_path,
+        )
 
     def save_download(
         self,
         filename: str,
         data: bytes,
     ) -> Path:
-        blob_path = f"downloads/{filename}"
-        self._put_blob(blob_path, data)
-        path = self.download_path / filename
-        try:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(data)
-        except OSError:
-            logger.debug(
-                "Local mirror write failed for download %s; blob is source of truth.",
-                blob_path,
-            )
-        return path
+        return save_download(
+            self._prefix,
+            self._access,
+            filename,
+            data,
+            self.download_path,
+        )
 
     def materialize_download(
         self,
         filename: str,
     ) -> Path:
-        path = self.download_path / filename
-        if path.exists():
-            return path
-        blob_path = f"downloads/{filename}"
-        try:
-            result = get(blob_path, access=self._access)
-        except BlobNotFoundError:
-            return path
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(result.content)
-        return path
+        return materialize_download(
+            self._prefix,
+            self._access,
+            filename,
+            self.download_path,
+        )
 
     def move_download(
         self,
         source_path: Path,
         filename: str,
     ) -> Path:
-        data = (
-            source_path.read_bytes()
-            if source_path.exists()
-            else b""
+        return move_download(
+            self._prefix,
+            self._access,
+            source_path,
+            filename,
+            self.download_path,
         )
-        return self.save_download(filename, data)
 
     def delete_job(self, job_id: str) -> None:
-        prefix = self._job_prefix(job_id)
-        blobs = []
-        cursor = None
-        while True:
-            page = list_objects(
-                prefix=prefix,
-                cursor=cursor,
-                limit=1000,
-            )
-            blobs.extend(page.blobs)
-            if not page.has_more or page.cursor is None:
-                break
-            cursor = page.cursor
-        if blobs:
-            delete([blob.pathname for blob in blobs])
-        shutil.rmtree(self.get_job_path(job_id), ignore_errors=True)
+        delete_job(self._prefix, job_id, self.root_path)

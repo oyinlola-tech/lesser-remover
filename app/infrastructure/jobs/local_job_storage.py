@@ -1,104 +1,68 @@
-import json
-import logging
-import shutil
-from datetime import datetime, timezone
+"""Local filesystem job storage."""
+
 from pathlib import Path
 from uuid import uuid4
 
 from app.core.config import settings
-from app.shared.utils.file_util import is_safe_filename
+from app.infrastructure.jobs.local_files import (
+    delete_job,
+    materialize_download,
+    move_download,
+    save_download,
+    save_input,
+    save_output,
+)
+from app.infrastructure.jobs.local_metadata import (
+    create_job_metadata,
+    read_metadata,
+    write_metadata,
+)
+from app.infrastructure.jobs.local_paths import (
+    get_input_path,
+    get_job_path,
+    get_metadata_path,
+    get_output_path,
+    prepare_directories,
+)
 
 
 class LocalJobStorage:
+
     def __init__(self) -> None:
         self.root_path = settings.job_path
         self.download_path = settings.download_path
-        try:
-            self.root_path.mkdir(
-                parents=True,
-                exist_ok=True,
-            )
-        except OSError:
-            logging.getLogger(__name__).warning(
-                "Could not create job directory %s (filesystem not writable)",
-                self.root_path,
-            )
-        try:
-            self.download_path.mkdir(
-                parents=True,
-                exist_ok=True,
-            )
-        except OSError:
-            logging.getLogger(__name__).warning(
-                "Could not create download directory %s (filesystem not writable)",
-                self.download_path,
-            )
+        prepare_directories(self.root_path, self.download_path)
 
     def create_job(self) -> str:
         job_id = uuid4().hex
-        job_path = self.root_path / job_id
-        input_path = job_path / "input"
-        output_path = job_path / "output"
-        input_path.mkdir(
-            parents=True,
-            exist_ok=True,
-        )
-        output_path.mkdir(
-            parents=True,
-            exist_ok=True,
-        )
-        metadata = {
-            "job_id": job_id,
-            "created_at": datetime.now(
-                timezone.utc
-            ).isoformat(),
-            "status": "created",
-        }
-        self.write_metadata(
-            job_id,
-            metadata,
-        )
+        input_path = get_input_path(self.root_path, job_id)
+        output_path = get_output_path(self.root_path, job_id)
+        input_path.mkdir(parents=True, exist_ok=True)
+        output_path.mkdir(parents=True, exist_ok=True)
+        job_id, _ = create_job_metadata(self.root_path, job_id)
         return job_id
 
     def get_job_path(self, job_id: str) -> Path:
-        return self.root_path / job_id
+        return get_job_path(self.root_path, job_id)
 
     def get_input_path(self, job_id: str) -> Path:
-        return self.get_job_path(job_id) / "input"
+        return get_input_path(self.root_path, job_id)
 
     def get_output_path(self, job_id: str) -> Path:
-        return self.get_job_path(job_id) / "output"
+        return get_output_path(self.root_path, job_id)
 
     def get_metadata_path(self, job_id: str) -> Path:
-        return self.get_job_path(job_id) / "metadata.json"
+        return get_metadata_path(self.root_path, job_id)
 
     def write_metadata(
         self,
         job_id: str,
         metadata: dict,
     ) -> None:
-        metadata_path = self.get_metadata_path(
-            job_id
-        )
-        metadata_path.write_text(
-            json.dumps(
-                metadata,
-                indent=2,
-            ),
-            encoding="utf-8",
-        )
+        write_metadata(self.root_path, job_id, metadata)
 
     def read_metadata(self, job_id: str) -> dict:
-        metadata_path = self.get_metadata_path(
-            job_id
-        )
-        if not metadata_path.exists():
-            return {}
-        return json.loads(
-            metadata_path.read_text(
-                encoding="utf-8"
-            )
-        )
+        return read_metadata(self.root_path, job_id)
 
     def save_input(
         self,
@@ -106,11 +70,12 @@ class LocalJobStorage:
         filename: str,
         data: bytes,
     ) -> Path:
-        if not is_safe_filename(filename):
-            raise ValueError("Invalid filename")
-        path = self.get_input_path(job_id) / filename
-        path.write_bytes(data)
-        return path
+        return save_input(
+            self.root_path,
+            job_id,
+            filename,
+            data,
+        )
 
     def save_output(
         self,
@@ -118,51 +83,39 @@ class LocalJobStorage:
         filename: str,
         data: bytes,
     ) -> Path:
-        if not is_safe_filename(filename):
-            raise ValueError("Invalid filename")
-        path = self.get_output_path(job_id) / filename
-        path.write_bytes(data)
-        return path
+        return save_output(
+            self.root_path,
+            job_id,
+            filename,
+            data,
+        )
 
     def save_download(
         self,
         filename: str,
         data: bytes,
     ) -> Path:
-        if not is_safe_filename(filename):
-            raise ValueError("Invalid filename")
-        path = self.download_path / filename
-        path.write_bytes(data)
-        return path
+        return save_download(self.download_path, filename, data)
 
     def materialize_download(
         self,
         filename: str,
     ) -> Path:
-        if not is_safe_filename(filename):
-            raise ValueError("Invalid filename")
-        return self.download_path / filename
+        return materialize_download(self.download_path, filename)
 
     def move_download(
         self,
         source_path: Path,
         filename: str,
     ) -> Path:
-        if not is_safe_filename(filename):
-            raise ValueError("Invalid filename")
-        destination = (
-            self.download_path
-            / filename
+        return move_download(
+            self.download_path,
+            source_path,
+            filename,
         )
-        source_path.replace(
-            destination
-        )
-        return destination
 
     def delete_job(self, job_id: str) -> None:
-        job_path = self.get_job_path(job_id)
-        if job_path.exists():
-            shutil.rmtree(job_path)
+        delete_job(self.root_path, job_id)
 
 
 local_job_storage = LocalJobStorage()
