@@ -1,13 +1,12 @@
 """Unit tests for the 11 new Vercel-compatible utility tools."""
 
-from unittest.mock import MagicMock, patch
-import pytest
+from unittest.mock import patch
+
 from fastapi.testclient import TestClient
 
 from app.main import app
 from app.modules.devtools.dev_tools_service import dev_tools_service
 from app.modules.text.text_service import text_service
-from app.modules.image.image_service import image_service
 
 client = TestClient(app)
 

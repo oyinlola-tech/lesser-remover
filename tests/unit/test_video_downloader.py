@@ -1,13 +1,14 @@
 """Unit tests for Video Downloader schema, service, controller, and routes."""
 
 from unittest.mock import MagicMock, patch
+
 import pytest
 from fastapi.testclient import TestClient
 
+from app.core.exceptions import ProcessingError
 from app.main import app
 from app.modules.video.video_schema import VideoDownloadRequest, VideoInfoRequest
 from app.modules.video.video_service import video_downloader_service
-from app.core.exceptions import ProcessingError
 
 client = TestClient(app)
 
@@ -66,7 +67,7 @@ def test_video_service_get_info_error(mock_ytdl):
 
     with pytest.raises(ProcessingError) as exc_info:
         video_downloader_service.get_video_info("https://invalid-link.com")
-    
+
     assert "Could not retrieve video details" in str(exc_info.value)
 
 
