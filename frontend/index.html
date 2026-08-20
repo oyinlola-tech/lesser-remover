@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#fbfbf7" />
-    <meta name="description" content="Utils-tool - free, local-first file utilities. Compress, convert, edit, remove backgrounds, process PDFs and analyze files. No accounts, no cloud uploads." />
-    <meta name="keywords" content="image tools, pdf tools, file tools, background remover, image compressor, image converter, pdf compressor, developer tools, free file utilities" />
+    <meta name="description" content="Utils-tool - free, local-first file utilities. Compress, convert, edit PDFs, download videos, generate speech, extract color palettes, decode JWT and much more. 40 tools. No accounts, no cloud uploads." />
+    <meta name="keywords" content="image tools, pdf tools, file tools, background remover, image compressor, image converter, pdf compressor, developer tools, free file utilities, video downloader, text to speech, jwt decoder, color palette extractor, json formatter, text diff" />
     <meta name="author" content="Oluwayemi Oyinlola" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://tools.oyinlola.site/" />
@@ -81,8 +81,20 @@
             "Background removal",
             "PDF compression",
             "PDF merge and split",
+            "PDF password protection",
+            "PDF page numbering",
+            "PDF text watermark",
             "QR code generation",
-            "SVG optimization"
+            "SVG optimization",
+            "Video downloader (YouTube, TikTok, Facebook)",
+            "Text-to-Speech MP3 generator",
+            "JSON CSV converter",
+            "JSON formatter and minifier",
+            "JWT decoder",
+            "Text diff and comparison",
+            "Text case converter",
+            "Word and character counter",
+            "Color palette extractor"
           ],
           "publisher": {
             "@type": "Person",
@@ -104,8 +116,9 @@
               <span class="hero-eyebrow">Private by default</span>
               <h1 class="hero-title" id="hero-title">Simple tools for <em>your files</em>.</h1>
               <p class="hero-description">
-                Compress, convert, edit, remove backgrounds, process PDFs and
-                analyze files — all in one calm, fast tool. No accounts. No cloud
+                Compress, convert, edit, remove backgrounds, process PDFs,
+                download videos, generate speech, decode JWT, extract color palettes
+                and more — 40 tools in one calm, fast app. No accounts. No cloud
                 uploads. Your files stay yours.
               </p>
               <div class="hero-actions">
@@ -129,18 +142,26 @@
                   <span class="hero-mini-status">Saved 75%</span>
                 </div>
                 <div class="hero-mini-card">
-                  <span class="hero-mini-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                  <span class="hero-mini-icon"><i class="fa-solid fa-video"></i></span>
                   <div>
-                    <span class="hero-mini-name">Background Remover</span>
-                    <div class="hero-mini-meta">product-photo.png</div>
+                    <span class="hero-mini-name">Video Downloader</span>
+                    <div class="hero-mini-meta">YouTube · TikTok · Facebook</div>
                   </div>
-                  <span class="hero-mini-status">Done</span>
+                  <span class="hero-mini-status">No watermark</span>
                 </div>
                 <div class="hero-mini-card">
                   <span class="hero-mini-icon"><i class="fa-solid fa-file-pdf"></i></span>
                   <div>
-                    <span class="hero-mini-name">PDF Merger</span>
-                    <div class="hero-mini-meta">3 documents · one file</div>
+                    <span class="hero-mini-name">PDF Encrypt</span>
+                    <div class="hero-mini-meta">contract.pdf · AES-256</div>
+                  </div>
+                  <span class="hero-mini-status">Protected</span>
+                </div>
+                <div class="hero-mini-card">
+                  <span class="hero-mini-icon"><i class="fa-solid fa-volume-high"></i></span>
+                  <div>
+                    <span class="hero-mini-name">Text-to-Speech</span>
+                    <div class="hero-mini-meta">hello.txt → speech.mp3</div>
                   </div>
                   <span class="hero-mini-status">Done</span>
                 </div>
@@ -154,8 +175,8 @@
         <div class="container">
           <div class="stats-grid">
             <div class="stat">
-              <strong>28</strong>
-              <span>File tools</span>
+              <strong>40</strong>
+              <span>File &amp; media tools</span>
             </div>
             <div class="stat">
               <strong>0</strong>
@@ -186,26 +207,38 @@
             <a href="/tools#category-image" class="category-bento-card is-featured">
               <span class="category-bento-icon"><i class="fa-solid fa-image"></i></span>
               <h3>Image tools</h3>
-              <p>Compress, convert, crop, resize, remove backgrounds and edit photos — the largest part of the kit.</p>
+              <p>Compress, convert, crop, resize, remove backgrounds, edit photos and extract color palettes — the largest part of the kit.</p>
               <span class="category-bento-link">Browse image tools <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
             </a>
             <a href="/tools#category-pdf" class="category-bento-card">
               <span class="category-bento-icon"><i class="fa-solid fa-file-pdf"></i></span>
               <h3>PDF tools</h3>
-              <p>Compress, merge, split, rotate and reorganize PDF documents.</p>
+              <p>Compress, merge, split, rotate, encrypt with password, add page numbers and overlay watermarks on PDF documents.</p>
               <span class="category-bento-link">Browse PDF tools <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            </a>
+            <a href="/tools#category-video" class="category-bento-card">
+              <span class="category-bento-icon"><i class="fa-solid fa-video"></i></span>
+              <h3>Video tools</h3>
+              <p>Download videos without watermarks from YouTube, TikTok, Facebook, Instagram and hundreds of other sites.</p>
+              <span class="category-bento-link">Browse video tools <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            </a>
+            <a href="/tools#category-developer" class="category-bento-card">
+              <span class="category-bento-icon"><i class="fa-solid fa-code"></i></span>
+              <h3>Developer tools</h3>
+              <p>Favicons, SVG, Base64, QR codes, JSON formatter, CSV converter, JWT decoder and more.</p>
+              <span class="category-bento-link">Browse developer tools <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            </a>
+            <a href="/tools#category-text" class="category-bento-card">
+              <span class="category-bento-icon"><i class="fa-solid fa-font"></i></span>
+              <h3>Text &amp; Audio tools</h3>
+              <p>Diff text, convert case, count words and characters, and generate downloadable MP3 speech from any text.</p>
+              <span class="category-bento-link">Browse text tools <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
             </a>
             <a href="/tools#category-file" class="category-bento-card">
               <span class="category-bento-icon"><i class="fa-solid fa-folder"></i></span>
               <h3>File tools</h3>
               <p>Analyze files, package archives and find duplicates.</p>
               <span class="category-bento-link">Browse file tools <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
-            </a>
-            <a href="/tools#category-developer" class="category-bento-card">
-              <span class="category-bento-icon"><i class="fa-solid fa-code"></i></span>
-              <h3>Developer tools</h3>
-              <p>Favicons, SVG optimization, Base64, QR codes and barcodes.</p>
-              <span class="category-bento-link">Browse developer tools <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
             </a>
             <a href="/tools#category-utility" class="category-bento-card">
               <span class="category-bento-icon"><i class="fa-solid fa-palette"></i></span>
@@ -231,6 +264,152 @@
           </div>
         </div>
       </section>
+
+      <!-- ═══════════════════ NEW TOOLS SECTION ═══════════════════ -->
+      <section class="new-tools-section" id="new-tools" aria-labelledby="new-tools-title">
+        <div class="container">
+          <div class="section-header centered">
+            <span class="eyebrow">What&apos;s new</span>
+            <h2 id="new-tools-title">12 powerful tools, freshly added.</h2>
+            <p class="section-description">
+              From video downloading to PDF encryption, text-to-speech to color palette extraction — everything you asked for, now built in.
+            </p>
+          </div>
+
+          <!-- ── Video ─────────────────────────────────── -->
+          <div class="new-tools-group" id="new-tools-video">
+            <h3 class="new-tools-group-title"><i class="fa-solid fa-video" aria-hidden="true"></i> Video</h3>
+            <div class="tool-grid">
+              <a href="/tools/video-downloader" class="tool-card" id="new-card-video-downloader">
+                <span class="tool-card-icon"><i class="fa-solid fa-circle-down"></i></span>
+                <div class="tool-card-body">
+                  <h4>Video Downloader</h4>
+                  <p>Download videos from YouTube, TikTok, Facebook, Instagram and 1000+ other sites — completely watermark-free. Paste a URL, pick a quality, get your file.</p>
+                </div>
+                <span class="tool-card-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </a>
+            </div>
+          </div>
+
+          <!-- ── PDF ──────────────────────────────────── -->
+          <div class="new-tools-group" id="new-tools-pdf">
+            <h3 class="new-tools-group-title"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i> PDF — 3 new tools</h3>
+            <div class="tool-grid">
+              <a href="/tools/pdf-encrypt" class="tool-card" id="new-card-pdf-encrypt">
+                <span class="tool-card-icon"><i class="fa-solid fa-lock"></i></span>
+                <div class="tool-card-body">
+                  <h4>PDF Password Protect</h4>
+                  <p>Encrypt any PDF with a user-read password and an owner-admin password using 256-bit AES encryption. Sensitive documents stay private.</p>
+                </div>
+                <span class="tool-card-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </a>
+              <a href="/tools/pdf-page-number" class="tool-card" id="new-card-pdf-page-number">
+                <span class="tool-card-icon"><i class="fa-solid fa-list-ol"></i></span>
+                <div class="tool-card-body">
+                  <h4>PDF Page Numberer</h4>
+                  <p>Automatically stamp <em>Page X of Y</em> on every page of your PDF. Choose your font size, position and starting number.</p>
+                </div>
+                <span class="tool-card-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </a>
+              <a href="/tools/pdf-watermark" class="tool-card" id="new-card-pdf-watermark">
+                <span class="tool-card-icon"><i class="fa-solid fa-droplet"></i></span>
+                <div class="tool-card-body">
+                  <h4>PDF Text Watermark</h4>
+                  <p>Overlay a diagonal text watermark (e.g. <em>CONFIDENTIAL</em>, <em>DRAFT</em>) across every page of your PDF document.</p>
+                </div>
+                <span class="tool-card-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </a>
+            </div>
+          </div>
+
+          <!-- ── Developer & Data ────────────────────── -->
+          <div class="new-tools-group" id="new-tools-dev">
+            <h3 class="new-tools-group-title"><i class="fa-solid fa-code" aria-hidden="true"></i> Developer &amp; Data — 3 new tools</h3>
+            <div class="tool-grid">
+              <a href="/tools/json-csv-converter" class="tool-card" id="new-card-json-csv">
+                <span class="tool-card-icon"><i class="fa-solid fa-table"></i></span>
+                <div class="tool-card-body">
+                  <h4>JSON ↔ CSV Converter</h4>
+                  <p>Convert JSON arrays to CSV spreadsheets for Excel, Sheets and data pipelines — or convert CSV rows back into a JSON array instantly.</p>
+                </div>
+                <span class="tool-card-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </a>
+              <a href="/tools/json-formatter" class="tool-card" id="new-card-json-formatter">
+                <span class="tool-card-icon"><i class="fa-solid fa-brackets-curly"></i></span>
+                <div class="tool-card-body">
+                  <h4>JSON Formatter &amp; Minifier</h4>
+                  <p>Prettify messy JSON with indented formatting, or minify it for network payloads. Validates your JSON and highlights syntax errors.</p>
+                </div>
+                <span class="tool-card-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </a>
+              <a href="/tools/jwt-decoder" class="tool-card" id="new-card-jwt-decoder">
+                <span class="tool-card-icon"><i class="fa-solid fa-key"></i></span>
+                <div class="tool-card-body">
+                  <h4>JWT Decoder</h4>
+                  <p>Paste any JSON Web Token and instantly decode its header and payload. Useful for debugging auth flows — no secrets are ever sent anywhere.</p>
+                </div>
+                <span class="tool-card-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </a>
+            </div>
+          </div>
+
+          <!-- ── Text & Audio ────────────────────────── -->
+          <div class="new-tools-group" id="new-tools-text">
+            <h3 class="new-tools-group-title"><i class="fa-solid fa-font" aria-hidden="true"></i> Text &amp; Audio — 4 new tools</h3>
+            <div class="tool-grid">
+              <a href="/tools/text-diff" class="tool-card" id="new-card-text-diff">
+                <span class="tool-card-icon"><i class="fa-solid fa-code-compare"></i></span>
+                <div class="tool-card-body">
+                  <h4>Text Diff Tool</h4>
+                  <p>Paste two blocks of text and see exactly what changed — added, removed and unchanged lines highlighted in a clear unified diff view.</p>
+                </div>
+                <span class="tool-card-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </a>
+              <a href="/tools/case-converter" class="tool-card" id="new-card-case-converter">
+                <span class="tool-card-icon"><i class="fa-solid fa-text-height"></i></span>
+                <div class="tool-card-body">
+                  <h4>Text Case Converter</h4>
+                  <p>Instantly convert text between <code>camelCase</code>, <code>snake_case</code>, <code>kebab-case</code>, <code>Title Case</code>, <code>UPPER</code> and <code>lower</code> — perfect for code, APIs and copywriting.</p>
+                </div>
+                <span class="tool-card-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </a>
+              <a href="/tools/word-counter" class="tool-card" id="new-card-word-counter">
+                <span class="tool-card-icon"><i class="fa-solid fa-calculator"></i></span>
+                <div class="tool-card-body">
+                  <h4>Word &amp; Character Counter</h4>
+                  <p>Real-time word count, character count, sentence count, line count and estimated reading time. Great for blog posts, essays and social captions.</p>
+                </div>
+                <span class="tool-card-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </a>
+              <a href="/tools/text-to-speech" class="tool-card" id="new-card-tts">
+                <span class="tool-card-icon"><i class="fa-solid fa-volume-high"></i></span>
+                <div class="tool-card-body">
+                  <h4>Text-to-Speech</h4>
+                  <p>Convert any text to natural-sounding spoken audio and download it as an MP3 file. Choose from multiple languages. Ideal for accessibility, voiceovers and podcasts.</p>
+                </div>
+                <span class="tool-card-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </a>
+            </div>
+          </div>
+
+          <!-- ── Image (new) ─────────────────────────── -->
+          <div class="new-tools-group" id="new-tools-image-ext">
+            <h3 class="new-tools-group-title"><i class="fa-solid fa-image" aria-hidden="true"></i> Image — 1 new tool</h3>
+            <div class="tool-grid">
+              <a href="/tools/palette-extractor" class="tool-card" id="new-card-palette">
+                <span class="tool-card-icon"><i class="fa-solid fa-palette"></i></span>
+                <div class="tool-card-body">
+                  <h4>Color Palette Extractor</h4>
+                  <p>Upload any photo and extract its dominant HEX color codes with percentage weights. Perfect for designers matching brand colors or building themes from real-world photography.</p>
+                </div>
+                <span class="tool-card-arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+      <!-- ═══════════════════ /NEW TOOLS SECTION ══════════════════ -->
 
       <section class="how-it-works-section" id="how-it-works">
         <div class="container">
@@ -316,7 +495,15 @@
             </div>
             <div class="faq-item">
               <dt>What file formats are supported?</dt>
-              <dd>Images (JPG, PNG, WebP, AVIF), PDFs, SVG, ZIP and other common types. Each tool lists the formats it accepts.</dd>
+              <dd>Images (JPG, PNG, WebP, AVIF), PDFs, SVG, ZIP and other common types. The Video Downloader supports YouTube, TikTok, Facebook, Instagram and 1000+ sites. Each tool lists the exact formats it accepts.</dd>
+            </div>
+            <div class="faq-item">
+              <dt>Can I download videos without watermarks?</dt>
+              <dd>Yes. The Video Downloader tool uses yt-dlp under the hood to fetch the highest-quality source stream — no watermark, no re-encoding. Paste a URL and choose the format you want.</dd>
+            </div>
+            <div class="faq-item">
+              <dt>How does Text-to-Speech work?</dt>
+              <dd>Type or paste your text, choose a language, and the tool generates an MP3 audio file using Google TTS. The file is downloaded straight to your device — nothing is stored on the server.</dd>
             </div>
             <div class="faq-item">
               <dt>Can I process multiple files at once?</dt>
@@ -353,13 +540,6 @@
 
     <script type="module" src="/static/assets/js/app.js"></script>
     <script type="module" src="/static/assets/js/landing.js"></script>
-    <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
-    <script>
-      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/speed-insights/script.js"></script>
+    <script defer src="/static/assets/js/vercel-analytics.js"></script>
   </body>
 </html>

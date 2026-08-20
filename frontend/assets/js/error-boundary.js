@@ -1,3 +1,16 @@
+const ERROR_PAGES = [400, 404, 408, 413, 415, 422, 429, 500, 502, 503, 504];
+
+function isOfflineError(error) {
+    const message = (error && (error.message || String(error))) || "";
+    return /offline|network|timed out|failed to fetch|internet connection/i.test(message);
+}
+
+function goToErrorPage(status, message) {
+    const url = `/errors/${Number(status)}.html` +
+        (message ? `?detail=${encodeURIComponent(String(message))}` : "");
+    window.location.href = url;
+}
+
 const ERROR_STATE = {
     boundary: null,
     init() {
@@ -9,12 +22,23 @@ const ERROR_STATE = {
             document.body.appendChild(this.boundary);
         }
         window.addEventListener("error", (event) => {
-            this.show(event.message || "Unexpected error", event.filename, event.lineno);
+            this.handle(event.error || { message: event.message }, event.filename, event.lineno);
         }, true);
         window.addEventListener("unhandledrejection", (event) => {
-            const reason = event.reason?.message || event.reason || "Promise rejected";
-            this.show(reason, "", 0);
+            this.handle(event.reason || { message: "Promise rejected" }, "", 0);
         });
+    },
+    handle(error, file = "", line = 0) {
+        const status = error && error.status;
+        if (status && ERROR_PAGES.includes(Number(status))) {
+            goToErrorPage(status, error.message);
+            return;
+        }
+        if (isOfflineError(error)) {
+            window.location.href = "/errors/offline.html";
+            return;
+        }
+        this.show((error && error.message) || "Unexpected error", file, line);
     },
     show(message, file = "", line = 0) {
         if (!this.boundary) return;
@@ -27,7 +51,7 @@ const ERROR_STATE = {
                  <p style="color:#55634f;margin:0 0 24px;">The app hit an unexpected error. You can try refreshing the page.</p>
                  <div style="background:#fff;border:1px solid #deded6;border-radius:12px;padding:16px;text-align:left;font-family:monospace;font-size:13px;word-break:break-word;">${this.escape(message)}${fileInfo}</div>
                  <button onclick="location.reload()" style="margin-top:24px;padding:12px 24px;border-radius:999px;background:#9fe870;color:#163300;font-weight:800;border:0;cursor:pointer;">Refresh page</button>
-                 <div style="margin-top:14px;"><a href="/errors/500.html" style="color:#55634f;font-size:14px;">Open the error page instead</a></div>
+                 <div style="margin-top:14px;"><a href="/tools" style="color:#55634f;font-size:14px;">Browse tools</a></div>
              </div>
          `;
         this.boundary.style.display = "block";

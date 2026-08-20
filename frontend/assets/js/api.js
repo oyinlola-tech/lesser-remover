@@ -206,6 +206,21 @@ export async function apiGet(path) {
     return data;
 }
 
+export async function apiJsonPost(path, bodyPayload = {}) {
+    const response = await safeFetch(`${API_BASE_URL}${path}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyPayload),
+    });
+    const data = await parseJsonResponse(response);
+    if (!response.ok) {
+        throw apiError(response, data, "Request failed.");
+    }
+    return data;
+}
+
 function buildFormData(files = [], fields = {}) {
     const formData = new FormData();
     for (const item of files) {

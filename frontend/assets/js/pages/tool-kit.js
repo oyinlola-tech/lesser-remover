@@ -8,6 +8,8 @@ import {
 } from "../components/ui.js";
 import { showElement, hideElement, formatBytes } from "../utils.js";
 
+const ERROR_PAGES = [400, 404, 408, 413, 415, 422, 429, 500, 502, 503, 504];
+
 
 export async function initToolPage(toolId) {
     renderShell();
@@ -68,6 +70,23 @@ export async function initToolPage(toolId) {
         },
         showResult() {
             showResultBox(document.querySelector("#tool-results"));
+        },
+        showError(error) {
+            const status = error && error.status;
+            if (status && ERROR_PAGES.includes(Number(status))) {
+                const url = `/errors/${Number(status)}.html` +
+                    (error.message ? `?detail=${encodeURIComponent(String(error.message))}` : "");
+                window.location.href = url;
+                return;
+            }
+            if (error && /offline|network|timed out|failed to fetch|internet connection/i.test(error.message || "")) {
+                window.location.href = "/errors/offline.html";
+                return;
+            }
+            banner.show(
+                (error && error.message) ||
+                    "Something went wrong. Please try again."
+            );
         },
     };
 }
