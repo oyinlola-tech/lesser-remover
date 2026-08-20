@@ -1,86 +1,17 @@
-from io import BytesIO
+"""Facade over the per-tool image compression services."""
 
-from PIL import Image
-
-from app.infrastructure.compression.pillow_adapter import (
-    pillow_adapter,
+from app.modules.compression.image_compression.preset_compression import (
+    preset_compression_service,
 )
-from app.modules.compression.image_compression.image_compression_settings import (
-    PRESETS,
+from app.modules.compression.image_compression.quality_compression import (
+    quality_compression_service,
+)
+from app.modules.compression.image_compression.target_compression import (
+    target_compression_service,
 )
 
 
 class ImageCompressionService:
-
-    def _prepare_image(
-        self,
-        file_data: bytes,
-        max_dimension: int | None = None,
-        strip_metadata: bool = True,
-    ) -> Image.Image:
-
-        image = Image.open(
-            BytesIO(file_data)
-        )
-
-        image.load()
-
-        if max_dimension:
-            image.thumbnail(
-                (
-                    max_dimension,
-                    max_dimension,
-                ),
-                Image.Resampling.LANCZOS,
-            )
-
-        return image
-
-    def _encode(
-        self,
-        image: Image.Image,
-        output_format: str,
-        quality: int,
-        strip_metadata: bool = True,
-    ) -> tuple[bytes, str]:
-
-        output_format = (
-            output_format.lower()
-        )
-
-        if output_format == "webp":
-            return (
-                pillow_adapter.encode_webp(
-                    image,
-                    quality=quality,
-                    strip_metadata=strip_metadata,
-                ),
-                "image/webp",
-            )
-
-        if output_format == "jpeg":
-            return (
-                pillow_adapter.encode_jpeg(
-                    image,
-                    quality=quality,
-                    strip_metadata=strip_metadata,
-                ),
-                "image/jpeg",
-            )
-
-        if output_format == "png":
-            return (
-                pillow_adapter.encode_png(
-                    image,
-                    strip_metadata=strip_metadata,
-                ),
-                "image/png",
-            )
-
-        raise ValueError(
-            f"Unsupported output format: "
-            f"{output_format}"
-        )
 
     def compress(
         self,
@@ -90,84 +21,12 @@ class ImageCompressionService:
         max_dimension: int | None = None,
         strip_metadata: bool = True,
     ) -> tuple[bytes, str, int, int, int]:
-
-        image = self._prepare_image(
-            file_data,
-            max_dimension,
-            strip_metadata,
-        )
-
-        data, content_type = self._encode(
-            image,
-            output_format,
-            quality,
+        return quality_compression_service.compress(
+            file_data=file_data,
+            output_format=output_format,
+            quality=quality,
+            max_dimension=max_dimension,
             strip_metadata=strip_metadata,
-        )
-
-        return data, content_type, quality, image.width, image.height
-
-    def _compress_with_preset_details(
-        self,
-        file_data: bytes,
-        preset: str = "balanced",
-        output_format: str = "webp",
-        max_dimension: int | None = None,
-        strip_metadata: bool = True,
-    ) -> tuple[bytes, str, int, int, int]:
-
-        settings = PRESETS.get(
-            preset
-        )
-
-        if not settings:
-            raise ValueError(
-                f"Unsupported compression preset: "
-                f"{preset}"
-            )
-
-        image = self._prepare_image(
-            file_data,
-            max_dimension,
-            strip_metadata,
-        )
-
-        best_data: bytes | None = None
-        best_content_type = ""
-        best_quality = 0
-
-        for quality in settings.qualities:
-
-            data, content_type = (
-                self._encode(
-                    image,
-                    output_format,
-                    quality,
-                    strip_metadata=strip_metadata,
-                )
-            )
-
-            if (
-                best_data is None
-                or len(data)
-                < len(best_data)
-            ):
-                best_data = data
-                best_content_type = (
-                    content_type
-                )
-                best_quality = quality
-
-        if best_data is None:
-            raise RuntimeError(
-                "Unable to compress image."
-            )
-
-        return (
-            best_data,
-            best_content_type,
-            best_quality,
-            image.width,
-            image.height,
         )
 
     def compress_with_preset(
@@ -178,108 +37,12 @@ class ImageCompressionService:
         max_dimension: int | None = None,
         strip_metadata: bool = True,
     ) -> tuple[bytes, str, int, int, int]:
-
-        best_data, best_content_type, best_quality, width, height = (
-            self._compress_with_preset_details(
-                file_data=file_data,
-                preset=preset,
-                output_format=output_format,
-                max_dimension=max_dimension,
-                strip_metadata=strip_metadata,
-            )
-        )
-
-        return (
-            best_data,
-            best_content_type,
-            best_quality,
-            width,
-            height,
-        )
-
-    def _compress_to_target_details(
-        self,
-        file_data: bytes,
-        target_size_bytes: int,
-        output_format: str = "webp",
-        max_dimension: int | None = None,
-        strip_metadata: bool = True,
-    ) -> tuple[bytes, str, int, int, int]:
-
-        if output_format == "png":
-            raise ValueError(
-                "Target size compression "
-                "requires a lossy-capable "
-                "format such as WebP or JPEG."
-            )
-
-        image = self._prepare_image(
-            file_data,
-            max_dimension,
-            strip_metadata,
-        )
-
-        low = 20
-        high = 100
-
-        best_data: bytes | None = None
-        best_content_type = ""
-        best_quality = 0
-
-        while low <= high:
-
-            quality = (
-                low + high
-            ) // 2
-
-            data, content_type = (
-                self._encode(
-                    image,
-                    output_format,
-                    quality,
-                    strip_metadata=strip_metadata,
-                )
-            )
-
-            if len(data) <= target_size_bytes:
-
-                best_data = data
-                best_content_type = (
-                    content_type
-                )
-                best_quality = quality
-
-                low = quality + 1
-
-            else:
-
-                high = quality - 1
-
-        if best_data is None:
-
-            data, content_type = (
-                self._encode(
-                    image,
-                    output_format,
-                    20,
-                    strip_metadata=strip_metadata,
-                )
-            )
-
-            return (
-                data,
-                content_type,
-                20,
-                image.width,
-                image.height,
-            )
-
-        return (
-            best_data,
-            best_content_type,
-            best_quality,
-            image.width,
-            image.height,
+        return preset_compression_service.compress_with_preset(
+            file_data=file_data,
+            preset=preset,
+            output_format=output_format,
+            max_dimension=max_dimension,
+            strip_metadata=strip_metadata,
         )
 
     def compress_to_target(
@@ -290,26 +53,13 @@ class ImageCompressionService:
         max_dimension: int | None = None,
         strip_metadata: bool = True,
     ) -> tuple[bytes, str, int, int, int]:
-
-        best_data, best_content_type, best_quality, width, height = (
-            self._compress_to_target_details(
-                file_data=file_data,
-                target_size_bytes=target_size_bytes,
-                output_format=output_format,
-                max_dimension=max_dimension,
-                strip_metadata=strip_metadata,
-            )
-        )
-
-        return (
-            best_data,
-            best_content_type,
-            best_quality,
-            width,
-            height,
+        return target_compression_service.compress_to_target(
+            file_data=file_data,
+            target_size_bytes=target_size_bytes,
+            output_format=output_format,
+            max_dimension=max_dimension,
+            strip_metadata=strip_metadata,
         )
 
 
-image_compression_service = (
-    ImageCompressionService()
-)
+image_compression_service = ImageCompressionService()
