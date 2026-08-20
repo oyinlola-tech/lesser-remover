@@ -14,6 +14,7 @@ from app.core.logging import setup_logging
 from app.core.middleware import (
     RateLimitMiddleware,
     RequestIDMiddleware,
+    StaticCacheMiddleware,
 )
 from app.modules.background.background_route import (
     router as background_router,
@@ -69,6 +70,9 @@ register_exception_handlers(app)
 
 app.add_middleware(
     RequestIDMiddleware,
+)
+app.add_middleware(
+    StaticCacheMiddleware,
 )
 app.add_middleware(
     RateLimitMiddleware,

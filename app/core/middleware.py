@@ -1,4 +1,4 @@
-"""Request ID and rate-limit middleware.
+"""Request ID, rate-limit and static-cache middleware.
 
 Every request receives a short random ID that is attached to log
 records and returned in the ``X-Request-ID`` header, so errors can be
@@ -7,6 +7,10 @@ traced without leaking internals.
 The rate limiter protects the API from being overwhelmed by bursts of
 requests, returning a designed 429 page for browsers and the standard
 error envelope for API clients.
+
+The static-cache middleware forces browsers and the edge cache to
+revalidate static assets, so a fresh deploy is never masked by stale
+JS/CSS.
 """
 
 import logging
@@ -34,6 +38,23 @@ class RequestIDMiddleware(BaseHTTPMiddleware):
         request.state.request_id = request_id
         response = await call_next(request)
         response.headers["X-Request-ID"] = request_id
+        return response
+
+
+class StaticCacheMiddleware(BaseHTTPMiddleware):
+    """Make static assets revalidate so deploys always reach users.
+
+    FastAPI's StaticFiles mount sends no Cache-Control header, so
+    browsers and the Vercel edge cache can serve outdated JS/CSS
+    indefinitely after a deploy. ``no-cache`` lets the browser keep the
+    file locally but forces a revalidation with the origin on every
+    request.
+    """
+
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        if request.url.path.startswith("/static"):
+            response.headers["Cache-Control"] = "no-cache"
         return response
 
 
