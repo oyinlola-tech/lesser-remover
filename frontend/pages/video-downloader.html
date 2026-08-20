@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#fbfbf7" />
+    <meta name="description" content="Download videos from YouTube, TikTok (no watermark), Facebook, Instagram, Twitter/X and more." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://tools.oyinlola.site/tools/video-downloader" />
+    <meta property="og:title" content="Video Downloader - Utils-tool" />
+    <meta property="og:description" content="Download videos from YouTube, TikTok (no watermark), Facebook, Instagram, Twitter/X and more." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Utils-tool" />
+    <meta property="og:url" content="https://tools.oyinlola.site/tools/video-downloader" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Video Downloader - Utils-tool</title>
+    <link rel="icon" type="image/svg+xml" href="/static/assets/brand/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/brand/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/brand/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/brand/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+    <script type="module" src="/static/assets/js/error-boundary.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/reset.css" />
+    <link rel="stylesheet" href="/static/assets/css/variables.css" />
+    <link rel="stylesheet" href="/static/assets/css/base.css" />
+    <link rel="stylesheet" href="/static/assets/css/components.css" />
+    <link rel="stylesheet" href="/static/assets/css/responsive.css" />
+    <style>
+      .platform-badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        margin-bottom: 20px;
+      }
+      .platform-badge {
+        font-size: 0.8rem;
+        padding: 4px 10px;
+        border-radius: 20px;
+        background: #eee;
+        color: #555;
+        font-weight: 500;
+      }
+      .url-input-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .url-input-container input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 1px solid var(--color-border, #ccc);
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+      .video-preview-card {
+        display: flex;
+        gap: 16px;
+        background: var(--color-bg-subtle, #f8f9fa);
+        border: 1px solid var(--color-border, #e9ecef);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 20px;
+      }
+      .video-preview-thumb {
+        width: 160px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 8px;
+        background: #000;
+      }
+      .video-preview-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .video-preview-title {
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 6px;
+        color: var(--color-text, #212529);
+      }
+      .video-preview-meta {
+        font-size: 0.875rem;
+        color: var(--color-text-muted, #6c757d);
+      }
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="site-header"></div>
+    <main class="tool-page">
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <span class="eyebrow">Utility tool</span>
+            <h1>Video Downloader</h1>
+            <p class="hero-description">Download videos from YouTube, TikTok (without watermark), Facebook, Instagram, Twitter/X, and 1000+ platforms.</p>
+          </div>
+          <section class="tool-card">
+            <div id="tool-unavailable" class="hidden" role="alert"></div>
+
+            <div class="platform-badges">
+              <span class="platform-badge">YouTube</span>
+              <span class="platform-badge">TikTok (No Watermark)</span>
+              <span class="platform-badge">Facebook</span>
+              <span class="platform-badge">Instagram</span>
+              <span class="platform-badge">Twitter / X</span>
+              <span class="platform-badge">Vimeo</span>
+            </div>
+
+            <div id="video-preview" class="video-preview-card hidden">
+              <img id="preview-thumb" class="video-preview-thumb" src="" alt="Video thumbnail" />
+              <div class="video-preview-info">
+                <div id="preview-title" class="video-preview-title">Video Title</div>
+                <div id="preview-meta" class="video-preview-meta">Platform · 00:00</div>
+              </div>
+            </div>
+
+            <div class="tool-options" id="tool-options">
+              <div class="url-input-container">
+                <input type="url" id="video-url" placeholder="Paste video link (YouTube, TikTok, Facebook, Instagram...)" autocomplete="off" />
+                <button type="button" class="secondary-button" id="btn-fetch-info">Fetch Info</button>
+              </div>
+              <div class="option-row">
+                <div class="option-field">
+                  <label for="video-format">Format</label>
+                  <select id="video-format" class="select-input">
+                    <option value="mp4" selected>MP4 (Video)</option>
+                    <option value="mp3">MP3 (Audio Only)</option>
+                    <option value="webm">WebM (Video)</option>
+                    <option value="m4a">M4A (Audio Only)</option>
+                  </select>
+                </div>
+                <div class="option-field">
+                  <label for="video-quality">Quality / Resolution</label>
+                  <select id="video-quality" class="select-input">
+                    <option value="best" selected>Best Available</option>
+                    <option value="1080p">1080p Full HD</option>
+                    <option value="720p">720p HD</option>
+                    <option value="480p">480p SD</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" class="primary-button tool-run" id="tool-run">Download Video</button>
+            <div id="tool-processing"></div>
+            <div id="tool-results"></div>
+            <div id="tool-error"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <div id="site-footer"></div>
+    <script type="module" src="/static/assets/js/pages/video-downloader.js"></script>
+    <script defer src="/static/assets/js/vercel-analytics.js"></script>
+  </body>
+</html>
