@@ -48,6 +48,8 @@ typing-inspection==0.4.4
 typing_extensions==4.16.0
 urllib3==2.7.0
 uvicorn==0.52.3
+yt-dlp>=2024.0.0
+gTTS>=2.3.0
 mangum==0.19.0
 
 # Official Vercel Python SDK (vercel.blob) — Vercel Blob storage

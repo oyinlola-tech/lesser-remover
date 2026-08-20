@@ -6,8 +6,8 @@ from app.core.capabilities import (
 )
 
 
-def test_registry_contains_all_28_tools():
-    assert len(capability_registry.tools) == 28
+def test_registry_contains_all_40_tools():
+    assert len(capability_registry.tools) == 40
 
 
 def test_all_tools_have_unique_ids():
@@ -25,6 +25,7 @@ def test_registry_covers_all_categories():
         "file",
         "developer",
         "utility",
+        "text",
     }
 
 
