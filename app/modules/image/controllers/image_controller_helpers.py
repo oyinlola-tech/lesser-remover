@@ -84,3 +84,18 @@ def save_and_build_result(
     if details:
         merged.update(details)
     return output_path.name, merged
+
+
+def resize_details(result: dict) -> dict:
+    """Standard details block shared by single and batch resize results."""
+    return {
+        "input_format": result["input_format"],
+        "original_width": result["original_width"],
+        "original_height": result["original_height"],
+        "original_size_bytes": result["original_size"],
+        "output_format": result["extension"],
+        "width": result["width"],
+        "height": result["height"],
+        "flattened": result.get("flattened", False),
+        "has_alpha": result.get("has_alpha", False),
+    }

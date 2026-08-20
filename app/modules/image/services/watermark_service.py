@@ -31,8 +31,6 @@ class WatermarkService:
         tool_logger = get_tool_logger("watermark")
         started = time.monotonic()
         image = open_image(file_data).convert("RGBA")
-        layer = Image.new("RGBA", image.size, (0, 0, 0, 0))
-        ImageDraw.Draw(layer)
 
         if text:
             layer = self._build_text_layer(
@@ -50,19 +48,11 @@ class WatermarkService:
         data = pillow_adapter.encode_webp(result, quality=95)
         tool_logger.info(
             "watermarked %dx%d image (%s, %d bytes) in %.2fs",
-            image.width,
-            image.height,
+            image.width, image.height,
             "text" if text else "logo",
-            len(data),
-            time.monotonic() - started,
+            len(data), time.monotonic() - started,
         )
-        return {
-            "data": data,
-            "content_type": "image/webp",
-            "extension": "webp",
-            "width": image.width,
-            "height": image.height,
-        }
+        return {"data": data, "content_type": "image/webp", "extension": "webp", "width": image.width, "height": image.height}
 
     def _build_text_layer(
         self,
@@ -77,10 +67,8 @@ class WatermarkService:
         text_layer = Image.new("RGBA", image.size, (0, 0, 0, 0))
         text_draw = ImageDraw.Draw(text_layer)
         bbox = text_draw.textbbox((0, 0), text, font=font)
-        text_width = bbox[2] - bbox[0]
-        text_height = bbox[3] - bbox[1]
-        x = (image.width - text_width) // 2
-        y = (image.height - text_height) // 2
+        x = (image.width - (bbox[2] - bbox[0])) // 2
+        y = (image.height - (bbox[3] - bbox[1])) // 2
         text_draw.text(
             (x - bbox[0], y - bbox[1]),
             text,
@@ -107,9 +95,7 @@ class WatermarkService:
             logo = Image.open(BytesIO(logo_data))
             logo.load()
         except Exception as error:
-            raise ValueError(
-                "The uploaded watermark logo is not a valid image."
-            ) from error
+            raise ValueError("The uploaded watermark logo is not a valid image.") from error
         logo = logo.convert("RGBA")
         target = max(16, round(min(image.size) * size_ratio))
         logo.thumbnail((target, target), Image.Resampling.LANCZOS)
@@ -143,20 +129,22 @@ class WatermarkService:
 
         canvas = Image.new("RGBA", image.size, (0, 0, 0, 0))
         margin = max(12, round(min(image.size) * 0.04))
-        if horizontal == "left":
-            x = margin
-        elif horizontal == "right":
-            x = image.width - watermark.width - margin
-        else:
-            x = (image.width - watermark.width) // 2
-        if vertical == "top":
-            y = margin
-        elif vertical == "bottom":
-            y = image.height - watermark.height - margin
-        else:
-            y = (image.height - watermark.height) // 2
+        x = self._axis(horizontal, image.width, watermark.width, margin)
+        y = self._axis(vertical, image.height, watermark.height, margin)
         canvas.paste(watermark, (x, y), watermark)
         return canvas
+    @staticmethod
+    def _axis(
+        alignment: str,
+        canvas_size: int,
+        item_size: int,
+        margin: int,
+    ) -> int:
+        if alignment == "left":
+            return margin
+        if alignment == "right":
+            return canvas_size - item_size - margin
+        return (canvas_size - item_size) // 2
 
 
 watermark_service = WatermarkService()

@@ -9,8 +9,10 @@ from fastapi import UploadFile
 from app.modules.image.controllers import (
     convert_controller,
     crop_controller,
+    full_resize_controller,
     metadata_controller,
     palette_controller,
+    resize_batch_controller,
     resize_controller,
     watermark_controller,
 )
@@ -29,10 +31,10 @@ class ImageToolsController:
         return await resize_controller.resize(file, *args, **kwargs)
 
     async def resize_image(self, file: UploadFile, *args, **kwargs):
-        return await resize_controller.resize_image(file, *args, **kwargs)
+        return await full_resize_controller.resize_image(file, *args, **kwargs)
 
     async def resize_batch(self, files: list[UploadFile], *args, **kwargs):
-        return await resize_controller.resize_batch(files, *args, **kwargs)
+        return await resize_batch_controller.resize_batch(files, *args, **kwargs)
 
     async def crop(self, file: UploadFile, *args, **kwargs):
         return await crop_controller.crop(file, *args, **kwargs)
